@@ -1,32 +1,51 @@
-// src/routes.jsx
+// src/routes.jsx (CORRIGIDO)
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
-// Importe suas páginas (que você criará em src/pages/)
+// Importe suas páginas
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import FeedPage from './pages/FeedPage'; // Página que o usuário verá após logar
+import FeedPage from './pages/FeedPage';
 import ProfilePage from './pages/ProfilePage';
-import NotFoundPage from './pages/NotFoundPage';// Uma página simples para 404
+import NotFoundPage from './pages/NotFoundPage';
+
+// Importe o componente para proteger rotas (ESSENCIAL!)
+import ProtectedRoute from './components/ProtectedRoutes';
+
 
 const AppRoutes = () => {
-  return (
-    <Router>
-      <Routes>
-        {/* Rotas de Autenticação */}
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+  // AQUI ESTÁ A CORREÇÃO:
+  return ( // <--- ADICIONE ESTE PARÊNTESE DE ABERTURA AQUI!
+    <Routes>
+      {/* Rotas Públicas (não precisam de proteção) */}
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
 
-        {/* Rotas Principais (Protegidas ou Abertas, dependendo do design) */}
-        <Route path="/feed" element={<FeedPage />} /> {/* Página inicial após login */}
-        <Route path="/profile/:username" element={<ProfilePage />} />
-        {/* Adicione outras rotas conforme o projeto avança */}
+      {/* Rotas Protegidas - O usuário precisa estar logado para acessá-las */}
+      {/* Envolva a FeedPage com ProtectedRoute */}
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <FeedPage />
+          </ProtectedRoute>
+        }
+      />
+      {/* Envolva a ProfilePage com ProtectedRoute */}
+      <Route
+        path="/profile/:username"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      {/* Adicione outras rotas protegidas aqui */}
 
-        {/* Rota curinga para 404 (página não encontrada) */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </Router>
-  );
+      {/* Rota curinga para 404 (página não encontrada) */}
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
+  ); // E o parêntese de fechamento já está no final
 };
 
 export default AppRoutes;

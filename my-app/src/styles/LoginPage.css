@@ -1,13 +1,14 @@
+
 .center-container {
   display: grid;
   place-items: center;
   height: 100vh;
-  background-color: #000; /* ajuda a visualizar o espaço */
+  background-color: #1a1a1a; /* ajuda a visualizar o espaço */
 }
 
 .card-login {
-  background-color: #2b2b2b; /* Um cinza um pouco mais claro para o card */
-  padding: 40px;
+  /*background-color: #2b2b2b; /* Um cinza um pouco mais claro para o card */
+  background-color: #3a3a3a;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   max-width: 400px; /* Largura máxima do formulário */
@@ -19,7 +20,8 @@
 /* Estilos para os campos de input */
 .card-login input[type="text"],
 .card-login input[type="password"],
-.card-login input[type="email"] {
+.card-login input[type="email"],
+.card-login input[type="date"] {
   width: calc(100% - 20px); /* 100% menos padding */
   padding: 10px;
   margin-bottom: 15px;
@@ -32,7 +34,7 @@
 
 /* Estilos para o botão Entrar */
 .card-login button {
-  width: 100%;
+  width: 25%;
   padding: 12px;
   background-color: #007bff; /* Azul vibrante */
   color: white;
@@ -46,10 +48,15 @@
 
 .card-login button:hover {
   background-color: #0056b3;
+  
 }
 
 .card-login h1 {
     margin-bottom: 25px;
     font-size: 24px;
     color: #f0f0f0;
+} 
+
+.register-button{
+  color: #007bff;;
 }

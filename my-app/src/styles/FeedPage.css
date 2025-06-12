@@ -1,0 +1,48 @@
+.header-container{
+    display: flex; /* Habilita o Flexbox */
+    align-items: center; /* Alinha os itens verticalmente ao centro (título e botões na mesma linha) */
+    justify-content: space-between;
+}
+.header-container .title{
+  padding: 8px 15px;  
+    
+}
+.header-container .login-button,
+.header-container .register-button {
+  padding: 8px 15px;
+  margin-left: 10px; 
+  margin-right: 10px; /* Espaço entre os botões */
+  border-radius: 4px;
+  text-decoration: none; /* Remove sublinhado padrão do link */
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.header-container .login-button {
+  background-color: #007bff; /* Azul para o botão de login */
+  color: white;
+  border: none;
+}
+
+.header-container .login-button:hover {
+  background-color: #0056b3;
+}
+
+.header-container .register-button {
+  background-color: transparent; /* Fundo transparente para o cadastro */
+  color: #007bff;
+  border: 1px solid #007bff;
+}
+
+.header-container .register-button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.header-container .profile-header{
+    display: flex;
+    width: 50px;
+    height: 50px;
+    margin-right: 50px; 
+    border-radius: 100%;
+}

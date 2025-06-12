@@ -1,12 +1,21 @@
 // src/main.jsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.jsx'; // <--- O caminho está correto?
-import './index.css'; // Ou o nome do seu CSS global
+import App from './App.jsx'; // Seu componente App
+import './index.css'; // Seu CSS global (se tiver)
 
-// Certifique-se de que 'root' é o ID correto do seu div no index.html
+// IMPORTANTE: Importe o AuthProvider e o BrowserRouter
+import { AuthProvider } from './contexts/AuthContext.jsx'; // <--- Verifique o caminho!
+import { BrowserRouter } from 'react-router-dom'; // <--- Verifique o caminho!
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App /> {/* <--- App está sendo renderizado aqui? */}
+    {/* O BrowserRouter DEVE envolver tudo que usa roteamento, incluindo o AuthProvider e o App */}
+    <BrowserRouter>
+      {/* O AuthProvider DEVE envolver seu componente App para que o useAuth funcione em qualquer lugar */}
+      <AuthProvider>
+        <App /> {/* Seu componente App principal */}
+      </AuthProvider>
+    </BrowserRouter>
   </React.StrictMode>,
 );

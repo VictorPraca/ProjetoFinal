@@ -1,6 +1,7 @@
 // src/App.jsx (VERSÃO CORRETA)
 import React from 'react';
 import AppRoutes from './routes'; // Importe AppRoutes
+import '/src/styles/global.css'
 
 // Se você tiver um arquivo CSS global, pode importá-lo aqui
 // import './styles/global.css'; 
