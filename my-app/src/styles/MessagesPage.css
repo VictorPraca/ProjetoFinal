@@ -1,0 +1,217 @@
+/* src/styles/MessagesPage.css */
+
+.messages-page-container {
+  display: flex; /* Layout de duas colunas */
+  padding-top: calc(60px + 20px); /* Padding para o header fixo */
+  background-color: #1a1a1a;
+  min-height: 100vh;
+  color: #e0e0e0;
+  font-family: Arial, sans-serif;
+}
+
+/* Lista de Conversas (coluna esquerda) */
+.conversations-list {
+  flex: 0 0 300px; /* Largura fixa de 300px, não cresce nem encolhe */
+  background-color: #2b2b2b;
+  border-right: 1px solid #3a3a3a;
+  overflow-y: auto; /* Permite rolagem se houver muitas conversas */
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+.conversations-list h2 {
+  font-size: 1.8em;
+  color: #f0f0f0;
+  padding: 0 20px 15px;
+  margin-top: 0;
+  border-bottom: 1px solid #3a3a3a;
+  margin-bottom: 15px;
+}
+
+.conversation-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid #3a3a3a;
+  transition: background-color 0.2s ease;
+}
+
+.conversation-item:hover {
+  background-color: #333;
+}
+
+.conversation-item.selected {
+  background-color: #d33800; /* Cor para conversa selecionada */
+  color: white;
+}
+
+.conversation-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+  border: 1px solid #444;
+}
+
+.conversation-info {
+  flex-grow: 1;
+  overflow: hidden; /* Para lidar com texto longo */
+}
+
+.conversation-info h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.1em;
+  color: #f0f0f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conversation-item.selected h3,
+.conversation-item.selected .last-message,
+.conversation-item.selected .last-message-time {
+  color: white; /* Garante texto branco na conversa selecionada */
+}
+
+.last-message {
+  margin: 0;
+  font-size: 0.9em;
+  color: #aaa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.last-message-time {
+  font-size: 0.8em;
+  color: #888;
+  white-space: nowrap;
+}
+
+/* Área de Chat (coluna direita) */
+.chat-area {
+  flex-grow: 1; /* Ocupa o restante do espaço */
+  display: flex;
+  flex-direction: column;
+  background-color: #1f1f1f;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.no-conversation-selected {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  font-size: 1.2em;
+  color: #aaa;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+.chat-header-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+  border: 1px solid #ff4500;
+}
+
+.chat-header h3 {
+  margin: 0;
+  font-size: 1.5em;
+  color: #f0f0f0;
+}
+
+.messages-display {
+  flex-grow: 1; /* Permite que a área de mensagens ocupe o espaço restante */
+  overflow-y: auto; /* Rolagem para as mensagens */
+  padding-right: 10px; /* Espaço para a scrollbar */
+  margin-bottom: 20px;
+}
+
+/* Estilos para as bolhas de mensagem */
+.message-bubble {
+  display: flex;
+  margin-bottom: 10px;
+  max-width: 80%; /* Largura máxima da bolha */
+  padding: 10px 15px;
+  border-radius: 20px;
+  position: relative; /* Para o timestamp */
+  line-height: 1.4;
+  word-wrap: break-word; /* Quebra texto longo */
+}
+
+.message-bubble p {
+  margin: 0;
+  padding-right: 50px; /* Espaço para o timestamp */
+}
+
+.message-timestamp {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  font-size: 0.7em;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}
+
+.message-bubble.current-user {
+  align-self: flex-end; /* Alinha a mensagem do usuário atual à direita */
+  background-color: #ff4400; /* Cor azul para mensagens do usuário atual */
+  color: white;
+  border-bottom-right-radius: 5px; /* Deixa uma ponta mais quadrada */
+  margin-left: auto; /* Empurra para a direita */
+}
+
+.message-bubble.other-user {
+  align-self: flex-start; /* Alinha a mensagem do outro usuário à esquerda */
+  background-color: #444; /* Cor cinza para mensagens do outro usuário */
+  color: white;
+  border-bottom-left-radius: 5px; /* Deixa uma ponta mais quadrada */
+  margin-right: auto; /* Empurra para a esquerda */
+}
+
+/* Formulário de Input de Mensagem */
+.message-input-form {
+  display: flex;
+  gap: 10px;
+  padding-top: 15px;
+  border-top: 1px solid #3a3a3a;
+}
+
+.message-input {
+  flex-grow: 1; /* Ocupa o máximo de espaço */
+  padding: 12px 15px;
+  border: 1px solid #444;
+  border-radius: 25px; /* Borda arredondada */
+  background-color: #333;
+  color: white;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+.send-button {
+  padding: 10px 20px;
+  background-color: #ff4500;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.send-button:hover {
+  background-color: #d33800;
+}

@@ -35,9 +35,11 @@ const LoginPage = () => {
   };
 
   return (
+    
     <div className="center-container">
+      <h1 className="login-reddit-title">Reddit</h1>
       <div className="card-login">
-        <h1>Login</h1>
+        <h2>Login</h2>
 
         {/* Adicione o formulário e o onSubmit */}
         <form onSubmit={handleSubmit}>
@@ -63,11 +65,11 @@ const LoginPage = () => {
 
           {error && <p style={{ color: 'red', marginBottom: '15px' }}>{error}</p>}
 
-          <button type="submit">Entrar</button> {/* Mantenha o type="submit" */}
+          <button type="submit">Entrar</button>
         </form>
 
         <p>
-          Não tem conta? <a href="/register" className='register-button'>Cadastre-se</a>
+          Não tem conta? <a href="/register" className='register-link'>Cadastre-se</a>
         </p>
       </div>
     </div>

@@ -1,0 +1,177 @@
+/* src/styles/Header.css */
+
+.header-container {
+  display: flex;
+  align-items: center; /* Alinha itens verticalmente ao centro */
+  justify-content: space-between; /* Distribui espaço entre os grupos esquerdo e direito */
+  
+  padding: 15px 30px; /* Espaçamento interno */
+  background-color: #2a2a2a; /* Cor de fundo do cabeçalho */
+  border-bottom: 1px solid #3a3a3a; /* Linha inferior */
+  color: white; /* Cor do texto padrão */
+  
+  height: 60px; /* Altura fixa do cabeçalho */
+  width: 100%; /* Ocupa toda a largura da tela */
+  box-sizing: border-box; /* Inclui padding na largura total */
+
+  /* Propriedades para fixar o header no topo da tela */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999; /* Garante que o header fique acima de outros conteúdos */
+}
+
+/* Grupo esquerdo do cabeçalho (botão do menu + título) */
+.header-left-group {
+  display: flex;
+  align-items: center; /* Alinha o botão e o título verticalmente */
+  gap: 15px; /* Espaçamento entre o botão e o título */
+}
+
+/* Estilo do botão de toggle da sidebar */
+.menu-toggle-button {
+  background: none; /* Sem fundo */
+  border: none; /* Sem borda */
+  color: white; /* Cor do ícone */
+  font-size: 2em; /* Tamanho do ícone */
+  cursor: pointer; /* Cursor de clique */
+  padding: 5px;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.menu-toggle-button:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Efeito hover */
+}
+
+/* Estilo do título "Reddit" */
+.title {
+  margin: 0; /* Remove margens padrão do h1 */
+  font-size: 28px;
+  color: #FF4500; /* Cor laranja do Reddit */
+}
+
+/* Estilos para os botões de login/cadastro (quando não logado) */
+.login-button,
+.register-button {
+  padding: 8px 15px;
+  margin-left: 10px; /* Espaçamento entre os botões */
+  border-radius: 4px;
+  text-decoration: none; /* Remove sublinhado */
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.login-button {
+  background-color: #007bff; /* Azul vibrante */
+  color: white;
+  border: none;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+}
+
+.register-button {
+  background-color: transparent; /* Fundo transparente */
+  color: #007bff;
+  border: 1px solid #007bff;
+}
+
+.register-button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Grupo de elementos quando o usuário está logado */
+.logged {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Espaçamento entre a mensagem de boas-vindas, foto e botão */
+}
+
+/* Estilo para o span de nome de usuário */
+.username-display {
+    color: white;
+    font-weight: bold;
+    white-space: nowrap; /* Evita que o nome quebre a linha */
+}
+
+/* Contêiner da foto de perfil e do dropdown (para posicionamento relativo) */
+.profile-dropdown-container {
+  position: relative; /* Essencial para o posicionamento absoluto do dropdown */
+  display: flex; /* Para alinhar a imagem dentro dele */
+  align-items: center;
+  cursor: pointer; /* Indica que é clicável */
+}
+
+/* Estilo do Link que envolve a imagem de perfil */
+.profile-link-wrapper {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden; /* Garante que a imagem não saia do círculo */
+    background-color: transparent; /* Certifique-se de que não tem fundo indesejado */
+    flex-shrink: 0; /* Impede que o item encolha */
+}
+
+/* Estilo da imagem de perfil no cabeçalho */
+.feed-profile-pic {
+  width: 100%; /* Preenche o wrapper */
+  height: 100%; /* Preenche o wrapper */
+  border-radius: 50%; /* Faz a imagem ser redonda */
+  object-fit: cover; /* Garante que a imagem preencha sem distorcer */
+}
+
+/* Estilos para o Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background-color: #2a2a2a; /* <--- Fundo mais escuro, similar ao da imagem */
+  border-radius: 8px; /* Mantém os cantos arredondados */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6); /* Sombra um pouco mais forte */
+  min-width: 180px; /* Ajusta largura para caber o texto */
+  z-index: 1000;
+  overflow: hidden; /* Garante que bordas arredondadas funcionem bem */
+  padding: 8px 0; /* <--- Padding vertical para o menu inteiro, padding horizontal nos itens */
+  list-style: none; /* Remove bolinhas da lista padrão */
+  margin: 0; /* Remove margens padrão */
+}
+
+/* Os itens da lista (li) dentro do dropdown */
+.dropdown-menu li {
+  /* Para o separador visual */
+  border-bottom: 1px solid #444; /* <--- Linha de separação */
+}
+
+.dropdown-menu li:last-child {
+  border-bottom: none; /* Remove a linha de separação do último item */
+}
+
+
+/* Estilos para os links/botões dentro do dropdown */
+.dropdown-menu .dropdown-item {
+  display: flex; /* <--- Use flex para alinhar o texto e o ícone de checkmark (se tiver) */
+  align-items: center; /* Alinha verticalmente */
+  justify-content: space-between; /* Empurra o checkmark para a direita se tiver */
+  
+  padding: 10px 15px; /* <--- Padding ajustado: menos horizontal, suficiente vertical */
+  color: white;
+  text-decoration: none;
+  font-size: 1em; /* Ajuste o tamanho da fonte se quiser menor */
+  font-weight: 400; /* Pode ser mais fino se a imagem mostrar */
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  text-align: left; /* Alinha o texto à esquerda */
+  cursor: pointer;
+  box-sizing: border-box; /* Garante que o padding não aumente a largura total */
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  color: #dd3500;
+  background-color: #444; /* Cor de fundo ao passar o mouse, um pouco mais clara */
+}

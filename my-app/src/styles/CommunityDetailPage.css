@@ -1,0 +1,144 @@
+/* src/styles/CommunityDetailPage.css */
+
+.community-detail-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza o conteúdo da página */
+  padding-top: calc(60px + 30px); /* Padding para o header fixo */
+  padding-bottom: 30px;
+  background-color: #1a1a1a;
+  min-height: 100vh;
+  color: #e0e0e0;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+/* Cabeçalho da Comunidade */
+.community-detail-header {
+  background-color: #2b2b2b;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  margin-bottom: 30px;
+  max-width: 800px;
+  width: 100%;
+  text-align: center; /* Centraliza nome, descrição e meta */
+  box-sizing: border-box;
+}
+
+.community-detail-header h1 {
+  font-size: 2.5em;
+  color: #f0f0f0;
+  margin-bottom: 15px;
+}
+
+.community-description {
+  font-size: 1.1em;
+  color: #cccccc;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.community-meta-details {
+  display: flex;
+  justify-content: center; /* Centraliza os detalhes (membros, criada em) */
+  gap: 20px;
+  font-size: 0.9em;
+  color: #aaa;
+  margin-bottom: 20px;
+}
+
+.admin-tag {
+  background-color: #28a745;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: bold;
+  margin-left: 10px; /* Espaço do lado do "Criada em" */
+}
+
+.join-leave-button {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.join-leave-button.join {
+  background-color: #007bff;
+  color: white;
+}
+
+.join-leave-button.join:hover {
+  background-color: #0056b3;
+}
+
+.join-leave-button.leave {
+  background-color: #dc3545; /* Vermelho para sair */
+  color: white;
+}
+
+.join-leave-button.leave:hover {
+  background-color: #c82333;
+}
+
+/* Seção de Postagens da Comunidade */
+.community-posts-section {
+  background-color: #2b2b2b;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 30px; /* Espaço antes da próxima seção */
+  text-align: center; /* Centraliza o título "Postagens na Comunidade" */
+}
+
+.community-posts-section h2 {
+  font-size: 2em;
+  color: #f0f0f0;
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+.community-posts-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza os PostCards */
+  width: 100%;
+}
+
+/* Seção para criar nova postagem */
+.create-post-community-section {
+  background-color: #2b2b2b;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.create-post-community-section h3 {
+  font-size: 1.5em;
+  color: #f0f0f0;
+  margin-bottom: 20px;
+}
+
+/* Mensagens de erro/sucesso */
+.error-message {
+  color: #dc3545;
+  margin-top: 15px;
+  text-align: center;
+}
+.success-message {
+  color: #28a745;
+  margin-top: 15px;
+  text-align: center;
+}

@@ -1,48 +1,31 @@
-.header-container{
-    display: flex; /* Habilita o Flexbox */
-    align-items: center; /* Alinha os itens verticalmente ao centro (título e botões na mesma linha) */
-    justify-content: space-between;
-}
-.header-container .title{
-  padding: 8px 15px;  
-    
-}
-.header-container .login-button,
-.header-container .register-button {
-  padding: 8px 15px;
-  margin-left: 10px; 
-  margin-right: 10px; /* Espaço entre os botões */
-  border-radius: 4px;
-  text-decoration: none; /* Remove sublinhado padrão do link */
-  font-weight: bold;
-  transition: background-color 0.2s ease;
-}
+/* src/styles/FeedPage.css */
 
-.header-container .login-button {
-  background-color: #007bff; /* Azul para o botão de login */
+/* ... (Estilos existentes do cabeçalho, se houver) ... */
+
+/* Estilos para o conteúdo principal do feed (abaixo do cabeçalho) */
+.feed-content-main {
+  padding-top: 80px; /* <--- ADICIONE ESTA LINHA: Altura do header + seu padding original */
   color: white;
-  border: none;
+  min-height: calc(100vh - 60px); /* Ajuste este min-height se precisar */
+  background-color: #1a1a1a;
+  display: flex;          /* Contêiner flexível */
+  flex-direction: column; /* Itens empilhados verticalmente */
+  align-items: center;    /* <--- ESSA LINHA DEVE CENTRALIZAR OS POSTS HORIZONTALMENTE */
 }
 
-.header-container .login-button:hover {
-  background-color: #0056b3;
+.posts-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* <--- ESSA LINHA DEVE CENTRALIZAR OS PostCards DENTRO DA LISTA */
+  width: 100%;
+  max-width: 700px; /* <--- Esta é a largura máxima da coluna de posts */
+  padding-top: 20px;
 }
 
-.header-container .register-button {
-  background-color: transparent; /* Fundo transparente para o cadastro */
-  color: #007bff;
-  border: 1px solid #007bff;
-}
-
-.header-container .register-button:hover {
-  background-color: #007bff;
-  color: white;
-}
-
-.header-container .profile-header{
-    display: flex;
-    width: 50px;
-    height: 50px;
-    margin-right: 50px; 
-    border-radius: 100%;
+/* Estilo para o título das seções (ex: "Últimas Postagens") */
+.feed-content-main h2 {
+    font-size: 2em;
+    color: #f0f0f0;
+    margin-bottom: 25px;
+    text-align: center;
 }

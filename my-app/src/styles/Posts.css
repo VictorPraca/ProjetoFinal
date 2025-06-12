@@ -1,0 +1,88 @@
+/* src/styles/PostCard.css */
+
+.post-card {
+  background-color: #2b2b2b;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  margin-bottom: 20px;
+  padding: 20px;
+  max-width: 1000px; /* Largura máxima das postagens */
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto 20px auto;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.post-user-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #ff4500; /* Cor do link do usuário */
+  font-weight: bold;
+}
+
+.post-user-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+  border: 1px solid #ff4500;
+}
+
+.post-username {
+  color: #e0e0e0;
+  font-size: 1.1em;
+}
+
+.post-date {
+  font-size: 0.9em;
+  color: #aaa;
+}
+
+.post-content p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+  color: #f0f0f0;
+}
+
+.post-image,
+.post-video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  display: block; /* Remove espaço extra abaixo de imagens/vídeos */
+  margin-top: 10px; /* Espaço entre texto e mídia */
+}
+
+.post-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #3a3a3a; /* Linha divisória para ações */
+}
+
+.action-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 0.95em;
+  transition: background-color 0.2s ease;
+  display: flex; /* Para alinhar ícone e texto */
+  align-items: center;
+  gap: 5px; /* Espaço entre ícone e texto */
+}
+
+.action-button:hover {
+  background-color: #3a3a3a;
+}

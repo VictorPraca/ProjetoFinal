@@ -147,7 +147,7 @@ const RegisterPage = () => {
         </form>
 
         <p>
-          Já tem conta? <a href="/login" className='login-button'>Fazer Login</a>
+          Já tem conta? <a href="/login">Fazer Login</a>
         </p>
       </div>
     </div>

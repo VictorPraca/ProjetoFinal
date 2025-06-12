@@ -7,7 +7,10 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import FeedPage from './pages/FeedPage';
 import ProfilePage from './pages/ProfilePage';
+import CommunitiesPage from './pages/CommunitiesPage.jsx';
 import NotFoundPage from './pages/NotFoundPage';
+import MessagesPage from './pages/MessagesPage.jsx';
+import CommunityDetailPage from './pages/CommunityDetailPage.jsx';
 
 // Importe o componente para proteger rotas (ESSENCIAL!)
 import ProtectedRoute from './components/ProtectedRoutes';
@@ -40,7 +43,33 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-      {/* Adicione outras rotas protegidas aqui */}
+      
+      <Route
+            path="/communities"
+            element={
+                <ProtectedRoute>
+                    <CommunitiesPage />
+                </ProtectedRoute>
+            }
+      />
+
+      <Route
+            path="/messages"
+            element={
+                <ProtectedRoute>
+                    <MessagesPage /> {/* <--- Nova rota */}
+                </ProtectedRoute>
+            }
+      />
+
+      <Route // <--- O ERRO PODE ESTAR NO INÍCIO DESTA LINHA OU NOS ATRIBUTOS
+            path="/community/:communityName"
+            element={
+                <ProtectedRoute>
+                    <CommunityDetailPage /> {/* <--- OU ALGUM PROBLEMA NESTA LINHA DO COMPONENTE */}
+                </ProtectedRoute>
+            } // <--- OU NO FECHAMENTO DAS CHAVES/PARÊNTESES AQUI
+        />
 
       {/* Rota curinga para 404 (página não encontrada) */}
       <Route path="*" element={<NotFoundPage />} />
