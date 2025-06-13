@@ -83,7 +83,24 @@
   color: white;
 }
 
-/* Grupo de elementos quando o usuário está logado */
+.create-post-header-button {
+  padding: 8px 15px;
+  background-color: #ff4500; /* Verde para criar */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+  white-space: nowrap; /* Evita que o texto quebre a linha */
+  margin-right: 10px; /* Espaço antes do nome de usuário */
+}
+
+.create-post-header-button:hover {
+  color: white;
+  background-color: #dd3500;
+}
+
 .logged {
   display: flex;
   align-items: center;
@@ -132,18 +149,24 @@
   background-color: #2a2a2a; /* <--- Fundo mais escuro, similar ao da imagem */
   border-radius: 8px; /* Mantém os cantos arredondados */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6); /* Sombra um pouco mais forte */
-  min-width: 180px; /* Ajusta largura para caber o texto */
+  min-width: 170px; /* Ajusta largura para caber o texto */
   z-index: 1000;
   overflow: hidden; /* Garante que bordas arredondadas funcionem bem */
-  padding: 8px 0; /* <--- Padding vertical para o menu inteiro, padding horizontal nos itens */
-  list-style: none; /* Remove bolinhas da lista padrão */
-  margin: 0; /* Remove margens padrão */
+  padding: 0; 
+  margin: 0;
 }
 
+.dropdown-menu ul {
+  margin: 0;
+  padding: 0;
+}
 /* Os itens da lista (li) dentro do dropdown */
 .dropdown-menu li {
-  /* Para o separador visual */
-  border-bottom: 1px solid #444; /* <--- Linha de separação */
+  list-style: none; 
+  border-bottom: 1px solid #444; 
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 .dropdown-menu li:last-child {
@@ -153,22 +176,21 @@
 
 /* Estilos para os links/botões dentro do dropdown */
 .dropdown-menu .dropdown-item {
-  display: flex; /* <--- Use flex para alinhar o texto e o ícone de checkmark (se tiver) */
-  align-items: center; /* Alinha verticalmente */
-  justify-content: space-between; /* Empurra o checkmark para a direita se tiver */
-  
-  padding: 10px 15px; /* <--- Padding ajustado: menos horizontal, suficiente vertical */
-  color: white;
-  text-decoration: none;
-  font-size: 1em; /* Ajuste o tamanho da fonte se quiser menor */
-  font-weight: 400; /* Pode ser mais fino se a imagem mostrar */
-  background-color: transparent;
-  border: none;
-  width: 100%;
-  text-align: left; /* Alinha o texto à esquerda */
-  cursor: pointer;
-  box-sizing: border-box; /* Garante que o padding não aumente a largura total */
-  transition: background-color 0.2s ease;
+   display: flex; 
+   align-items: center;
+   justify-content: flex-start;
+   padding: 10px 15px; /* Ajuste o padding, reduzindo lateralmente */
+   color: white;
+   text-decoration: none;
+   font-size: 1em;
+   font-weight: 400;
+   background-color: transparent;
+   border: none;
+   width: 100%;
+   text-align: left; 
+   cursor: pointer;
+   box-sizing: border-box;
+   transition: background-color 0.2s ease;
 }
 
 .dropdown-menu .dropdown-item:hover {

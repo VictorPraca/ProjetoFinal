@@ -1,45 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/Header.jsx'; // Seu componente de cabeçalho
+import Header from '../components/Header.jsx'; 
 import api from '../services/api.js'; // Para simular chamadas ao backend
 import { Link } from 'react-router-dom'; // Para links para comunidades individuais (futuro)
-import '../styles/CommunitiesPage.css'; // Vamos criar este CSS
+import '../styles/CommunitiesPage.css'; 
+import { MOCK_COMMUNITIES } from '../mockData.js'; // Vamos criar este CSS
 
-// --- DADOS MOCKADOS DE COMUNIDADES (Simulação do Backend) ---
-// src/pages/CommunitiesPage.jsx (E TAMBÉM NO src/pages/CommunityDetailPage.jsx)
-
-const MOCK_COMMUNITIES = [
-  {
-    id: 'comm1',
-    name: 'Programação',
-    slug: 'programacao', // <--- ESTE CAMPO É O QUE ESTÁ FALTANDO OU INCORRETO
-    description: 'Comunidade para discutir sobre programação, linguagens, frameworks e desenvolvimento em geral.',
-    createdAt: new Date('2024-01-15T10:00:00Z').toISOString(),
-    membersCount: 1500,
-    isMember: false,
-    isAdmin: false,
-  },
-  {
-    id: 'comm2',
-    name: 'ReactJs Brasil',
-    slug: 'reactjs-brasil', // <--- ESTE CAMPO É O QUE ESTÁ FALTANDO OU INCORRETO
-    description: 'Tudo sobre React.js no Brasil. Dúvidas, dicas, projetos e eventos.',
-    createdAt: new Date('2023-08-20T14:30:00Z').toISOString(),
-    membersCount: 800,
-    isMember: true,
-    isAdmin: true,
-  },
-  {
-    id: 'comm3',
-    name: 'Jogos Online',
-    slug: 'jogos-online', // <--- ESTE CAMPO É O QUE ESTÁ FALTANDO OU INCORRETO
-    description: 'Para apaixonados por jogos online, notícias, reviews e encontrar times.',
-    createdAt: new Date('2024-03-01T18:00:00Z').toISOString(),
-    membersCount: 2300,
-    isMember: false,
-    isAdmin: false,
-  },
-  // ... adicione slugs para quaisquer outras comunidades que você tenha no mock
-];
 // --- FIM DOS DADOS MOCKADOS DE COMUNIDADES ---
 
 const CommunitiesPage = () => {

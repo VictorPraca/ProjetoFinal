@@ -1,0 +1,61 @@
+/* src/styles/CreateCommentForm.css */
+
+.create-comment-form-container {
+  background-color: #333;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 15px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  color: #f0f0f0;
+}
+
+.create-comment-form-container.is-reply-form {
+  background-color: #3a3a3a; /* Fundo ligeiramente diferente para formulários de resposta */
+  padding: 10px;
+  margin-top: 10px;
+}
+
+
+.create-comment-form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comment-textarea {
+  width: calc(100% - 20px); /* 100% menos padding */
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background-color: #2a2a2a; /* Fundo do textarea */
+  color: white;
+  box-sizing: border-box;
+  font-size: 0.95em;
+  resize: vertical; /* Permite redimensionar */
+  min-height: 40px;
+}
+
+.submit-comment-button {
+  padding: 8px 15px;
+  background-color: #007bff; /* Azul */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+  align-self: flex-end; /* Alinha o botão à direita */
+}
+
+.submit-comment-button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.submit-comment-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* Reutiliza a mensagem de erro (já definida em outros CSS) */
+/* .error-message { color: #dc3545; } */

@@ -3,66 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../services/api.js';
 import Header from '../components/Header.jsx'; // Importado como 'Header'
-import Posts from '../components/Posts.jsx'; // <--- Importe o PostCard
+import Posts from '../components/Posts.jsx'; // <--- Importe o Post
 import '../styles/ProfilePage.css';
+import { MOCK_COMMUNITIES, MOCK_POSTS, COMMENT_USERS } from '../mockData.js';
 
-// --- DADOS MOCKADOS DE POSTAGENS (Copie de FeedPage.jsx para consistência) ---
-const MOCK_POSTS = [
-  {
-    id: 'post1',
-    user: {
-      username: 'usuarioSimulado',
-      profilePicUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
-    },
-    createdAt: new Date('2025-06-11T10:00:00Z').toISOString(),
-    contentType: 'text',
-    content: 'Olá a todos! Que dia lindo para testar a nova rede social!',
-    likes: 15,
-    dislikes: 2,
-    commentsCount: 5,
-  },
-  {
-    id: 'post2',
-    user: {
-      username: 'outroUsuario',
-      profilePicUrl: 'https://cdn-icons-png.flaticon.com/512/147/147133.png',
-    },
-    createdAt: new Date('2025-06-10T15:30:00Z').toISOString(),
-    contentType: 'image',
-    content: 'Meu novo setup de trabalho, o que acharam?',
-    imageUrl: 'https://images.unsplash.com/photo-1542831371-d41f71a48c66?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    likes: 45,
-    dislikes: 1,
-    commentsCount: 12,
-  },
-  {
-    id: 'post3',
-    user: {
-      username: 'usuarioSimulado',
-      profilePicUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
-    },
-    createdAt: new Date('2025-06-09T08:15:00Z').toISOString(),
-    contentType: 'video',
-    content: 'Olhem só essa dica de produtividade que aprendi!',
-    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    likes: 22,
-    dislikes: 0,
-    commentsCount: 3,
-  },
-   { // Nova postagem para Outro Usuário
-    id: 'post4',
-    user: {
-      username: 'outroUsuario',
-      profilePicUrl: 'https://cdn-icons-png.flaticon.com/512/147/147133.png',
-    },
-    createdAt: new Date('2025-06-08T18:00:00Z').toISOString(),
-    contentType: 'text',
-    content: 'Hoje o dia foi produtivo! #devlife',
-    likes: 30,
-    dislikes: 0,
-    commentsCount: 7,
-  },
-];
 // --- FIM DOS DADOS MOCKADOS DE POSTAGENS ---
 
 

@@ -68,11 +68,13 @@ const Header = () => {
           </div>
         ) : ( // Se o usuário ESTÁ AUTENTICADO
           <div className="logged">
-            {/* Contêiner da foto de perfil e do dropdown - Usa a ref para detectar cliques fora */}
+            {/* NOVO BOTÃO: Criar Postagem */}
+            <Link to="/create-post" className="create-post-header-button"> {/* <--- ESTE É O BOTÃO! */}
+              + Criar Post
+            </Link>
+            
             <div className="profile-dropdown-container" ref={dropdownRef}>
               {user && user.profilePicUrl && (
-                // O Link envolve a imagem de perfil. Ao clicar, ele alterna o dropdown
-                // to="#" evita a navegação, pois a navegação é feita via dropdown
                 <Link to="#" onClick={toggleDropdown} className="profile-link-wrapper">
                   <img
                     src={user.profilePicUrl}
@@ -82,25 +84,19 @@ const Header = () => {
                 </Link>
               )}
 
-              {/* O Dropdown Menu aparece APENAS SE isDropdownOpen for true */}
               {isDropdownOpen && (
-                <ul className="dropdown-menu"> {/* Remova a div.dropdown-menu e use <ul> diretamente */}
-                  <li>
-                    <Link to={`/profile/${user.username}`} onClick={toggleDropdown} className="dropdown-item">
-                      Perfil
-                      {/* Exemplo de checkmark, você precisaria de um estado para qual opção está "selecionada" */}
-                      {/* {selectedOption === 'perfil' && <span className="checkmark">✓</span>} */}
-                    </Link>
-                  </li>
-                  <li>
-                    <button onClick={() => { logout(); toggleDropdown(); }} className="dropdown-item">
-                      Sair
-                      {/* {selectedOption === 'sair' && <span className="checkmark">✓</span>} */}
-                    </button>
-                  </li>
-                </ul>
+                <div className="dropdown-menu">
+                  <ul>
+                    <li>
+                      <Link to={`/profile/${user.username}`} onClick={toggleDropdown} className="dropdown-item">Perfil</Link>
+                    </li>
+                    <li>
+                      <button onClick={() => { logout(); toggleDropdown(); }} className="dropdown-item">Sair</button>
+                    </li>
+                  </ul>
+                </div>
               )}
-            </div>
+            </div> 
           </div>
         )}
       </header>

@@ -66,23 +66,87 @@
   justify-content: space-around;
   margin-top: 20px;
   padding-top: 15px;
-  border-top: 1px solid #3a3a3a; /* Linha divisória para ações */
+  border-top: 1px solid #3a3a3a;
 }
 
 .action-button {
   background: none;
   border: none;
-  color: #007bff;
+  color: #ff4500;
   cursor: pointer;
   padding: 8px 12px;
   border-radius: 5px;
   font-size: 0.95em;
-  transition: background-color 0.2s ease;
-  display: flex; /* Para alinhar ícone e texto */
+  transition: background-color 0.2s ease, color 0.2s ease; /* Adicione color na transição */
+  display: flex;
   align-items: center;
-  gap: 5px; /* Espaço entre ícone e texto */
+  gap: 5px;
 }
 
 .action-button:hover {
   background-color: #3a3a3a;
+}
+
+/* --- NOVOS ESTILOS PARA LIKES/DISLIKES ATIVOS --- */
+.action-button.like-button.active {
+  background-color: #28a745; /* Verde para like ativo */
+  color: white;
+}
+
+.action-button.dislike-button.active {
+  background-color: #dc3545; /* Vermelho para dislike ativo */
+  color: white;
+}
+
+.post-comments-section {
+  margin-top: 20px;
+  border-top: 1px solid #3a3a3a;
+  padding-top: 20px;
+}
+
+.add-comment-form { /* Esta regra não é mais usada diretamente, pois o form é CreateCommentForm */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.add-comment-form textarea { /* Esta regra não é mais usada diretamente */
+  width: calc(100% - 20px);
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  box-sizing: border-box;
+  font-size: 0.95em;
+  resize: vertical;
+  min-height: 40px;
+}
+
+.add-comment-form button { /* Esta regra não é mais usada diretamente */
+  padding: 8px 15px;
+  background-color: #ff4500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  align-self: flex-end;
+  transition: background-color 0.2s ease;
+}
+
+.add-comment-form button:hover { /* Esta regra não é mais usada diretamente */
+  background-color: #dc3545;
+}
+
+.comments-list {
+  margin-top: 15px; /* Espaçamento entre o formulário de comentário e a lista */
+}
+
+.no-comments-message {
+  font-style: italic;
+  color: #aaa;
+  text-align: center;
+  margin: 20px 0;
 }
