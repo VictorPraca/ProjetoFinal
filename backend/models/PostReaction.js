@@ -1,22 +1,26 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // ajuste conforme seu arquivo de conexão
+const sequelize = require('../config/database');
 
-const Post = sequelize.define('Post', {
+const PostReaction = sequelize.define('PostReaction', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
+  postId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  content: {
-    type: DataTypes.TEXT,
+  reactionType: {
+    type: DataTypes.STRING,
     allowNull: false
   }
 }, {
   timestamps: true
 });
 
-module.exports = Post;
+module.exports = PostReaction;
