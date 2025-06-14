@@ -1,0 +1,55 @@
+.center-container {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  background-color: #1a1a1a; /* ajuda a visualizar o espaço */
+}
+
+.card-register {
+  background-color: #2b2b2b; /* Um cinza um pouco mais claro para o card */
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  max-width: 400px; /* Largura máxima do formulário */
+  width: 90%; /* Ajuste para responsividade */
+  text-align: center; /* Centraliza textos dentro do card */
+  color: #e0e0e0; /* Cor do texto dentro do card */
+}
+
+/* Estilos para os campos de input */
+.card-register input[type="text"],
+.card-register input[type="password"],
+.card-register input[type="email"] {
+  width: calc(100% - 20px); /* 100% menos padding */
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background-color: #333;
+  color: white;
+  box-sizing: border-box; /* Inclui padding e borda na largura total */
+}
+
+/* Estilos para o botão Entrar */
+.card-register button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff; /* Azul vibrante */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.card-register button:hover {
+  background-color: #0056b3;
+}
+
+.card-register h1 {
+    margin-bottom: 25px;
+    font-size: 24px;
+    color: #f0f0f0;
+}

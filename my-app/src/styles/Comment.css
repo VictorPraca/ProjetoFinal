@@ -1,0 +1,122 @@
+/* src/styles/Comment.css */
+
+.comment-bubble {
+  background-color: #3a3a3a; /* Fundo do comentário */
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  color: #f0f0f0;
+  max-width: 100%; /* Garante que o comentário não transborde */
+  box-sizing: border-box; /* Inclui padding na largura */
+}
+
+/* Estilos para diferentes níveis de aninhamento de comentários */
+.comment-bubble.level-0 {
+  margin-left: 0; /* Comentário de nível superior */
+}
+
+.comment-bubble.level-1 {
+  margin-left: 30px; /* Recuo para respostas */
+  background-color: #303030;
+  border-left: 3px solid #007bff; /* Linha lateral para aninhamento */
+}
+
+.comment-bubble.level-2 {
+  margin-left: 60px;
+  background-color: #2a2a2a;
+  border-left: 3px solid #28a745;
+}
+
+.comment-bubble.level-3 {
+  margin-left: 90px;
+  background-color: #252525;
+  border-left: 3px solid #dc3545;
+}
+
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.comment-user-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.comment-user-pic {
+  width: 30px; /* Menor que a foto de postagem */
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 8px;
+  border: 1px solid #007bff;
+}
+
+.comment-username {
+  color: #e0e0e0;
+  font-size: 0.95em;
+}
+
+.comment-date {
+  font-size: 0.8em;
+  color: #aaa;
+}
+
+.comment-content-text p {
+  margin-bottom: 10px;
+  line-height: 1.5;
+  color: #f0f0f0;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 10px; /* Espaço entre os botões de ação */
+  margin-top: 10px;
+  border-top: 1px solid #444;
+  padding-top: 10px;
+}
+
+/* Reutiliza estilos de action-button de PostCard.css */
+/* Certifique-se que o PostCard.css está carregado globalmente ou antes de Comment.css */
+.comment-action-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding: 5px 8px; /* Padding menor */
+  border-radius: 5px;
+  font-size: 0.85em; /* Fonte menor */
+  transition: background-color 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.comment-action-button:hover {
+  background-color: #444;
+}
+
+/* Estilos para likes/dislikes ativos em comentários */
+.comment-action-button.like-button.active {
+  background-color: #28a745;
+  color: white;
+}
+
+.comment-action-button.dislike-button.active {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Contêiner para as respostas a um comentário */
+.comment-replies {
+  margin-top: 10px;
+  padding-top: 10px;
+  /* border-top: 1px dashed #555; */ /* Opcional: linha para separar respostas */
+}

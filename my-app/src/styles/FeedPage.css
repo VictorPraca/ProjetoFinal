@@ -1,0 +1,31 @@
+/* src/styles/FeedPage.css */
+
+/* ... (Estilos existentes do cabeçalho, se houver) ... */
+
+/* Estilos para o conteúdo principal do feed (abaixo do cabeçalho) */
+.feed-content-main {
+  padding-top: 80px; /* <--- ADICIONE ESTA LINHA: Altura do header + seu padding original */
+  color: white;
+  min-height: calc(100vh - 60px); /* Ajuste este min-height se precisar */
+  background-color: #1a1a1a;
+  display: flex;          /* Contêiner flexível */
+  flex-direction: column; /* Itens empilhados verticalmente */
+  align-items: center;    /* <--- ESSA LINHA DEVE CENTRALIZAR OS POSTS HORIZONTALMENTE */
+}
+
+.posts-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* <--- ESSA LINHA DEVE CENTRALIZAR OS PostCards DENTRO DA LISTA */
+  width: 100%;
+  max-width: 700px; /* <--- Esta é a largura máxima da coluna de posts */
+  padding-top: 20px;
+}
+
+/* Estilo para o título das seções (ex: "Últimas Postagens") */
+.feed-content-main h2 {
+    font-size: 2em;
+    color: #f0f0f0;
+    margin-bottom: 25px;
+    text-align: center;
+}

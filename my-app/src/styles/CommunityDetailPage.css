@@ -1,0 +1,146 @@
+/* src/styles/CommunityDetailPage.css */
+
+/* Contêiner principal da página de detalhes da comunidade, AGORA PARA O LAYOUT DE DUAS COLUNAS */
+.community-page-layout {
+  display: flex; /* Habilita Flexbox para as colunas */
+  justify-content: center; /* Centraliza as colunas */
+  gap: 30px; /* Espaçamento entre as colunas */
+  
+  padding-top: calc(60px + 30px); /* Padding para o header fixo */
+  padding-bottom: 30px;
+  background-color: #1a1a1a;
+  min-height: 100vh;
+  color: #e0e0e0;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  max-width: 1400px; /* Largura máxima para todo o layout de duas colunas */
+  margin: 0 auto; /* Centraliza o layout na página */
+}
+
+/* Coluna Esquerda: Informações da Comunidade */
+.community-info-sidebar {
+  flex: 0 0 300px; /* Largura fixa de 300px, não cresce nem encolhe */
+  /* ou: width: 300px; */
+  display: flex; /* Para empilhar o card de info e a seção de criar post */
+  flex-direction: column;
+  gap: 20px; /* Espaço entre os blocos da sidebar */
+}
+
+.community-info-card {
+  background-color: #2b2b2b;
+  padding: 25px; /* Reduzi um pouco o padding para caber melhor na sidebar */
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  text-align: center; /* Centraliza o texto dentro do card de info */
+  box-sizing: border-box;
+}
+
+.community-info-card h1 { /* Ajustado para caber na sidebar */
+  font-size: 2em; /* Menor que o título principal da página */
+  color: #f0f0f0;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.community-description {
+  font-size: 0.95em; /* Fonte menor */
+  color: #cccccc;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.community-meta-details {
+  display: flex;
+  justify-content: center; /* Centraliza os detalhes (membros, criada em) */
+  gap: 20px;
+  font-size: 0.85em; /* Fonte menor */
+  color: #aaa;
+  margin-bottom: 20px;
+}
+
+.admin-tag {
+  background-color: #28a745;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7em;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.join-leave-button {
+  padding: 10px 20px; /* Ajustei um pouco o padding */
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.9em; /* Ajustei a fonte */
+  font-weight: bold;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.join-leave-button.join {
+  background-color: #007bff;
+  color: white;
+}
+
+.join-leave-button.join:hover {
+  background-color: #0056b3;
+}
+
+.join-leave-button.leave {
+  background-color: #dc3545;
+  color: white;
+}
+
+.join-leave-button.leave:hover {
+  background-color: #c82333;
+}
+
+
+/* Coluna Central: Postagens da Comunidade */
+.community-posts-main {
+  flex-grow: 1; /* Ocupa o restante do espaço horizontal */
+  max-width: 800px; /* Largura máxima para a coluna de posts */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza os posts individualmente */
+  box-sizing: border-box;
+}
+
+.community-posts-main h2 {
+  font-size: 2em;
+  color: #f0f0f0;
+  margin-top: 0; /* Remove margem superior padrão */
+  margin-bottom: 25px;
+  text-align: center;
+  width: 100%; /* Garante que ocupe a largura para centralizar o texto */
+}
+
+.community-posts-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza os PostCards dentro da lista */
+  width: 100%;
+}
+
+/* Seção para criar nova postagem na comunidade (pode ir aqui ou no centro) */
+/* Reutiliza o estilo do create-community-section se for similar */
+.create-post-community-section {
+  background-color: #2b2b2b;
+  padding: 20px; /* Reduzido o padding */
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  max-width: 600px; /* Alinhado com o PostCard */
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  /* margin-left: auto; margin-right: auto; */ /* Não necessário se o pai já alinha */
+}
+
+.create-post-community-section h3 {
+  font-size: 1.5em;
+  color: #f0f0f0;
+  margin-bottom: 20px;
+}
+
+/* ... (mensagens de erro/sucesso: .error-message, .success-message) ... */

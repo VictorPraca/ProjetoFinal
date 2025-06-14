@@ -1,0 +1,89 @@
+/* src/styles/ProfilePage.css */
+
+/* Contêiner principal da página de perfil */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px; /* Seu padding existente */
+  padding-top: calc(60px + 30px); /* <--- ADICIONE ESTA LINHA: Altura do header + seu padding original */
+  background-color: #1e1e1e;
+  min-height: 100vh;
+  color: #e0e0e0;
+  font-family: Arial, sans-serif;
+  /* position: relative; */ /* Opcional: Se você tiver elementos posicionados absolutamente dentro */
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* <--- AQUI: Alinha os itens para o início (esquerda) */
+  /* justify-content: center; */ /* Remova ou comente esta linha, não é necessária para alinhamento em coluna com flex-start */
+  /* gap: 20px; */ /* Remova, pois não há gap direto aqui com flex-direction: column */
+
+  text-align: left; /* <--- AQUI: Alinha o texto dentro do próprio header para a esquerda */
+  margin-bottom: 30px;
+  background-color: #2b2b2b;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+  max-width: 850px;
+  width: 100%;
+}
+
+/* Estilo para a linha da foto e do nome */
+.profile-main-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* <--- AQUI: Alinha a foto e o nome para o início (esquerda) dentro da sua linha */
+  gap: 20px;
+  margin-bottom: 20px;
+  width: 100%; /* Garante que ocupe a largura total para o justify-content funcionar */
+}
+
+/* Estilos para a imagem de perfil principal */
+.profile-page-pic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #ff4500;
+  box-shadow: 0 0 10px rgba(255, 38, 0, 0.5);
+}
+
+/* Ajuste a margem do h1 para não interferir com o flexbox */
+.profile-header h1 {
+  font-size: 2.5em;
+  margin: 0;
+  color: #f0f0f0;
+}
+
+/* Estilo para a biografia */
+.profile-bio {
+    font-style: italic;
+    color: #b0b0b0;
+    margin-top: 15px;
+    max-width: 500px;
+    text-align: left; /* <--- AQUI: Garante que o texto da bio fica à esquerda */
+    width: 100%; /* Garante que ocupe a largura total disponível */
+}
+
+/* ... (Mantenha os outros estilos para .profile-content, h2, etc.) ... */
+/* Apenas garanta que .profile-content também tem text-align: left; se precisar */
+.profile-content {
+  background-color: #2b2b2b;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+  max-width: 850px;
+  width: 100%;
+  text-align: left; /* <--- Se quiser o conteúdo abaixo alinhado à esquerda */
+  margin-top: 20px;
+}
+
+.profile-content h2 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  color: #f0f0f0;
+  text-align: left; /* <--- Alinha o título da seção à esquerda */
+}

@@ -1,0 +1,55 @@
+/* src/styles/Sidebar.css */
+
+.sidebar {
+  position: fixed; /* Fixa o menu na tela */
+  top: 0;
+  left: -250px; /* Esconde o menu fora da tela por padrão */
+  width: 250px; /* Largura do menu */
+  height: 100%; /* Altura total da tela */
+  background-color: #202020; /* Cor de fundo do menu */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra para destaque */
+  transition: left 0.3s ease-in-out; /* Transição suave para abrir/fechar */
+  z-index: 1000; /* Garante que o menu fique acima de outros elementos */
+  padding-top: 60px; /* Espaço para o botão de fechar */
+  color: white;
+}
+
+.sidebar.open {
+  left: 0; /* Move o menu para a tela quando a classe 'open' é adicionada */
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5em;
+  cursor: pointer;
+  z-index: 1001; /* Fica acima do próprio sidebar */
+}
+
+.sidebar-nav ul {
+  list-style: none; /* Remove marcadores da lista */
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav li {
+  margin-bottom: 10px;
+}
+
+.sidebar-nav a {
+  display: block; /* O link ocupa toda a largura do item da lista */
+  padding: 15px 20px;
+  color: white;
+  text-decoration: none;
+  font-size: 1.1em;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-nav a:hover {
+  color: #dd3500;
+  background-color: #333; /* Cor de fundo ao passar o mouse */
+}
