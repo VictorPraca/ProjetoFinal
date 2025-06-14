@@ -1,30 +1,27 @@
 import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext.jsx'; // Para obter o usuário logado
-import api from '../services/api.js'; // Para simular o envio do comentário
-import '../styles/CreateComment.css'; // O CSS para este formulário
+import { useAuth } from '../contexts/AuthContext.jsx';
+import api from '../services/api.js'; // Mesmo que simulado
+import '../styles/CreateComment.css';
 
-const CreateComment= ({ postId, parentId = null, onCommentCreated, isReply = false }) => {
-  const { user: currentUser } = useAuth(); // Obtém o usuário logado
-  // --- Adicione este console.log ---
-  console.log('CreateCommentForm: Renderizando, currentUser:', currentUser);
-
+const CreateComment = ({ postId, parentId = null, onCommentCreated, isReply = false }) => {
+  const { user: currentUser } = useAuth();
   const [commentContent, setCommentContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // ← Impede recarregamento da página
     setIsSubmitting(true);
     setError('');
 
-    // --- Adicione este console.log ---
-    console.log('CreateCommentForm: handleSubmit chamado. currentUser:', currentUser);
+    console.log('CreateComment: Enviando comentário como', currentUser);
 
     if (!currentUser) {
       setError('Você precisa estar logado para comentar.');
       setIsSubmitting(false);
-      return; // Sai da função aqui se não estiver logado
+      return;
     }
+
     if (!commentContent.trim()) {
       setError('O comentário não pode ser vazio.');
       setIsSubmitting(false);
@@ -32,17 +29,28 @@ const CreateComment= ({ postId, parentId = null, onCommentCreated, isReply = fal
     }
 
     try {
-      const newComment = { /* ... */ };
-      console.log('CreateCommentForm: Enviando comentário (Simulado)...');
+      const newComment = {
+        id: Math.random().toString(36).substr(2, 9),
+        content: commentContent.trim(),
+        createdAt: new Date().toISOString(),
+        user: {
+          username: currentUser.username,
+          profilePicUrl: currentUser.profilePicUrl || '/default.png'
+        },
+        replies: []
+      };
+
+      // Simulação de envio à API
+      console.log('CreateComment: Simulando envio...');
       await new Promise(resolve => setTimeout(resolve, 800));
 
       if (onCommentCreated) {
         onCommentCreated(newComment);
       }
-      setCommentContent('');
 
+      setCommentContent('');
     } catch (err) {
-      console.error('CreateCommentForm: Erro REAL ao enviar comentário (simulado):', err); // Mensagem mais específica
+      console.error('Erro ao enviar comentário:', err);
       setError('Não foi possível enviar o comentário. Tente novamente.');
     } finally {
       setIsSubmitting(false);
@@ -56,7 +64,7 @@ const CreateComment= ({ postId, parentId = null, onCommentCreated, isReply = fal
           value={commentContent}
           onChange={(e) => setCommentContent(e.target.value)}
           placeholder={isReply ? 'Digite sua resposta...' : 'Adicione um comentário...'}
-          rows={isReply ? "2" : "3"} // Respostas podem ser menores
+          rows={isReply ? "2" : "3"}
           className="comment-textarea"
         ></textarea>
         {error && <p className="error-message">{error}</p>}

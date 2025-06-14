@@ -69,7 +69,7 @@ const Comment = ({ comment, postId, onReplyCreated, level = 0 }) => {
 
       {/* Formulário de Resposta (visível se showReplyForm for true) */}
       {showReplyForm && (
-        <CreateCommentForm
+        <CreateComment
           postId={postId}
           parentId={comment.id} // Este comentário é o pai da nova resposta
           onCommentCreated={(newReply) => {
