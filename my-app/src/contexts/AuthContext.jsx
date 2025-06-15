@@ -1,5 +1,6 @@
-/*import React, { createContext, useState, useEffect, useContext } from 'react';
-import api from '../services/api'; // Importa a instância configurada do Axios
+// src/contexts/AuthContext.jsx
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import api from '../services/api'; // Importa a instância configurada do Axios para comunicação com o backend
 import { useNavigate } from 'react-router-dom'; // Para redirecionar após login/logout
 
 // 1. Criação do Contexto
@@ -8,86 +9,84 @@ const AuthContext = createContext(null);
 
 // 2. Componente Provedor de Autenticação
 export const AuthProvider = ({ children }) => {
-  // Estados para gerenciar o usuário, o status de carregamento e o token
+  // Estados para gerenciar o usuário logado, o status de carregamento e a navegação
   const [user, setUser] = useState(null); // Armazena os dados do usuário logado
   const [loading, setLoading] = useState(true); // Indica se a verificação inicial de autenticação está em andamento
   const navigate = useNavigate(); // Hook para navegação programática
 
   // Efeito para verificar o token no localStorage na inicialização da aplicação
+  // Isso mantém o usuário logado se ele fechar e reabrir o navegador
   useEffect(() => {
     const loadUser = async () => {
-      console.log('AuthContext: Iniciando loadUser...');
+      console.log('AuthContext: Iniciando verificação de autenticação...');
       const token = localStorage.getItem('authToken'); // Tenta obter o token do localStorage
 
-      if (token === MOCK_TOKEN) {
-        console.log('AuthContext: Token encontrado no localStorage.');
-        setUser(MOCK_USER)
+      if (token) {
+        console.log('AuthContext: Token encontrado no localStorage. Tentando validar no backend...');
         try {
-          // Opcional: Chamar uma rota do backend para validar o token e obter dados do usuário
-          // Isso é mais seguro do que apenas decodificar o token no front-end, pois o backend pode invalidar o token
-          // const response = await api.get('/auth/validate-token'); // Exemplo de rota de validação no backend
-          // setUser(response.data.user); // Assumindo que a resposta traz os dados do usuário
-
-          // Para testes iniciais, se não tiver a rota de validação no backend:
-          // Você pode decodificar o token aqui (cuidado, JWTs são apenas codificados, não criptografados!)
-          // ou simplesmente assumir que o token é válido e definir um usuário mock.
-          // Para uma implementação real, a validação no backend é recomendada.
-          setUser({ username: 'Usuário Teste', email: 'teste@example.com' }); // Dados mockados para simulação
-          console.log('AuthContext: Usuário definido (mockado ou validado).');
-
+          // Chama uma rota do backend para validar o token
+          // O middleware 'protect' do backend irá verificar o token JWT.
+          // Se for válido, o backend pode retornar os dados atualizados do usuário.
+          const response = await api.get('/api/auth/validate-token');
+          setUser(response.data.user); // Define os dados do usuário recebidos do backend
+          console.log('AuthContext: Token validado e usuário carregado:', response.data.user.username);
         } catch (error) {
-          console.error('AuthContext: Erro ao validar token ou carregar usuário:', error);
-          localStorage.removeItem('authToken'); // Remove token inválido/expirado
+          console.error('AuthContext: Erro ao validar token ou carregar usuário:', error.response?.data?.message || error.message);
+          // Se o token for inválido, expirado ou houver erro na validação, remove-o
+          localStorage.removeItem('authToken');
           setUser(null); // Garante que o usuário não está logado
+          // Opcional: redirecionar para login se o token for inválido/expirado ao carregar
+          // navigate('/login');
         }
       } else {
-        console.log('AuthContext: Nenhum token encontrado no localStorage.');
+        console.log('AuthContext: Nenhum token encontrado no localStorage. Usuário não logado.');
         setUser(null); // Garante que o usuário não está logado
       }
       setLoading(false); // Finaliza o estado de carregamento
-      console.log('AuthContext: loadUser finalizado. Loading:', false);
+      console.log('AuthContext: Verificação de autenticação finalizada. Loading:', false);
     };
 
     loadUser(); // Chama a função ao montar o componente
   }, []); // O array vazio garante que este efeito roda apenas uma vez (na montagem)
 
-  // Função de Login
+  // Função de Login: Envia as credenciais para o backend e armazena o token
   const login = async (email, password) => {
-    // ...
+    console.log('AuthContext: Tentando fazer login com o backend...');
     try {
-      const response = await api.post('/auth/login', { email, password });
-      const { token, user: userData } = response.data;
+      // Faz a requisição POST para a rota de login do backend
+      const response = await api.post('/api/auth/login', { email, password });
+      const { token, user: userData } = response.data; // Espera 'token' e 'user' na resposta do backend
 
-      localStorage.setItem('authToken', token);
-      setUser(userData);
-      console.log('AuthContext: Login bem-sucedido. Redirecionando para /');
-      navigate('/'); // <--- ESTA LINHA FAZ O REDIRECIONAMENTO PARA O FEED
-      return true;
+      localStorage.setItem('authToken', token); // Armazena o token JWT no localStorage
+      setUser(userData); // Define os dados do usuário no estado do contexto
+      console.log('AuthContext: Login bem-sucedido. Redirecionando para / (Feed)');
+      navigate('/'); // Redireciona para a página principal (Feed) após o login
+      return true; // Retorna true para indicar sucesso
     } catch (error) {
-      // ...
-      throw error; // É importante propagar o erro para o LoginPage poder exibi-lo
+      console.error('AuthContext: Erro no login:', error.response?.data || error.message);
+      // Lança o erro para que o componente que chamou 'login' (ex: LoginPage) possa tratá-lo
+      throw error;
     }
   };
 
-  // Função de Logout
+  // Função de Logout: Remove o token e os dados do usuário
   const logout = () => {
     console.log('AuthContext: Fazendo logout...');
-    localStorage.removeItem('authToken'); // Remove o token
-    setUser(null); // Limpa os dados do usuário
-    navigate('/'); // Redireciona para a página de login
+    localStorage.removeItem('authToken'); // Remove o token do localStorage
+    setUser(null); // Limpa os dados do usuário do estado
+    navigate('/login'); // Redireciona para a página de login
   };
 
-  // Valor que será fornecido pelo contexto
-  // isAuthenticated: é true se user não for nulo (!!user converte para booleano)
+  // Valor que será fornecido pelo contexto para os componentes filhos
   const contextValue = {
-    user,
-    isAuthenticated: !!user,
-    loading, // Necessário para o ProtectedRoute
-    login,
-    logout,
+    user, // Dados do usuário logado (ou null)
+    isAuthenticated: !!user, // Booleano que indica se o usuário está logado
+    loading, // Estado de carregamento inicial
+    login, // Função para realizar login
+    logout, // Função para realizar logout
   };
 
-  // O AuthProvider envolve os componentes filhos com o contexto
+  // O AuthProvider envolve os componentes filhos e disponibiliza o 'contextValue' para eles
   return (
     <AuthContext.Provider value={contextValue}>
       {children}
@@ -100,95 +99,7 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === null) {
-    // Isso acontece se useAuth for chamado fora do AuthProvider
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-}; */
-
-// src/contexts/AuthContext.jsx
-import React, { createContext, useState, useEffect, useContext } from 'react';
-// import api from '../services/api.js'; // <-- COMENTE OU REMOVA ESTA LINHA PARA SIMULAÇÃO TEMPORÁRIA
-import { useNavigate } from 'react-router-dom';
-import { MOCK_USER, MOCK_TOKEN } from '../mockData';
-
-// 1. Criação do Contexto
-const AuthContext = createContext(null);
-// Qualquer string serve
-
-// 2. Componente Provedor de Autenticação
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-
-  // Efeito para verificar o token no localStorage na inicialização da aplicação
-  useEffect(() => {
-    const loadUser = async () => {
-      console.log('AuthContext: Iniciando loadUser (Simulado)...');
-      const token = localStorage.getItem('authToken'); // Tenta obter o token do localStorage
-
-      if (token === MOCK_TOKEN) { // <--- Verifica se é o nosso token mock
-        console.log('AuthContext: Token SIMULADO encontrado no localStorage. Definindo usuário mock.');
-        // Se o token mock for encontrado, assume que o usuário está logado
-        setUser(MOCK_USER); // Define o usuário mock
-      } else {
-        console.log('AuthContext: Nenhum token mock encontrado ou token inválido. Usuário não logado.');
-        setUser(null);
-        localStorage.removeItem('authToken'); // Garante que nenhum token inválido/antigo fique por aí
-      }
-      setLoading(false); // Finaliza o estado de carregamento
-      console.log('AuthContext: loadUser finalizado. Loading:', false);
-    };
-
-    loadUser();
-  }, []);
-
-  // Função de Login (SIMULADA)
-  const login = async (email, password) => {
-    console.log('AuthContext: Tentando fazer login (Simulado)...');
-    // Você pode adicionar uma validação SIMPLES para fins de teste
-    if (email === MOCK_USER.email && password === '123456') { // Senha fixa para o mock
-      console.log('AuthContext: Login SIMULADO bem-sucedido. Definindo token e usuário mock.');
-      localStorage.setItem('authToken', MOCK_TOKEN); // Salva o token mock
-      setUser(MOCK_USER); // Define o usuário mock
-      navigate('/'); // Redireciona para a página principal (FeedPage)
-      return true;
-    } else {
-      console.log('AuthContext: Login SIMULADO falhou. Credenciais inválidas.');
-      const error = new Error('Credenciais de login simuladas inválidas.');
-      error.response = { data: { message: 'E-mail ou senha inválidos (simulado).' } }; // Simula resposta de erro do backend
-      throw error; // Lança um erro para ser capturado pelo LoginPage
-    }
-  };
-
-  // Função de Logout (Continua igual)
-  const logout = () => {
-    console.log('AuthContext: Fazendo logout...');
-    localStorage.removeItem('authToken');
-    setUser(null);
-    navigate('/login');
-  };
-
-  const contextValue = {
-    user,
-    isAuthenticated: !!user,
-    loading,
-    login,
-    logout,
-  };
-
-  return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-// 3. Hook Personalizado para Consumir o Contexto
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === null) {
+    // Isso acontece se useAuth for chamado fora do AuthProvider, o que é um erro
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;

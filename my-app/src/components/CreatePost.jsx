@@ -1,74 +1,73 @@
+// src/pages/CreatePost.jsx
 import React, { useState } from 'react';
-import Header from '../components/Header.jsx'; // Seu componente de cabeçalho
-import { useAuth } from '../contexts/AuthContext.jsx'; // Para pegar o usuário logado
-import api from '../services/api.js'; // Para simular o envio da postagem
-import { useNavigate } from 'react-router-dom'; // Para redirecionar após a criação
-import '../styles/CreatePost.css'; // O CSS para esta página
+import Header from '../components/Header.jsx';
+import { useAuth } from '../contexts/AuthContext.jsx';
+import api from '../services/api.js'; // Para enviar dados ao backend real
+import { useNavigate } from 'react-router-dom';
+import '../styles/CreatePost.css';
 
 const CreatePost = () => {
-  const { user } = useAuth(); // Obtém o usuário logado do contexto
-  const navigate = useNavigate(); // Hook para navegação
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-  // Estados para gerenciar os campos do formulário de postagem
   const [contentType, setContentType] = useState('text'); // 'text', 'image', 'video'
   const [content, setContent] = useState(''); // Texto da postagem
-  const [mediaUrl, setMediaUrl] = useState(''); // URL da imagem ou vídeo
-  const [isSubmitting, setIsSubmitting] = useState(false); // Estado para o botão de envio
-  const [error, setError] = useState(''); // Mensagem de erro
-  const [success, setSuccess] = useState(''); // Mensagem de sucesso
+  const [mediaFile, setMediaFile] = useState(null); // <-- MUDANÇA: Para armazenar o OBJETO File
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  // Função para lidar com a submissão do formulário de postagem
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Previne o comportamento padrão de recarregar a página
-    setIsSubmitting(true); // Ativa o estado de envio
-    setError('');       // Limpa mensagens anteriores
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
     setSuccess('');
 
-    // Validações básicas do formulário
     if (!user) {
       setError('Você precisa estar logado para criar uma postagem.');
       setIsSubmitting(false);
       return;
     }
-    if (!content.trim() && (contentType === 'text' || !mediaUrl.trim())) {
-      setError('A postagem não pode ser vazia.');
+    // Validação para conteúdo vazio: ou tem texto, ou tem mídia
+    if (!content.trim() && !(mediaFile && (contentType === 'image' || contentType === 'video'))) {
+      setError('A postagem não pode ser vazia. Digite algo ou selecione uma mídia.');
       setIsSubmitting(false);
       return;
     }
-    if ((contentType === 'image' || contentType === 'video') && !mediaUrl.trim()) {
-        setError(`Por favor, insira a URL da ${contentType}.`);
-        setIsSubmitting(false);
-        return;
+    // Validação para tipo de mídia sem arquivo
+    if ((contentType === 'image' || contentType === 'video') && !mediaFile) {
+      setError(`Por favor, selecione um arquivo para a ${contentType}.`);
+      setIsSubmitting(false);
+      return;
     }
 
     try {
-      // --- SIMULAÇÃO: Cria um objeto de postagem com dados mockados ---
-      const newPost = {
-        id: `post${Date.now()}`, // ID único (para o mock)
-        user: { // Dados do usuário logado para a postagem
-          id: user.id, // Adiciona o ID do usuário para futura distinção
-          username: user.username,
-          profilePicUrl: user.profilePicUrl,
-        },
-        createdAt: new Date().toISOString(), // Data atual da criação
-        contentType: contentType, // Tipo de conteúdo selecionado
-        content: content.trim(), // Conteúdo textual
-        imageUrl: contentType === 'image' ? mediaUrl.trim() : undefined, // URL da imagem, se for imagem
-        videoUrl: contentType === 'video' ? mediaUrl.trim() : undefined, // URL do vídeo, se for vídeo
-        likes: 0, // Inicia com 0 likes
-        dislikes: 0, // Inicia com 0 dislikes
-        commentsCount: 0, // Inicia com 0 comentários
-        communityId: undefined, // Esta postagem é para o feed geral
-      };
-
-      console.log('CreatePostPage: Enviando nova postagem (Simulado):', newPost);
-      // Simula um atraso de rede para o envio da postagem
-      await new Promise(resolve => setTimeout(resolve, 1000)); 
-
-      setSuccess('Postagem criada com sucesso! Redirecionando para o feed...');
+      // MUDANÇA: Criar um FormData para enviar arquivos para o backend
+      const formData = new FormData();
+      formData.append('contentType', contentType);
+      formData.append('content', content.trim());
       
-      // Em um ambiente real, você enviaria newPost para o backend aqui:
-      // const response = await api.post('/posts', newPost); // Exemplo de chamada API
+      if (mediaFile) {
+        // MUDANÇA: Anexar o arquivo de mídia ao FormData
+        // 'media' é o nome do campo que o Multer (backend) espera em postController.js
+        formData.append('media', mediaFile); 
+      }
+
+      // MUDANÇA: Chamar a API REAL do backend para criar a postagem
+      console.log('CreatePostPage: Enviando nova postagem para o backend...');
+      const response = await api.post('/api/posts', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // <-- Essencial para enviar arquivos!
+        },
+      });
+
+      setSuccess(response.data.message || 'Postagem criada com sucesso! Redirecionando para o feed...');
+      console.log('Postagem criada no backend:', response.data);
+
+      // Limpar formulário após sucesso
+      setContent('');
+      setMediaFile(null);
+      setContentType('text');
 
       // Redireciona para o feed após um curto período
       setTimeout(() => {
@@ -76,8 +75,8 @@ const CreatePost = () => {
       }, 1000);
 
     } catch (err) {
-      console.error('CreatePostPage: Erro ao criar postagem (simulado):', err.response?.data || err.message);
-      setError('Não foi possível criar a postagem. Tente novamente.');
+      console.error('CreatePostPage: Erro ao criar postagem:', err.response?.data || err.message);
+      setError(err.response?.data?.message || 'Não foi possível criar a postagem. Tente novamente.');
     } finally {
       setIsSubmitting(false); // Desativa o estado de envio
     }
@@ -85,7 +84,7 @@ const CreatePost = () => {
 
   return (
     <div>
-      <Header /> {/* Inclui o cabeçalho fixo na página */}
+      <Header />
       <div className="create-post-page-container">
         <div className="create-post-form-wrapper">
             <h2>Criar Nova Postagem</h2>
@@ -95,21 +94,21 @@ const CreatePost = () => {
                 <button
                     type="button"
                     className={contentType === 'text' ? 'active' : ''}
-                    onClick={() => setContentType('text')}
+                    onClick={() => { setContentType('text'); setMediaFile(null); }} // Limpa arquivo ao mudar tipo
                 >
                     Texto
                 </button>
                 <button
                     type="button"
                     className={contentType === 'image' ? 'active' : ''}
-                    onClick={() => setContentType('image')}
+                    onClick={() => { setContentType('image'); setMediaFile(null); }} // Limpa arquivo ao mudar tipo
                 >
                     Imagem
                 </button>
                 <button
                     type="button"
                     className={contentType === 'video' ? 'active' : ''}
-                    onClick={() => setContentType('video')}
+                    onClick={() => { setContentType('video'); setMediaFile(null); }} // Limpa arquivo ao mudar tipo
                 >
                     Vídeo
                 </button>
@@ -128,17 +127,14 @@ const CreatePost = () => {
                 className="post-content-textarea"
                 ></textarea>
 
-                {/* Campos para URL de mídia (se o tipo não for texto) */}
+                {/* Campo para seleção de arquivo de mídia (se o tipo não for texto) */}
                 {(contentType === 'image' || contentType === 'video') && (
                 <input
-                    type="url" // Usa tipo 'url' para validação básica de URL
-                    value={mediaUrl}
-                    onChange={(e) => setMediaUrl(e.target.value)}
-                    placeholder={
-                    contentType === 'image' ? 'URL da imagem (ex: .jpg, .png)' :
-                    'URL do vídeo (ex: .mp4, YouTube embed link)'
-                    }
+                    type="file" // <-- MUDANÇA: Tipo 'file' para upload
+                    onChange={(e) => setMediaFile(e.target.files[0])} // Armazena o objeto File
                     className="post-media-input"
+                    // Opcional: Adicione 'accept' para filtrar tipos de arquivo
+                    accept={contentType === 'image' ? 'image/*' : 'video/*'}
                 />
                 )}
 

@@ -1,31 +1,227 @@
 /* src/styles/FeedPage.css */
 
-/* ... (Estilos existentes do cabeçalho, se houver) ... */
-
-/* Estilos para o conteúdo principal do feed (abaixo do cabeçalho) */
+/* Estilos para o container principal do Feed */
 .feed-content-main {
-  padding-top: 80px; /* <--- ADICIONE ESTA LINHA: Altura do header + seu padding original */
-  color: white;
-  min-height: calc(100vh - 60px); /* Ajuste este min-height se precisar */
-  background-color: #1a1a1a;
-  display: flex;          /* Contêiner flexível */
-  flex-direction: column; /* Itens empilhados verticalmente */
-  align-items: center;    /* <--- ESSA LINHA DEVE CENTRALIZAR OS POSTS HORIZONTALMENTE */
+  /* Adapte o padding-top se o seu header tiver uma altura diferente de 60px */
+  padding-top: calc(60px + 20px); /* Padding para considerar o header fixo */
+  padding-bottom: 20px; /* Padding na parte de baixo da página */
+  background-color: #0b0b0b; /* Fundo mais escuro para a página do feed */
+  min-height: 100vh; /* Ocupa a altura total da viewport */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza os posts */
+  color: #f0f0f0; /* Cor do texto padrão */
+  font-family: 'Inter', Arial, sans-serif;
+  box-sizing: border-box;
 }
 
+/* Container para a lista de posts */
 .posts-list {
   display: flex;
   flex-direction: column;
-  align-items: center; /* <--- ESSA LINHA DEVE CENTRALIZAR OS PostCards DENTRO DA LISTA */
-  width: 100%;
-  max-width: 700px; /* <--- Esta é a largura máxima da coluna de posts */
-  padding-top: 20px;
+  gap: 20px; /* Espaço entre os posts */
+  width: 100%; /* Ocupa toda a largura disponível */
+  max-width: 650px; /* Largura máxima para os cards de postagem */
+  margin-top: 20px; /* Espaço do topo */
 }
 
-/* Estilo para o título das seções (ex: "Últimas Postagens") */
-.feed-content-main h2 {
-    font-size: 2em;
-    color: #f0f0f0;
-    margin-bottom: 25px;
-    text-align: center;
+/* Estilo do CARD INDIVIDUAL DE POSTAGEM */
+.post-card {
+  background-color: #1a1a1b; /* Fundo do card */
+  border-radius: 8px; /* Cantos arredondados */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Sombra para profundidade */
+  padding: 20px; /* Preenchimento interno do card */
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espaço entre as seções do post (header, body, footer) */
+  box-sizing: border-box;
+  overflow: hidden; /* Garante que elementos grandes não causem overflow */
+  text-align: left; /* Garante que o texto dentro do card alinhe à esquerda por padrão */
+}
+
+/* Seção do cabeçalho do post (foto de perfil, nome, data) */
+.post-header {
+  display: flex;
+  align-items: center; /* Alinha itens verticalmente no centro (foto, nome, data) */
+  gap: 15px; /* Espaço entre a foto e o bloco de informações */
+}
+
+.post-profile-pic {
+  width: 48px; /* Tamanho da foto de perfil */
+  height: 48px;
+  border-radius: 50%; /* Torna a foto circular */
+  object-fit: cover; /* Garante que a imagem preencha sem distorção */
+  border: 1px solid #333;
+  flex-shrink: 0;  /* Borda sutil */
+}
+
+.post-info {
+  display: flex;
+  flex-direction: column; /* Empilha nome e data um abaixo do outro */
+  align-items: flex-start; /* Alinha o nome e a data à esquerda dentro do post-info */
+  justify-content: center; /* Centraliza verticalmente o nome/data se houver espaço extra */
+  margin: 0; /* Garante que não haja margem externa no post-info */
+  padding: 0; /* Garante que não haja padding externo no post-info */
+  flex-grow: 1;
+}
+
+.post-info h3 {
+  margin: 0; /* Remove TODAS as margens padrão do h3 */
+  font-size: 1.1em; /* Tamanho da fonte */
+  color: #f0f0f0 !important; /* <--- USE !important TEMPORARIAMENTE para forçar a cor e visibilidade */
+  text-align: left !important; /* <--- USE !important TEMPORARIAMENTE para forçar o alinhamento */
+  line-height: 1.2 !important; /* <--- USE !important TEMPORARIAMENTE para forçar a altura da linha */
+  white-space: nowrap; /* Evita que o nome quebre em várias linhas se for muito longo */
+  overflow: hidden; /* Esconde o excesso se o nome for muito longo e nowrap */
+  text-overflow: ellipsis; /* Adiciona "..." se o nome for cortado */
+  display: block !important; /* <--- GARANTE QUE NÃO ESTÁ ESCONDIDO POR DISPLAY:NONE */
+  height: auto !important; /* <--- GARANTE ALTURA AUTOMÁTICA */
+  opacity: 1 !important; /* <--- GARANTE VISIBILIDADE */
+}
+
+.post-info span {
+  font-size: 0.85em;
+  color: #aaa; /* Cor mais clara para a data */
+  text-align: left;
+  line-height: 1.2; /* Ajusta a altura da linha para a data */
+}
+
+/* Corpo do post (texto e mídia) */
+.post-body {
+  display: flex;
+  flex-direction: column; /* Empilha texto e mídia */
+  align-items: flex-start; /* Alinha o conteúdo à esquerda dentro do post-body */
+  width: 100%; /* Certifique-se de que o post-body ocupa toda a largura disponível */
+}
+
+.post-body p {
+  margin: 0; /* Remove margem padrão do parágrafo */
+  font-size: 1em;
+  line-height: 1.5;
+  color: #d0d0d0;
+  text-align: left; /* A propriedade fundamental para alinhar o texto do parágrafo à esquerda */
+  width: 100%; /* Garante que o parágrafo ocupe a largura total para o alinhamento */
+  box-sizing: border-box; /* Inclui padding na largura */
+}
+
+/* Estilo para imagens e vídeos dentro do post */
+.post-media-content {
+  max-width: 100%; /* Garante que a mídia não exceda a largura do card */
+  border-radius: 8px; /* Cantos arredondados para a mídia */
+  margin-top: 10px; /* Espaço acima da mídia */
+  display: block; /* Remove espaço extra abaixo da imagem */
+  height: auto; /* Mantém a proporção */
+}
+
+/* Rodapé do post (likes, dislikes, comentários) */
+.post-footer {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Espaçamento entre os botões */
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #aaa;
+}
+
+/* Estilo para os spans individuais de like, dislike e comentários */
+.post-footer span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  padding: 5px 10px; /* Adiciona um pouco de padding para a área clicável */
+  border-radius: 5px; /* Cantos arredondados */
+  user-select: none;
+  border: 1px solid transparent; /* Borda transparente padrão */
+}
+
+.post-footer span:hover {
+  color: #ff4500; /* Cor laranja no hover (padrão) */
+  background-color: rgba(255, 69, 0, 0.1); /* Fundo suave no hover */
+  border-color: #ff4500; /* Borda laranja no hover */
+}
+
+/* Estilo para o botão de LIKE quando não está clicado (amarelo/laranja sutil) */
+.post-footer .post-likes {
+    color: #FF4500; /* Amarelo/Laranja suave */
+    border-color: #FF4500; /* Borda amarela/laranja */
+}
+
+/* Estilo para o botão de LIKE quando CLICADO (verde) */
+.post-footer .post-likes.liked {
+  color: #28a745; /* Verde */
+  background-color: rgba(40, 167, 69, 0.2); /* Fundo verde suave */
+  border-color: #28a745; /* Borda verde */
+}
+
+/* Estilo para o botão de DISLIKE quando não está clicado (cinza padrão) */
+.post-footer .post-dislikes {
+    color: #FF4500; /* Cinza padrão */
+    border-color: #FF4500; /* Borda cinza padrão */
+}
+
+/* Estilo para o botão de DISLIKE quando CLICADO (vermelho) */
+.post-footer .post-dislikes.disliked {
+  color: #FF4500; /* Vermelho */
+  background-color: rgba(220, 53, 69, 0.2); /* Fundo vermelho suave */
+  border-color: #FF4500; /* Borda vermelha */
+}
+
+/* Estilo para o botão de COMENTÁRIOS */
+.post-footer .post-comments {
+  color: #FF4500; /* Azul para o botão de comentário */
+  background-color: transparent;
+  border-color: #FF4500; /* Borda azul */
+  font-weight: bold; /* Deixa o texto em negrito como na imagem */
+}
+
+.post-footer .post-comments:hover {
+  color: #ffffff; /* Azul mais escuro no hover */
+  background-color: #FF4500;
+  border-color: #FF4500;
+}
+
+/* NOVO: Estilo para o botão de COMENTÁRIOS quando a seção está ABERTA/ATIVA */
+.post-footer .post-comments.active-comments {
+    color: white; /* Cor branca para o texto */
+    background-color: #FF4500; /* Fundo azul sólido */
+    border-color: #FF4500; /* Borda azul sólida */
+}
+
+/* Mensagens de carregamento e erro no FeedPage */
+.feed-content-main p {
+    text-align: left; /* Alterado para alinhar à esquerda para mensagens genéricas */
+    margin-top: 30px;
+    font-size: 1.1em;
+    color: #bbb;
+}
+
+/* Responsividade Básica */
+@media (max-width: 768px) {
+  .feed-content-main {
+    padding: calc(60px + 15px) 15px 15px;
+  }
+  .posts-list {
+    gap: 15px;
+  }
+  .post-card {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .post-profile-pic {
+    width: 40px;
+    height: 40px;
+  }
+  .post-info h3 {
+    font-size: 1em;
+  }
+  .post-info span {
+    font-size: 0.8em;
+  }
+  .post-footer {
+    gap: 15px;
+  }
 }

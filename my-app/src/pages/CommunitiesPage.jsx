@@ -3,7 +3,7 @@ import Header from '../components/Header.jsx';
 import api from '../services/api.js'; // Para simular chamadas ao backend
 import { Link } from 'react-router-dom'; // Para links para comunidades individuais (futuro)
 import '../styles/CommunitiesPage.css'; 
-import { MOCK_COMMUNITIES } from '../mockData.js'; // Vamos criar este CSS
+
 
 // --- FIM DOS DADOS MOCKADOS DE COMUNIDADES ---
 

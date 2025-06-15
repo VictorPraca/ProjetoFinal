@@ -5,7 +5,6 @@ import Posts from '../components/Posts.jsx';
 import api from '../services/api.js';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import '../styles/CommunityDetailPage.css'; 
-import { MOCK_COMMUNITIES, MOCK_POSTS, COMMENT_USERS } from '../mockData.js';
 
 // --- FIM DOS DADOS MOCKADOS ---
 

@@ -1,109 +1,118 @@
-/* src/styles/CreatePostForm.css */
+/* src/styles/CreatePost.css */
 
 .create-post-page-container {
-  padding-top: calc(60px + 30px); /* Espaço para o header fixo */
+  /* Adapte o padding-top se o seu header tiver uma altura diferente de 60px */
+  padding-top: calc(60px + 30px); /* Espaço para o header fixo + padding extra */
   padding-bottom: 30px; /* Padding na parte de baixo da página */
-  background-color: #1a1a1a;
+  background-color: #1a1a1a; /* Fundo escuro */
   min-height: 100vh; /* Ocupa a altura total da viewport */
-  color: #f0f0f0;
-  font-family: Arial, sans-serif;
+  color: #f0f0f0; /* Cor do texto padrão */
+  font-family: 'Inter', Arial, sans-serif; /* Fonte, usando Inter se disponível */
   box-sizing: border-box; /* Inclui padding na largura e altura */
-  display: flex;             /* Habilita Flexbox */
-  flex-direction: column;    /* Empilha os itens (título e wrapper do formulário) verticalmente */
-  justify-content: center;   /* <--- Centraliza os itens verticalmente na página */
-  align-items: center;       /* <--- Centraliza os itens horizontalmente na página */
+  display: flex; /* Habilita Flexbox */
+  flex-direction: column; /* Empilha os itens verticalmente */
+  justify-content: flex-start; /* Alinha o conteúdo ao topo, mas pode ser 'center' se quiser */
+  align-items: center; /* Centraliza os itens horizontalmente na página */
+  width: 100%; /* Garante que o container ocupe 100% da largura */
 }
 
+/* Container principal do formulário */
 .create-post-form-wrapper {
-  background-color: #2b2b2b;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  padding: 30px;
+  background-color: #2b2b2b; /* Fundo do card do formulário */
+  border-radius: 8px; /* Cantos arredondados */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Sombra para profundidade */
+  padding: 30px; /* Preenchimento interno */
   max-width: 600px; /* Largura máxima do formulário em si */
-  width: 100%; /* Ocupa toda a largura disponível até o max-width */
-  box-sizing: border-box;
+  width: 90%; /* Ocupa 90% da largura disponível para ser responsivo */
+  box-sizing: border-box; /* Inclui padding na largura */
   text-align: center; /* Centraliza o h2 e outros textos DENTRO do wrapper */
-  /* Remova margin: 0 auto; se estiver aqui, pois o pai já está centralizando */
+  margin-top: 30px; /* Espaço do topo, abaixo do cabeçalho fixo */
 }
 
-/* Opcional: Para o h2 'Criar Nova Postagem' dentro do wrapper */
+/* Estilo para o título H2 'Criar Nova Postagem' */
 .create-post-form-wrapper h2 {
-    font-size: 2em;
-    margin-top: 0;
-    margin-bottom: 25px;
-    text-align: center; /* Garante que o título dentro do wrapper esteja centralizado */
-}
-
-.create-post-form-container {
-  background-color: #2b2b2b;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  padding: 25px;
-  margin-bottom: 30px; /* Espaço abaixo do formulário antes das postagens */
-  max-width: 600px; /* Largura máxima, alinhado com os PostCards */
-  width: 100%;
-  box-sizing: border-box;
-  text-align: center; /* Centraliza o h3 */
-  color: #f0f0f0;
-}
-
-.create-post-form-container h3 {
-  font-size: 1.5em;
+  font-size: 2em; /* Tamanho da fonte */
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 25px; /* Espaço abaixo do título */
+  color: #f0f0f0; /* Cor do título */
 }
 
+/* O formulário em si */
 .create-post-form {
   display: flex;
   flex-direction: column;
   gap: 15px; /* Espaço entre os elementos do formulário */
 }
 
+/* Botões de seleção de tipo (Texto, Imagem, Vídeo) */
 .content-type-selector {
   display: flex;
-  justify-content: center; /* Centraliza os botões de seleção de tipo */
-  gap: 10px;
-  margin-bottom: 10px;
+  justify-content: center; /* Centraliza os botões */
+  gap: 10px; /* Espaço entre os botões */
+  margin-bottom: 20px; /* Espaço abaixo do seletor */
 }
 
 .content-type-selector button {
-  padding: 8px 15px;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-  background-color: transparent;
-  color: #ffffff;
+  padding: 10px 18px; /* Preenchimento dos botões */
+  border: 1px solid #666; /* Borda sutil */
+  border-radius: 5px; /* Cantos arredondados */
+  background-color: transparent; /* Fundo transparente */
+  color: #f0f0f0; /* Cor do texto */
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 1em;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .content-type-selector button.active {
-  background-color: #dd3500;
+  background-color: #ff4500; /* Cor ativa (laranja do Reddit) */
+  border-color: #ff4500;
   color: white;
 }
 
 .content-type-selector button:hover:not(.active) {
-  background-color: rgba(255, 94, 0, 0.1);
+  background-color: rgba(255, 69, 0, 0.1); /* Efeito hover suave */
+  border-color: #ff4500;
 }
 
+/* Textarea de conteúdo e Input de arquivo de mídia */
 .post-content-textarea,
 .post-media-input {
-  width: 540px; /* 100% menos padding */
-
-  padding: 10px;
+  width: 100%; /* Ocupa toda a largura do container pai */
+  padding: 12px;
   border: 1px solid #444;
   border-radius: 5px;
   background-color: #333;
   color: white;
-  box-sizing: border-box;
+  box-sizing: border-box; /* Inclui padding na largura */
   font-size: 1em;
-  resize: vertical; /* Permite redimensionar textarea */
-  min-height: 50px;
+  resize: vertical; /* Permite redimensionar verticalmente */
+  min-height: 80px; /* Altura mínima para o textarea */
 }
 
+.post-media-input {
+    padding: 8px; /* Ajuste para inputs de arquivo */
+}
+
+/* Mensagens de erro e sucesso */
+.error-message {
+  color: #dc3545; /* Vermelho para erros */
+  margin-top: 10px;
+  margin-bottom: 0;
+  font-size: 0.9em;
+}
+
+.success-message {
+  color: #28a745; /* Verde para sucesso */
+  margin-top: 10px;
+  margin-bottom: 0;
+  font-size: 0.9em;
+}
+
+/* Botão de Publicar */
 .submit-post-button {
-  width: 200px;
+  width: 100%; /* Ocupa toda a largura do formulário */
   padding: 12px 20px;
-  background-color: #ff4500; /* Verde para publicar */
+  background-color: #ff4500; /* Laranja do Reddit */
   color: white;
   border: none;
   border-radius: 5px;
@@ -111,27 +120,57 @@
   font-size: 1.1em;
   font-weight: bold;
   transition: background-color 0.2s ease;
-  align-self: center; /
+  align-self: center; /* Centraliza o botão se ele não ocupar 100% (mas aqui ocupa) */
 }
 
 .submit-post-button:hover:not(:disabled) {
-  background-color: #dd3500;
+  background-color: #e03c00; /* Tom mais escuro no hover */
 }
 
 .submit-post-button:disabled {
-  background-color: #6c757d;
+  background-color: #6c757d; /* Cinza quando desabilitado */
   cursor: not-allowed;
+  opacity: 0.7;
 }
 
-.error-message {
-  color: #dc3545;
-  margin-top: 10px;
-  margin-bottom: 0;
+/* Media Queries para Responsividade */
+@media (max-width: 768px) {
+  .create-post-form-wrapper {
+    padding: 20px;
+    width: 95%;
+  }
+
+  .create-post-form-wrapper h2 {
+    font-size: 1.8em;
+  }
+
+  .content-type-selector button {
+    padding: 8px 12px;
+    font-size: 0.9em;
+  }
+
+  .submit-post-button {
+    padding: 10px 15px;
+    font-size: 1em;
+  }
 }
 
-.success-message {
-  color: #28a745;
-  margin-top: 10px;
-  margin-bottom: 0;
-}
+@media (max-width: 480px) {
+  .create-post-form-wrapper {
+    padding: 15px;
+  }
 
+  .create-post-form-wrapper h2 {
+    font-size: 1.5em;
+  }
+
+  .content-type-selector {
+    flex-wrap: wrap; /* Quebra linha se os botões não couberem */
+    justify-content: center;
+  }
+
+  .content-type-selector button {
+    flex-grow: 1; /* Faz os botões crescerem para preencher o espaço */
+    margin: 5px; /* Adiciona margem entre eles */
+  }
+}
