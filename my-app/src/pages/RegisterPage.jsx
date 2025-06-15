@@ -136,7 +136,7 @@ const RegisterPage = () => {
             accept="image/*" // Restringe a seleção para arquivos de imagem
             onChange={(e) => setProfilePicture(e.target.files[0])} // Armazena o objeto File
           />
-
+          <br/>
           <label htmlFor="password">Senha:</label>
           <input
             type="password"

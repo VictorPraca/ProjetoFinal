@@ -43,7 +43,7 @@ const LoginPage = () => {
 
         {/* Adicione o formulário e o onSubmit */}
         <form onSubmit={handleSubmit}>
-          <label htmlFor="email-username">E-mail / Nome de Usuário:</label>
+          <label htmlFor="email-username">E-mail:</label>
           <input
             type="text"
             id="email-username"

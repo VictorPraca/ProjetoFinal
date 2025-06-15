@@ -1,16 +1,18 @@
 /* my-app/src/styles/ProfilePage.css */
 
 .profile-container {
-  padding-top: calc(60px + 20px); /* Espaço para o header fixo */
+  /* Ajuste o padding-top para compensar a altura do header fixo.
+     Seu header tem aproximadamente 60px de altura. Adicionamos uma margem de segurança. */
+  padding-top: calc(60px + 30px); /* Garante que o conteúdo comece abaixo do header */
   padding-bottom: 20px;
-  background-color: #0b0b0b; /* Fundo escuro da página */
-  min-height: 100vh; /* Ocupa a altura total da viewport */
-  color: #f0f0f0; /* Cor do texto padrão */
+  background-color: #0b0b0b;
+  min-height: 100vh;
+  color: #f0f0f0;
   font-family: 'Inter', Arial, sans-serif;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centraliza o conteúdo horizontalmente */
+  align-items: center;
 }
 
 .profile-header {
