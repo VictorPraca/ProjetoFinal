@@ -1,80 +1,148 @@
 const User = require('../models/userModel');
+const { Sequelize } = require('sequelize');
+const Post = require('../models/postModel');
+const Interaction = require('../models/interactionModel'); // Para contagem de interações
 
-exports.getUserProfile = async (req, res) => {
+// Controlador para obter o perfil de um usuário por ID (geralmente não usado pelo frontend diretamente)
+exports.getUserProfileById = async (req, res) => {
   try {
-    const userId = req.params.id; // Ou req.user se for o próprio perfil do usuário logado
+    const userId = req.params.id; 
     const user = await User.findByPk(userId, {
-      attributes: { exclude: ['password'] } // Não retornar a senha
+      attributes: { exclude: ['password'] }
     });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: 'Usuário não encontrado.' });
     }
     res.json(user);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Erro ao obter perfil do usuário por ID:', error);
+    res.status(500).json({ error: 'Erro interno do servidor ao obter perfil do usuário.' });
   }
 };
 
+// NOVO: Controlador para obter o perfil de um usuário por username
+exports.getUserProfileByUsername = async (req, res) => {
+  try {
+    const username = req.params.username; 
+    const user = await User.findOne({ where: { username }, attributes: { exclude: ['password'] } });
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado.' });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error('Erro ao obter perfil do usuário por username:', error);
+    res.status(500).json({ error: 'Erro interno do servidor ao obter perfil do usuário.' });
+  }
+};
+
+// NOVO: Controlador para buscar postagens de um usuário específico
+exports.getUserPosts = async (req, res) => {
+  try {
+    const username = req.params.username;
+    const user = await User.findOne({ where: { username } });
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado.' });
+    }
+
+    const posts = await Post.findAll({
+      where: { userId: user.id }, // Busca posts por ID do usuário
+      include: [{ model: User, attributes: ['id', 'username', 'profilePicture'] }], // Inclui o próprio usuário
+      order: [['createdAt', 'DESC']],
+    });
+
+    const currentUserId = req.user ? req.user.id : null; // Para saber a interação do usuário logado
+
+    const postsWithInteractions = await Promise.all(posts.map(async (post) => {
+        const postData = post.toJSON();
+
+        // Contar likes/dislikes para este post (apenas likes/dislikes de posts)
+        const likes = await Interaction.count({ where: { postId: postData.id, type: 'like', targetCommentId: null } });
+        const dislikes = await Interaction.count({ where: { postId: postData.id, type: 'dislike', targetCommentId: null } });
+        const commentsCount = await Interaction.count({ where: { postId: postData.id, type: 'comment' } });
+
+        // Verificar interação do usuário logado com este post
+        let userInteractionType = null;
+        if (currentUserId) {
+            const userInteraction = await Interaction.findOne({
+                where: { postId: postData.id, userId: currentUserId, type: { [Sequelize.Op.in]: ['like', 'dislike'] }, targetCommentId: null }
+            });
+            if (userInteraction) {
+                userInteractionType = userInteraction.type;
+            }
+        }
+        
+        return {
+            ...postData,
+            likes: likes,
+            dislikes: dislikes,
+            comments: commentsCount,
+            userHasInteracted: userInteractionType
+        };
+    }));
+
+    res.json(postsWithInteractions);
+  } catch (error) {
+    console.error('Erro ao obter postagens do usuário:', error);
+    res.status(500).json({ error: 'Erro interno do servidor ao obter postagens do usuário.' });
+  }
+};
+
+
+// Controlador para enviar uma solicitação de conexão (permanece o mesmo)
 exports.sendConnectionRequest = async (req, res) => {
     try {
         const { receiverId } = req.body;
-        const senderId = req.user; // ID do usuário logado
+        const senderId = req.user.id; // ID do usuário logado
+
+        if (senderId === receiverId) {
+            return res.status(400).json({ message: 'Não é possível enviar solicitação de conexão para si mesmo.' });
+        }
 
         const sender = await User.findByPk(senderId);
         const receiver = await User.findByPk(receiverId);
 
         if (!sender || !receiver) {
-            return res.status(404).json({ message: 'User not found.' });
+            return res.status(404).json({ message: 'Remetente ou destinatário não encontrado.' });
         }
 
-        // Verificar se já existe uma conexão ou solicitação pendente
-        const existingConnection = await sender.getConnections({ where: { id: receiverId } });
-        const existingRequest = await receiver.getConnections({ where: { id: senderId } }); // Se o outro já enviou uma solicitação
-
-        if (existingConnection.length > 0) {
-            return res.status(400).json({ message: 'Already connected or connection request sent.' });
-        }
-        if (existingRequest.length > 0) { // Pode significar que já há uma solicitação do outro lado
-            return res.status(400).json({ message: 'Pending connection request from this user.' });
+        const isAlreadyConnected = await sender.hasConnection(receiver) || await receiver.hasConnection(sender);
+        if (isAlreadyConnected) {
+            return res.status(400).json({ message: 'Já conectado ou solicitação de conexão pendente.' });
         }
 
-        // Lógica para registrar uma solicitação de conexão pendente.
-        // Isso geralmente exigiria uma tabela intermediária `ConnectionRequests`
-        // ou um status na tabela `UserConnections`.
-        // Para simplicidade, vamos considerar que adicionar a conexão aqui significa uma solicitação,
-        // e a aceitação será outra operação que confirma a conexão de ambos os lados.
         await sender.addConnection(receiver);
-        res.status(200).json({ message: 'Connection request sent.' });
+        res.status(200).json({ message: 'Solicitação de conexão enviada.' });
 
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('Erro ao enviar solicitação de conexão:', error);
+        res.status(500).json({ error: 'Erro interno do servidor ao enviar solicitação de conexão.' });
     }
 };
 
+// Controlador para aceitar uma solicitação de conexão (permanece o mesmo)
 exports.acceptConnectionRequest = async (req, res) => {
     try {
         const { senderId } = req.body;
-        const receiverId = req.user; // ID do usuário logado (que está aceitando)
+        const receiverId = req.user.id; // ID do usuário logado (que está aceitando)
 
         const sender = await User.findByPk(senderId);
         const receiver = await User.findByPk(receiverId);
 
         if (!sender || !receiver) {
-            return res.status(404).json({ message: 'User not found.' });
+            return res.status(404).json({ message: 'Remetente ou destinatário não encontrado.' });
         }
 
-        // Verificar se há uma solicitação pendente do remetente
         const hasPendingRequest = await receiver.hasConnection(sender);
 
         if (!hasPendingRequest) {
-            return res.status(400).json({ message: 'No pending connection request from this user.' });
+            return res.status(400).json({ message: 'Nenhuma solicitação de conexão pendente deste usuário.' });
         }
 
-        // Para aceitar, criamos a conexão recíproca.
-        await receiver.addConnection(sender);
-        res.status(200).json({ message: 'Connection accepted.' });
+        await sender.addConnection(receiver);
+        res.status(200).json({ message: 'Conexão aceita.' });
 
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('Erro ao aceitar solicitação de conexão:', error);
+        res.status(500).json({ error: 'Erro interno do servidor ao aceitar solicitação de conexão.' });
     }
 };

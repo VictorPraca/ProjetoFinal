@@ -1,89 +1,158 @@
-/* src/styles/ProfilePage.css */
+/* my-app/src/styles/ProfilePage.css */
 
-/* Contêiner principal da página de perfil */
 .profile-container {
+  padding-top: calc(60px + 20px); /* Espaço para o header fixo */
+  padding-bottom: 20px;
+  background-color: #0b0b0b; /* Fundo escuro da página */
+  min-height: 100vh; /* Ocupa a altura total da viewport */
+  color: #f0f0f0; /* Cor do texto padrão */
+  font-family: 'Inter', Arial, sans-serif;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 30px; /* Seu padding existente */
-  padding-top: calc(60px + 30px); /* <--- ADICIONE ESTA LINHA: Altura do header + seu padding original */
-  background-color: #1e1e1e;
-  min-height: 100vh;
-  color: #e0e0e0;
-  font-family: Arial, sans-serif;
-  /* position: relative; */ /* Opcional: Se você tiver elementos posicionados absolutamente dentro */
+  align-items: center; /* Centraliza o conteúdo horizontalmente */
 }
 
 .profile-header {
+  background-color: #1a1a1b; /* Fundo do card de cabeçalho do perfil */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Sombra */
+  padding: 30px;
+  max-width: 650px; /* Largura máxima */
+  width: 90%; /* Ocupa 90% da largura em telas menores */
+  text-align: center; /* Centraliza o conteúdo (foto, nome) */
+  margin-top: 20px; /* Margem do topo para separar do header */
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* <--- AQUI: Alinha os itens para o início (esquerda) */
-  /* justify-content: center; */ /* Remova ou comente esta linha, não é necessária para alinhamento em coluna com flex-start */
-  /* gap: 20px; */ /* Remova, pois não há gap direto aqui com flex-direction: column */
-
-  text-align: left; /* <--- AQUI: Alinha o texto dentro do próprio header para a esquerda */
-  margin-bottom: 30px;
-  background-color: #2b2b2b;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-  max-width: 850px;
-  width: 100%;
+  align-items: center;
+  gap: 15px; /* Espaço entre os elementos */
 }
 
-/* Estilo para a linha da foto e do nome */
 .profile-main-info {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* <--- AQUI: Alinha a foto e o nome para o início (esquerda) dentro da sua linha */
-  gap: 20px;
-  margin-bottom: 20px;
-  width: 100%; /* Garante que ocupe a largura total para o justify-content funcionar */
+  gap: 10px;
 }
 
-/* Estilos para a imagem de perfil principal */
 .profile-page-pic {
-  width: 120px;
+  width: 120px; /* Tamanho grande para foto de perfil */
   height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #ff4500;
-  box-shadow: 0 0 10px rgba(255, 38, 0, 0.5);
+  border-radius: 50%; /* Torna circular */
+  object-fit: cover; /* Ajusta a imagem para preencher */
+  border: 3px solid #ff4500; /* Borda laranja */
 }
 
-/* Ajuste a margem do h1 para não interferir com o flexbox */
 .profile-header h1 {
-  font-size: 2.5em;
   margin: 0;
+  font-size: 2.5em; /* Tamanho do nome de usuário */
   color: #f0f0f0;
 }
 
-/* Estilo para a biografia */
+/* Se você ainda tiver um parágrafo .profile-bio no HTML, este estilo será aplicado */
 .profile-bio {
-    font-style: italic;
-    color: #b0b0b0;
-    margin-top: 15px;
-    max-width: 500px;
-    text-align: left; /* <--- AQUI: Garante que o texto da bio fica à esquerda */
-    width: 100%; /* Garante que ocupe a largura total disponível */
+  font-size: 1.1em;
+  color: #d0d0d0;
+  margin-top: 10px;
+  line-height: 1.5;
+  max-width: 500px;
+  text-align: center;
 }
 
-/* ... (Mantenha os outros estilos para .profile-content, h2, etc.) ... */
-/* Apenas garanta que .profile-content também tem text-align: left; se precisar */
-.profile-content {
-  background-color: #2b2b2b;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-  max-width: 850px;
-  width: 100%;
-  text-align: left; /* <--- Se quiser o conteúdo abaixo alinhado à esquerda */
-  margin-top: 20px;
+/* Estilo para o NOVO card com nome de usuário e bio */
+.profile-info-card {
+  background-color: #1a1a1b; /* Mesmo fundo do post-card */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  max-width: 700px;
+  width: 90%;
+  margin-top: 20px; /* Espaço entre o profile-header e este card */
+  text-align: left; /* Alinha o texto dentro do card à esquerda */
+  box-sizing: border-box;
 }
 
-.profile-content h2 {
+.profile-info-card h2 {
+  margin: 0 0 10px 0; /* Margem inferior para separar do parágrafo */
   font-size: 1.8em;
-  margin-bottom: 20px;
-  color: #f0f0f0;
-  text-align: left; /* <--- Alinha o título da seção à esquerda */
+  color: #ff4500; /* Cor do nome de usuário no card */
+}
+
+.profile-info-card p {
+  margin: 0;
+  font-size: 1em;
+  line-height: 1.5;
+  color: #d0d0d0;
+}
+
+.profile-info-card .no-bio-message {
+    font-style: italic;
+    color: #888;
+}
+
+
+.profile-content {
+  width: 100%;
+  max-width: 710px;
+  margin-top: 30px; /* Espaço entre o card de info e a seção de posts */
+}
+
+.user-posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Reutiliza estilos de post-card do FeedPage.css */
+/* Certifique-se de que FeedPage.css está sendo carregado onde PostCard é usado (e que PostCard tem suas próprias classes) */
+
+/* Media Queries para Responsividade */
+@media (max-width: 768px) {
+  .profile-container {
+    padding-top: calc(60px + 15px) 15px 15px;
+  }
+  .profile-header,
+  .profile-info-card {
+    padding: 20px;
+    width: 95%;
+  }
+  .profile-page-pic {
+    width: 100px;
+    height: 100px;
+  }
+  .profile-header h1 {
+    font-size: 2em;
+  }
+  .profile-info-card h2 {
+    font-size: 1.6em;
+  }
+  .profile-bio,
+  .profile-info-card p {
+    font-size: 0.95em;
+  }
+  .profile-content {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-header,
+  .profile-info-card {
+    padding: 15px;
+    width: 98%;
+  }
+  .profile-page-pic {
+    width: 80px;
+    height: 80px;
+  }
+  .profile-header h1 {
+    font-size: 1.8em;
+  }
+  .profile-info-card h2 {
+    font-size: 1.4em;
+  }
+  .profile-bio,
+  .profile-info-card p {
+    font-size: 0.9em;
+  }
 }

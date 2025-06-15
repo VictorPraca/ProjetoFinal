@@ -81,47 +81,49 @@ exports.getPosts = async (req, res) => {
 // Função para adicionar ou remover likes/dislikes
 exports.toggleLikeDislike = async (req, res) => {
   try {
+    // NOVO: Verificação de autenticação
+    if (!req.user || !req.user.id) {
+        console.error('Erro de autenticação: req.user ou req.user.id indefinido.');
+        return res.status(401).json({ message: 'Você precisa estar logado para realizar esta ação.' });
+    }
+    const userId = req.user.id; // Agora userId estará definido se a verificação passou
+
+    console.log('ToggleLikeDislike: userId:', userId); // Debug: verifique o userId no console do backend
+
     const { postId, commentId, type } = req.body; // Recebe postId OU commentId
-    const userId = req.user.id; // ID do usuário logado
 
     if (!['like', 'dislike'].includes(type)) {
       return res.status(400).json({ message: 'Tipo de interação inválido. Use "like" ou "dislike".' });
     }
 
-    let targetEntity; // Referência à entidade alvo (Post ou Comentário)
-    let associatedPostId = null; // O ID do Post principal ao qual a interação pertence
+    let targetEntity;
+    let associatedPostId = null;
 
-    // PASSO 1: Identificar o alvo da interação e determinar o associatedPostId
     if (postId && !commentId) {
-      // Interação é em uma POSTAGEM
       targetEntity = await Post.findByPk(postId);
       if (!targetEntity) {
           return res.status(404).json({ message: 'Postagem não encontrada.' });
       }
-      associatedPostId = postId; // O post ID é o alvo
+      associatedPostId = postId;
     } else if (commentId && !postId) {
-      // Interação é em um COMENTÁRIO
-      targetEntity = await Interaction.findByPk(commentId); // Busca o comentário
-      if (!targetEntity || targetEntity.type !== 'comment') { // Garante que é um comentário
+      targetEntity = await Interaction.findByPk(commentId);
+      if (!targetEntity || targetEntity.type !== 'comment') {
           return res.status(404).json({ message: 'Comentário alvo não encontrado ou não é um comentário válido.' });
       }
-      associatedPostId = targetEntity.postId; // O postId associado é o postId do comentário
+      associatedPostId = targetEntity.postId;
     } else {
-      // Se nem postId nem commentId foram fornecidos, ou ambos foram fornecidos
       return res.status(400).json({ message: 'Forneça exatamente um entre postId ou commentId.' });
     }
 
-    // Se a entidade alvo não foi encontrada (Post ou Comentário), retorna erro
     if (!targetEntity) { 
       return res.status(404).json({ message: 'Entidade alvo (Post ou Comentário) não encontrada.' });
     }
 
-    // PASSO 2: Definir a condição de busca para uma interação existente do usuário
     const whereCondition = {
       userId,
       type: { [Sequelize.Op.in]: ['like', 'dislike'] },
-      postId: associatedPostId, // Sempre usa o PostId associado (do Post ou do Comentário)
-      targetCommentId: commentId || null // Será o ID do comentário se for like/dislike de comentário, ou null se for de post
+      postId: associatedPostId,
+      targetCommentId: commentId || null
     };
 
     const existingInteraction = await Interaction.findOne({ where: whereCondition });
@@ -129,7 +131,6 @@ exports.toggleLikeDislike = async (req, res) => {
     let action = '';
     let newUserInteractionType = null;
 
-    // PASSO 3: Processar a interação (criar, remover ou alterar)
     if (existingInteraction) {
       if (existingInteraction.type === type) {
         await existingInteraction.destroy();
@@ -145,7 +146,7 @@ exports.toggleLikeDislike = async (req, res) => {
       const newInteractionData = {
         userId,
         type,
-        postId: associatedPostId, // Define o postId aqui também para novas interações
+        postId: associatedPostId,
         targetCommentId: commentId || null
       };
       await Interaction.create(newInteractionData);
@@ -153,12 +154,11 @@ exports.toggleLikeDislike = async (req, res) => {
       newUserInteractionType = type;
     }
 
-    // PASSO 4: Calcular os novos contadores de likes/dislikes para a ENTIDADE ALVO
     let returnCounts = {};
-    if (postId && !commentId) { // Se a interação foi em um Post
+    if (postId && !commentId) {
         returnCounts.likes = await Interaction.count({ where: { postId: associatedPostId, type: 'like', targetCommentId: null } });
         returnCounts.dislikes = await Interaction.count({ where: { postId: associatedPostId, type: 'dislike', targetCommentId: null } });
-    } else if (commentId && !postId) { // Se a interação foi em um Comentário
+    } else if (commentId && !postId) {
         returnCounts.likes = await Interaction.count({ where: { targetCommentId: commentId, type: 'like' } });
         returnCounts.dislikes = await Interaction.count({ where: { targetCommentId: commentId, type: 'dislike' } });
     }
