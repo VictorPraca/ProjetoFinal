@@ -2,39 +2,38 @@
   display: grid;
   place-items: center;
   height: 100vh;
-  background-color: #1a1a1a; /* ajuda a visualizar o espaço */
+  background-color: #1a1a1a; 
 }
 
 .card-register {
-  background-color: #2b2b2b; /* Um cinza um pouco mais claro para o card */
+  background-color: #2b2b2b; 
   padding: 40px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  max-width: 400px; /* Largura máxima do formulário */
-  width: 90%; /* Ajuste para responsividade */
-  text-align: center; /* Centraliza textos dentro do card */
-  color: #e0e0e0; /* Cor do texto dentro do card */
+  max-width: 400px; 
+  width: 90%; 
+  text-align: center; 
+  color: #e0e0e0; 
 }
 
-/* Estilos para os campos de input */
+
 .card-register input[type="text"],
 .card-register input[type="password"],
 .card-register input[type="email"] {
-  width: calc(100% - 20px); /* 100% menos padding */
+  width: calc(100% - 20px); 
   padding: 10px;
   margin-bottom: 15px;
   border: 1px solid #444;
   border-radius: 4px;
   background-color: #333;
   color: white;
-  box-sizing: border-box; /* Inclui padding e borda na largura total */
+  box-sizing: border-box; 
 }
 
-/* Estilos para o botão Entrar */
 .card-register button {
   width: 100%;
   padding: 12px;
-  background-color: #007bff; /* Azul vibrante */
+  background-color: #007bff; 
   color: white;
   border: none;
   border-radius: 4px;

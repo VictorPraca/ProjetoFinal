@@ -1,40 +1,38 @@
-/* my-app/src/styles/CommentSection.css */
-
 .comment-section {
-  background-color: #1a1a1b; /* Fundo similar ao post-card */
+  background-color: #1a1a1b; 
   border-top: 1px solid #333;
   padding: 15px;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
-  margin-top: -15px; /* Para 'grudar' no post-card, ajuste se necessário */
-  color: #f0f0f0; /* Cor padrão do texto nos comentários */
+  margin-top: -15px; 
+  color: #f0f0f0; 
 }
 
 .comment-input-area {
   display: flex;
-  flex-direction: column; /* Empilha o textarea e o botão */
-  gap: 10px; /* Espaço entre o textarea e o botão */
-  margin-bottom: 20px; /* Espaço abaixo da área de input */
+  flex-direction: column; 
+  gap: 10px; 
+  margin-bottom: 20px; 
 }
 
 .comment-input-area textarea {
-  width: 100%; /* Ocupa a largura total */
+  width: 100%; 
   padding: 10px;
   border: 1px solid #444;
   border-radius: 5px;
   background-color: #333;
   color: white;
-  box-sizing: border-box; /* Inclui padding na largura */
-  resize: vertical; /* Permite redimensionar verticalmente */
+  box-sizing: border-box; 
+  resize: vertical; 
   min-height: 50px;
   font-size: 0.95em;
   line-height: 1.4;
 }
 
 .comment-input-area button {
-  align-self: flex-end; /* Alinha o botão à direita dentro do flex container */
+  align-self: flex-end; 
   padding: 8px 15px;
-  background-color: #ff4500; /* Cor do botão de comentar */
+  background-color: #ff4500; 
   color: white;
   border: none;
   border-radius: 5px;
@@ -44,33 +42,32 @@
 }
 
 .comment-input-area button:hover {
-  background-color: #e03c00; /* Tom mais escuro no hover */
+  background-color: #e03c00; 
 }
 
-/* Estilos para a lista de comentários */
 .comments-list {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Espaço entre os comentários */
+  gap: 15px; 
 }
 
 .comment-item {
-  background-color: #2b2b2b; /* Fundo do card de comentário */
+  background-color: #2b2b2b;
   border-radius: 8px;
   padding: 10px 15px;
   color: #d0d0d0;
 }
 
-/* Estilo para respostas (nível de aninhamento) */
-.comment-item.level-1 { /* Respostas diretas */
-  margin-left: 20px; /* Recuo para sub-comentários */
-  border-left: 3px solid #ff4500; /* Borda laranja para diferenciar */
-  background-color: #222222; /* Fundo ligeiramente diferente */
+
+.comment-item.level-1 { 
+  margin-left: 20px;
+  border-left: 3px solid #ff4500; 
+  background-color: #222222; 
 }
 
-.comment-item.level-2 { /* Respostas de respostas */
+.comment-item.level-2 { 
   margin-left: 40px;
-  border-left: 3px solid #007bff; /* Outra cor de borda para mais níveis */
+  border-left: 3px solid #007bff; 
   background-color: #1a1a1a;
 }
 
@@ -106,31 +103,29 @@
   line-height: 1.4;
 }
 
-/* Estilo para o grupo de interações do comentário */
 .comment-interactions {
     display: flex;
     align-items: center;
-    gap: 10px; /* Ajustado o espaçamento entre os botões */
+    gap: 10px; 
     margin-top: 5px;
-    font-size: 0.8em; /* Tamanho da fonte menor que no post */
-    color: #aaa; /* Cor padrão dos ícones */
+    font-size: 0.8em; 
+    color: #aaa; 
 }
 
-/* Estilo para os spans de like/dislike/responder em comentários */
+
 .comment-interactions span,
-.comment-interactions .reply-button { /* Inclui o botão de responder aqui para estilo consistente */
+.comment-interactions .reply-button { 
   display: flex;
   align-items: center;
-  gap: 3px; /* Espaço entre ícone e número */
+  gap: 3px; 
   cursor: pointer;
   transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
-  padding: 3px 6px; /* Padding menor */
+  padding: 3px 6px; 
   border-radius: 4px;
   user-select: none;
-  border: 1px solid transparent; /* Borda transparente padrão */
+  border: 1px solid transparent; 
 }
 
-/* Estilo de hover geral para interações de comentário */
 .comment-interactions span:hover,
 .comment-interactions .reply-button:hover {
   color: #ff4500; /* Cor laranja no hover */
@@ -138,9 +133,8 @@
   border-color: #ff4500;
 }
 
-/* Estilo específico para Likes em comentários */
 .comment-interactions .comment-likes {
-    color: #ffc107; /* Amarelo/Laranja suave */
+    color: #ffc107;
     border-color: #ffc107;
 }
 
@@ -150,36 +144,35 @@
     border-color: #28a745;
 }
 
-/* Estilo específico para Dislikes em comentários */
 .comment-interactions .comment-dislikes {
-    color: #aaa; /* Cinza padrão */
+    color: #aaa; 
     border-color: #aaa;
 }
 
 .comment-interactions .comment-dislikes.disliked {
-    color: #ff4500; /* Vermelho */
+    color: #ff4500; 
     background-color: rgba(220, 53, 69, 0.2);
     border-color: #ff4500;
 }
 
-/* Estilo para o botão "Responder" em comentários */
+
 .comment-interactions .reply-button {
-    background: transparent; /* Fundo transparente */
-    border: none; /* Remove borda padrão de botão */
-    color: #ff4500; /* Azul para "Responder" */
+    background: transparent; 
+    border: none; 
+    color: #ff4500; 
     font-size: 0.85em;
     cursor: pointer;
-    padding: 0; /* Remove padding padrão de botão */
-    text-align: left; /* Garante alinhamento à esquerda */
-    font-weight: normal; /* Normaliza o peso da fonte */
-    margin-left: auto; /* NOVO: Empurra o botão "Responder" para a direita */
+    padding: 0; 
+    text-align: left; 
+    font-weight: normal; 
+    margin-left: auto; 
 }
 
 .comment-interactions .reply-button:hover {
-    text-decoration: underline; /* Sublinhado no hover */
+    text-decoration: underline;
     color: #ff4500;
-    background-color: transparent; /* Garante que o fundo não muda */
-    border-color: transparent; /* Garante que a borda não muda */
+    background-color: transparent; 
+    border-color: transparent; 
 }
 
 

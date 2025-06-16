@@ -1,49 +1,41 @@
-/* my-app/src/index.css */
-
-/* Reset agressivo para HTML e BODY */
 html, body {
   margin: 0;
   padding: 0;
-  border: 0; /* Garante que não há bordas padrão */
+  border: 0; 
   width: 100%;
-  min-height: 100vh; /* Garante que a altura mínima é 100% da viewport */
+  min-height: 100vh; 
+  overflow: visible !important; 
+  overflow-x: hidden !important; 
   
-  /* CRÍTICO: Sobrescreve possíveis overflows que prendem o sticky */
-  overflow: visible !important; /* Permite que o conteúdo flua, não confinando o sticky */
-  overflow-x: hidden !important; /* Oculta barras de rolagem horizontais indesejadas */
-  
-  /* CRÍTICO: Sobrescreve transform, filter, perspective que quebram o sticky */
   transform: none !important;
   filter: none !important;
   perspective: none !important; 
   
-  scroll-behavior: smooth; /* Rolagem suave (opcional) */
+  scroll-behavior: smooth; 
 }
 
-/* Garante que o elemento raiz do seu app React (#root) também não tem margens/paddings e ocupe a altura total */
-#root { /* Verifique o ID do seu div raiz em public/index.html ou main.jsx/index.js */
+#root { 
   width: 100%;
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  display: flex; /* Para que os elementos filhos (como o Header) se alinhem */
-  flex-direction: column; /* Para empilhar conteúdo verticalmente */
+  display: flex; 
+  flex-direction: column; 
   
-  /* CRÍTICO: Também para o #root, caso ele seja o culpado */
+
   overflow: visible !important;
   transform: none !important;
   filter: none !important;
   perspective: none !important;
 }
 
-/* NOVO: Regra para a classe .App (o div que envolve tudo em seu App.jsx) */
-.App { /* Verifique se esta é a classe do div principal em seu App.jsx, se houver um */
+.App { 
   width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   
-  /* CRÍTICO: Aplica os mesmos resets de overflow/transform para o .App */
+  
   overflow: visible !important;
   overflow-x: hidden !important;
   transform: none !important;
@@ -52,23 +44,21 @@ html, body {
 }
 
 
-/* Estilos de fonte e cor globais */
+
 body {
   font-family: 'Inter', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0b0b0b; /* Cor de fundo principal da aplicação */
-  color: #f0f0f0; /* Cor de texto padrão */
+  background-color: #0b0b0b; 
+  color: #f0f0f0; 
 }
 
-/* Box-sizing global para facilitar o layout */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/* Reset para listas, links e botões */
 ul {
   list-style: none;
   margin: 0;
@@ -87,7 +77,6 @@ button {
   font-family: 'Inter', Arial, sans-serif;
 }
 
-/* Esconder elementos visualmente mas mantê-los para leitores de tela */
 .sr-only {
   position: absolute;
   width: 1px;

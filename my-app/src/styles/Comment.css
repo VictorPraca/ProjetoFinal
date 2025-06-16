@@ -1,25 +1,22 @@
-/* src/styles/Comment.css */
-
 .comment-bubble {
-  background-color: #3a3a3a; /* Fundo do comentário */
+  background-color: #3a3a3a; 
   border-radius: 12px;
   padding: 15px;
   margin-bottom: 10px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   color: #f0f0f0;
-  max-width: 100%; /* Garante que o comentário não transborde */
-  box-sizing: border-box; /* Inclui padding na largura */
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-/* Estilos para diferentes níveis de aninhamento de comentários */
 .comment-bubble.level-0 {
-  margin-left: 0; /* Comentário de nível superior */
+  margin-left: 0;
 }
 
 .comment-bubble.level-1 {
-  margin-left: 30px; /* Recuo para respostas */
+  margin-left: 30px; 
   background-color: #303030;
-  border-left: 3px solid #007bff; /* Linha lateral para aninhamento */
+  border-left: 3px solid #007bff;
 }
 
 .comment-bubble.level-2 {
@@ -51,7 +48,7 @@
 }
 
 .comment-user-pic {
-  width: 30px; /* Menor que a foto de postagem */
+  width: 30px; 
   height: 30px;
   border-radius: 50%;
   object-fit: cover;
@@ -77,22 +74,20 @@
 
 .comment-actions {
   display: flex;
-  gap: 10px; /* Espaço entre os botões de ação */
+  gap: 10px; 
   margin-top: 10px;
   border-top: 1px solid #444;
   padding-top: 10px;
 }
 
-/* Reutiliza estilos de action-button de PostCard.css */
-/* Certifique-se que o PostCard.css está carregado globalmente ou antes de Comment.css */
 .comment-action-button {
   background: none;
   border: none;
   color: #007bff;
   cursor: pointer;
-  padding: 5px 8px; /* Padding menor */
+  padding: 5px 8px; 
   border-radius: 5px;
-  font-size: 0.85em; /* Fonte menor */
+  font-size: 0.85em; 
   transition: background-color 0.2s ease, color 0.2s ease;
   display: flex;
   align-items: center;
@@ -103,7 +98,6 @@
   background-color: #444;
 }
 
-/* Estilos para likes/dislikes ativos em comentários */
 .comment-action-button.like-button.active {
   background-color: #28a745;
   color: white;
@@ -114,9 +108,8 @@
   color: white;
 }
 
-/* Contêiner para as respostas a um comentário */
 .comment-replies {
   margin-top: 10px;
   padding-top: 10px;
-  /* border-top: 1px dashed #555; */ /* Opcional: linha para separar respostas */
+ 
 }

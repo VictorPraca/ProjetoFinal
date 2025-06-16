@@ -1,21 +1,19 @@
-/* src/styles/Sidebar.css */
-
 .sidebar {
-  position: fixed; /* Fixa o menu na tela */
+  position: fixed; 
   top: 0;
-  left: -250px; /* Esconde o menu fora da tela por padrão */
-  width: 250px; /* Largura do menu */
-  height: 100%; /* Altura total da tela */
-  background-color: #202020; /* Cor de fundo do menu */
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra para destaque */
-  transition: left 0.3s ease-in-out; /* Transição suave para abrir/fechar */
-  z-index: 1000; /* Garante que o menu fique acima de outros elementos */
-  padding-top: 60px; /* Espaço para o botão de fechar */
+  left: -250px;
+  width: 250px; 
+  height: 100%; 
+  background-color: #202020; 
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); 
+  transition: left 0.3s ease-in-out; 
+  z-index: 1000; 
+  padding-top: 60px; 
   color: white;
 }
 
 .sidebar.open {
-  left: 0; /* Move o menu para a tela quando a classe 'open' é adicionada */
+  left: 0; 
 }
 
 .close-button {
@@ -27,11 +25,11 @@
   color: white;
   font-size: 1.5em;
   cursor: pointer;
-  z-index: 1001; /* Fica acima do próprio sidebar */
+  z-index: 1001; 
 }
 
 .sidebar-nav ul {
-  list-style: none; /* Remove marcadores da lista */
+  list-style: none; 
   padding: 0;
   margin: 0;
 }
@@ -41,7 +39,7 @@
 }
 
 .sidebar-nav a {
-  display: block; /* O link ocupa toda a largura do item da lista */
+  display: block; 
   padding: 15px 20px;
   color: white;
   text-decoration: none;
@@ -51,5 +49,5 @@
 
 .sidebar-nav a:hover {
   color: #dd3500;
-  background-color: #333; /* Cor de fundo ao passar o mouse */
+  background-color: #333;
 }

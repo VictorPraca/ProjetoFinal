@@ -1,12 +1,10 @@
-/* src/styles/PostCard.css */
-
 .post-card {
   background-color: #2b2b2b;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   margin-bottom: 20px;
   padding: 20px;
-  max-width: 1000px; /* Largura máxima das postagens */
+  max-width: 1000px;
   width: 100%;
   box-sizing: border-box;
   margin: 0 auto 20px auto;
@@ -23,7 +21,7 @@
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: #ff4500; /* Cor do link do usuário */
+  color: #ff4500;
   font-weight: bold;
 }
 
@@ -57,8 +55,8 @@
   max-width: 100%;
   height: auto;
   border-radius: 6px;
-  display: block; /* Remove espaço extra abaixo de imagens/vídeos */
-  margin-top: 10px; /* Espaço entre texto e mídia */
+  display: block; 
+  margin-top: 10px; 
 }
 
 .post-actions {
@@ -77,7 +75,7 @@
   padding: 8px 12px;
   border-radius: 5px;
   font-size: 0.95em;
-  transition: background-color 0.2s ease, color 0.2s ease; /* Adicione color na transição */
+  transition: background-color 0.2s ease, color 0.2s ease; 
   display: flex;
   align-items: center;
   gap: 5px;
@@ -87,14 +85,13 @@
   background-color: #3a3a3a;
 }
 
-/* --- NOVOS ESTILOS PARA LIKES/DISLIKES ATIVOS --- */
 .action-button.like-button.active {
-  background-color: #28a745; /* Verde para like ativo */
+  background-color: #28a745; 
   color: white;
 }
 
 .action-button.dislike-button.active {
-  background-color: #dc3545; /* Vermelho para dislike ativo */
+  background-color: #dc3545; 
   color: white;
 }
 
@@ -104,14 +101,14 @@
   padding-top: 20px;
 }
 
-.add-comment-form { /* Esta regra não é mais usada diretamente, pois o form é CreateCommentForm */
+.add-comment-form { 
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-bottom: 20px;
 }
 
-.add-comment-form textarea { /* Esta regra não é mais usada diretamente */
+.add-comment-form textarea { 
   width: calc(100% - 20px);
   padding: 10px;
   border: 1px solid #444;
@@ -124,8 +121,7 @@
   min-height: 40px;
 }
 
-.add-comment-form button { /* Esta regra não é mais usada diretamente */
-  padding: 8px 15px;
+.add-comment-form button { 
   background-color: #ff4500;
   color: white;
   border: none;
@@ -136,12 +132,12 @@
   transition: background-color 0.2s ease;
 }
 
-.add-comment-form button:hover { /* Esta regra não é mais usada diretamente */
+.add-comment-form button:hover { 
   background-color: #dc3545;
 }
 
 .comments-list {
-  margin-top: 15px; /* Espaçamento entre o formulário de comentário e a lista */
+  margin-top: 15px; 
 }
 
 .no-comments-message {

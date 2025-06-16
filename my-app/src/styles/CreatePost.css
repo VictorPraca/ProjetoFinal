@@ -1,47 +1,43 @@
-/* src/styles/CreatePost.css */
-
 .create-post-page-container {
-  /* Adapte o padding-top se o seu header tiver uma altura diferente de 60px */
-  padding-top: calc(60px + 30px); /* Espaço para o header fixo + padding extra */
-  padding-bottom: 30px; /* Padding na parte de baixo da página */
-  background-color: #1a1a1a; /* Fundo escuro */
-  min-height: 100vh; /* Ocupa a altura total da viewport */
-  color: #f0f0f0; /* Cor do texto padrão */
-  font-family: 'Inter', Arial, sans-serif; /* Fonte, usando Inter se disponível */
-  box-sizing: border-box; /* Inclui padding na largura e altura */
-  display: flex; /* Habilita Flexbox */
-  flex-direction: column; /* Empilha os itens verticalmente */
-  justify-content: flex-start; /* Alinha o conteúdo ao topo, mas pode ser 'center' se quiser */
-  align-items: center; /* Centraliza os itens horizontalmente na página */
-  width: 100%; /* Garante que o container ocupe 100% da largura */
+  padding-top: calc(60px + 30px); 
+  padding-bottom: 30px; 
+  background-color: #1a1a1a; 
+  min-height: 100vh; 
+  color: #f0f0f0; 
+  font-family: 'Inter', Arial, sans-serif; 
+  box-sizing: border-box; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: flex-start; 
+  align-items: center;
+  width: 100%; 
 }
 
-/* Container principal do formulário */
+
 .create-post-form-wrapper {
-  background-color: #2b2b2b; /* Fundo do card do formulário */
-  border-radius: 8px; /* Cantos arredondados */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Sombra para profundidade */
-  padding: 30px; /* Preenchimento interno */
-  max-width: 600px; /* Largura máxima do formulário em si */
-  width: 90%; /* Ocupa 90% da largura disponível para ser responsivo */
-  box-sizing: border-box; /* Inclui padding na largura */
-  text-align: center; /* Centraliza o h2 e outros textos DENTRO do wrapper */
-  margin-top: 30px; /* Espaço do topo, abaixo do cabeçalho fixo */
+  background-color: #2b2b2b; 
+  border-radius: 8px; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
+  padding: 30px;
+  max-width: 600px; 
+  width: 90%; 
+  box-sizing: border-box;
+  text-align: center; 
+  margin-top: 30px;
 }
 
-/* Estilo para o título H2 'Criar Nova Postagem' */
 .create-post-form-wrapper h2 {
-  font-size: 2em; /* Tamanho da fonte */
+  font-size: 2em; 
   margin-top: 0;
-  margin-bottom: 25px; /* Espaço abaixo do título */
-  color: #f0f0f0; /* Cor do título */
+  margin-bottom: 25px; 
+  color: #f0f0f0;
 }
 
-/* O formulário em si */
+
 .create-post-form {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Espaço entre os elementos do formulário */
+  gap: 15px; 
 }
 
 .community-select {
@@ -53,7 +49,7 @@
   color: white;
   box-sizing: border-box;
   font-size: 1em;
-  appearance: none; /* Remove o estilo padrão do SO */
+  appearance: none; 
   background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%204%205%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M2%200L0%202h4L2%200z%20M2%205L0%203h4L2%205z%22%2F%3E%3C%2Fsvg%3E'); /* Seta customizada para dropdown */
   background-repeat: no-repeat;
   background-position: right 10px center;
@@ -66,75 +62,71 @@
 }
 
 
-/* Botões de seleção de tipo (Texto, Imagem, Vídeo) */
+
 .content-type-selector {
   display: flex;
-  justify-content: center; /* Centraliza os botões */
-  gap: 10px; /* Espaço entre os botões */
-  margin-bottom: 20px; /* Espaço abaixo do seletor */
+  justify-content: center; 
+  gap: 10px; 
+  margin-bottom: 20px; 
 }
 
 .content-type-selector button {
-  padding: 10px 18px; /* Preenchimento dos botões */
-  border: 1px solid #666; /* Borda sutil */
-  border-radius: 5px; /* Cantos arredondados */
-  background-color: transparent; /* Fundo transparente */
-  color: #f0f0f0; /* Cor do texto */
+  padding: 10px 18px; 
+  border: 1px solid #666; 
+  border-radius: 5px;
+  background-color: transparent;
+  color: #f0f0f0; 
   cursor: pointer;
   font-size: 1em;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .content-type-selector button.active {
-  background-color: #ff4500; /* Cor ativa (laranja do Reddit) */
-  border-color: #ff4500;
+  background-color: #ff4500; 
   color: white;
 }
 
 .content-type-selector button:hover:not(.active) {
-  background-color: rgba(255, 69, 0, 0.1); /* Efeito hover suave */
+  background-color: rgba(255, 69, 0, 0.1); 
   border-color: #ff4500;
 }
 
-/* Textarea de conteúdo e Input de arquivo de mídia */
 .post-content-textarea,
 .post-media-input {
-  width: 100%; /* Ocupa toda a largura do container pai */
+  width: 100%; 
   padding: 12px;
   border: 1px solid #444;
   border-radius: 5px;
   background-color: #333;
   color: white;
-  box-sizing: border-box; /* Inclui padding na largura */
+  box-sizing: border-box; 
   font-size: 1em;
-  resize: vertical; /* Permite redimensionar verticalmente */
-  min-height: 80px; /* Altura mínima para o textarea */
+  resize: vertical;
+  min-height: 80px; 
 }
 
 .post-media-input {
-    padding: 8px; /* Ajuste para inputs de arquivo */
+    padding: 8px; 
 }
 
-/* Mensagens de erro e sucesso */
 .error-message {
-  color: #dc3545; /* Vermelho para erros */
+  color: #dc3545; 
   margin-top: 10px;
   margin-bottom: 0;
   font-size: 0.9em;
 }
 
 .success-message {
-  color: #28a745; /* Verde para sucesso */
+  color: #28a745;
   margin-top: 10px;
   margin-bottom: 0;
   font-size: 0.9em;
 }
 
-/* Botão de Publicar */
 .submit-post-button {
-  width: 100%; /* Ocupa toda a largura do formulário */
+  width: 100%; 
   padding: 12px 20px;
-  background-color: #ff4500; /* Laranja do Reddit */
+  background-color: #ff4500; 
   color: white;
   border: none;
   border-radius: 5px;
@@ -142,20 +134,19 @@
   font-size: 1.1em;
   font-weight: bold;
   transition: background-color 0.2s ease;
-  align-self: center; /* Centraliza o botão se ele não ocupar 100% (mas aqui ocupa) */
+  align-self: center; 
 }
 
 .submit-post-button:hover:not(:disabled) {
-  background-color: #e03c00; /* Tom mais escuro no hover */
+  background-color: #e03c00; 
 }
 
 .submit-post-button:disabled {
-  background-color: #6c757d; /* Cinza quando desabilitado */
+  background-color: #6c757d; 
   cursor: not-allowed;
   opacity: 0.7;
 }
 
-/* Media Queries para Responsividade */
 @media (max-width: 768px) {
   .create-post-form-wrapper {
     padding: 20px;
@@ -187,12 +178,12 @@
   }
 
   .content-type-selector {
-    flex-wrap: wrap; /* Quebra linha se os botões não couberem */
+    flex-wrap: wrap; 
     justify-content: center;
   }
 
   .content-type-selector button {
-    flex-grow: 1; /* Faz os botões crescerem para preencher o espaço */
-    margin: 5px; /* Adiciona margem entre eles */
+    flex-grow: 1; 
+    margin: 5px; 
   }
 }

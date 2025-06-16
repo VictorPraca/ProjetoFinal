@@ -1,7 +1,5 @@
-/* my-app/src/styles/CommunityDetailPage.css */
-
 .community-detail-container {
-  padding-top: calc(60px + 30px); /* Espaço para o header fixo */
+  padding-top: calc(60px + 30px); 
   padding-bottom: 30px;
   background-color: #0b0b0b;
   min-height: 100vh;
@@ -14,20 +12,18 @@
 }
 
 .community-detail-content {
-  max-width: 900px; /* Largura um pouco maior para o conteúdo da página */
+  max-width: 900px; 
   width: 90%;
   margin-top: 20px;
-  /* Remove background-color e padding daqui, pois serão do banner e da seção de posts */
 }
 
-/* NOVO: Estilo para o banner/cabeçalho da comunidade */
 .community-banner {
   background-color: #1a1a1b;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   padding: 30px;
   text-align: center;
-  margin-bottom: 20px; /* Espaço entre o banner e a seção de posts */
+  margin-bottom: 20px; 
 }
 
 .community-banner h1 {
@@ -54,26 +50,25 @@
 }
 
 .community-banner-meta a {
-    color: #007bff; /* Cor do link do criador */
+    color: #007bff; 
     text-decoration: none;
 }
 .community-banner-meta a:hover {
     text-decoration: underline;
 }
 
-/* Botão de Entrar/Sair da Comunidade */
 .community-join-button {
   padding: 10px 20px;
-  border-radius: 9999px; /* Cantos arredondados */
+  border-radius: 9999px; 
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-  border: 1px solid #ff4500; /* Borda padrão */
+  border: 1px solid #ff4500; 
   background-color: #ff4500;
   color: white;
 }
 
-.community-join-button.leave { /* Estilo quando o usuário é membro (sair) */
+.community-join-button.leave { 
   background-color: transparent;
   color: #ff4500;
   border-color: #ff4500;
@@ -81,11 +76,11 @@
 
 .community-join-button:hover:not(:disabled) {
   opacity: 0.8;
-  background-color: #e03c00; /* Tom mais escuro para o botão de join */
+  background-color: #e03c00; 
 }
 
 .community-join-button.leave:hover:not(:disabled) {
-  background-color: rgba(255, 69, 0, 0.1); /* Fundo suave para o botão de leave */
+  background-color: rgba(255, 69, 0, 0.1); 
   color: #ff4500;
 }
 
@@ -113,17 +108,15 @@
     font-size: 0.8em;
     font-weight: bold;
     margin-top: 10px;
-    display: inline-block; /* Permite margens/paddings */
+    display: inline-block; 
 }
 
-
-/* Seção de postagens da comunidade */
 .community-posts-section {
-  background-color: #1a1a1b; /* Fundo similar ao banner */
+  background-color: #1a1a1b; 
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  padding: 20px 30px; /* Padding interno */
-  margin-bottom: 20px; /* Espaço abaixo da seção */
+  padding: 20px 30px; 
+  margin-bottom: 20px; 
 }
 
 .community-posts-section h2 {
@@ -137,10 +130,9 @@
 .community-posts-list {
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Espaço entre os posts */
+  gap: 20px; 
 }
 
-/* Mensagens de erro e sucesso */
 .error-message {
   color: #dc3545;
   margin-top: 10px;
@@ -148,10 +140,10 @@
   text-align: center;
 }
 
-/* Responsividade */
+
 @media (max-width: 768px) {
   .community-detail-content {
-    padding: 0; /* Remove padding do container para gerenciar padding nos sub-seções */
+    padding: 0; 
     width: 95%;
   }
   .community-banner,

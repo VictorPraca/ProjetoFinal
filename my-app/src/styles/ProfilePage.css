@@ -1,5 +1,3 @@
-/* my-app/src/styles/ProfilePage.css */
-
 .profile-container {
   padding-top: calc(60px + 30px);
   padding-bottom: 20px;
@@ -66,16 +64,16 @@
     text-align: center;
 }
 
-/* NOVO: Estilos para a seção de Tags/Interesses */
+
 .profile-tags-section {
   background-color: #1a1a1b;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  padding: 20px 30px; /* Padding ajustado */
+  padding: 20px 30px; 
   max-width: 650px;
   width: 90%;
   margin-top: 20px;
-  text-align: left; /* Alinhamento do conteúdo interno */
+  text-align: left; 
 }
 
 .profile-tags-section h2 {
@@ -96,40 +94,40 @@
 .tags-view-mode,
 .tags-edit-mode {
   display: flex;
-  flex-wrap: wrap; /* Permite que as tags quebrem linha */
-  gap: 10px; /* Espaço entre as tags */
+  flex-wrap: wrap;
+  gap: 10px; 
   align-items: center;
-  justify-content: center; /* Centraliza as tags horizontalmente */
+  justify-content: center; 
   margin-bottom: 15px;
-  min-height: 40px; /* Altura mínima para o container de tags */
+  min-height: 40px; 
 }
 
 .tag-bubble {
   background-color: #333;
   color: white;
   padding: 8px 12px;
-  border-radius: 9999px; /* Formato de pílula */
+  border-radius: 9999px; 
   font-size: 0.9em;
-  white-space: nowrap; /* Impede que o texto da tag quebre */
+  white-space: nowrap; 
 }
 
 .edit-tags-button {
-  background-color: #ff4500; /* Azul para o botão de editar */
+  background-color: #ff4500; 
   color: white;
   padding: 8px 15px;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.2s ease;
-  margin-top: 10px; /* Espaço acima do botão */
-  align-self: center; /* Centraliza o botão dentro do flex container do view mode */
+  margin-top: 10px; 
+  align-self: center; 
 }
 
 .edit-tags-button:hover {
   background-color: #ff4500;
 }
 
-/* Estilos para o modo de edição */
+
 .add-tag-form {
   display: flex;
   gap: 10px;
@@ -138,7 +136,7 @@
 }
 
 .add-tag-form input {
-  flex-grow: 1; /* Ocupa o espaço restante */
+  flex-grow: 1; 
   padding: 8px 12px;
   border: 1px solid #444;
   border-radius: 5px;
@@ -163,7 +161,7 @@
 }
 
 .editable-tag {
-  background-color: #555; /* Cor diferente para tags em edição */
+  background-color: #555; 
   display: flex;
   align-items: center;
   gap: 5px;
@@ -177,12 +175,12 @@
   cursor: pointer;
   font-size: 1.1em;
   padding: 0 3px;
-  line-height: 1; /* Alinhamento vertical */
+  line-height: 1; 
   transition: color 0.2s ease;
 }
 
 .remove-tag-button:hover {
-  color: #dc3545; /* Vermelho no hover */
+  color: #dc3545; 
 }
 
 .tag-actions-buttons {
@@ -202,7 +200,7 @@
 }
 
 .save-tags-button {
-    background-color: #ff4500; /* Verde */
+    background-color: #ff4500; 
     color: white;
     border: none;
 }
@@ -211,7 +209,7 @@
 }
 
 .cancel-tags-button {
-    background-color: #6c757d; /* Cinza */
+    background-color: #6c757d;
     color: white;
     border: none;
 }
@@ -220,7 +218,6 @@
 }
 
 
-/* Seção de postagens */
 .profile-content {
   width: 100%;
   max-width: 650px;
@@ -240,13 +237,12 @@
   gap: 20px;
 }
 
-/* Media Queries para Responsividade */
 @media (max-width: 768px) {
   .profile-container {
     padding-top: calc(60px + 15px);
   }
   .profile-header,
-  .profile-tags-section, /* Ajusta também a seção de tags */
+  .profile-tags-section, 
   .profile-info-card {
     padding: 20px;
     width: 95%;
@@ -260,7 +256,7 @@
   }
   .profile-bio-text,
   .profile-no-bio-message,
-  .no-tags-message { /* Ajusta a fonte das mensagens */
+  .no-tags-message { 
     font-size: 0.95em;
   }
   .profile-tags-section h2,
@@ -268,12 +264,12 @@
     font-size: 1.6em;
   }
   .add-tag-form {
-    flex-direction: column; /* Em telas menores, input e botão empilham */
+    flex-direction: column; 
     align-items: center;
   }
   .add-tag-form input,
   .add-tag-form button {
-    width: 100%; /* Ocupam largura total */
+    width: 100%; 
   }
 }
 

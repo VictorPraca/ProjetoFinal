@@ -1,7 +1,5 @@
-/* my-app/src/styles/CommunitiesPage.css */
-
 .communities-page-container {
-  padding-top: calc(60px + 30px); /* Espaço para o header fixo */
+  padding-top: calc(60px + 30px); 
   padding-bottom: 30px;
   background-color: #0b0b0b;
   min-height: 100vh;
@@ -28,7 +26,7 @@
 
 .create-community-section,
 .explore-communities-section {
-  background-color: #1a1a1b; /* Fundo do card principal da seção */
+  background-color: #1a1a1b; 
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   padding: 30px;
@@ -100,19 +98,19 @@
 .communities-list {
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Espaço entre os cards de comunidade */
+  gap: 20px; 
 }
 
-/* NOVO: Estilo para o CARD INDIVIDUAL DE COMUNIDADE */
+
 .community-card {
-  background-color: #2b2b2b; /* Fundo do card individual de comunidade */
+  background-color: #2b2b2b; 
   border-radius: 8px;
-  padding: 20px; /* Preenchimento interno */
+  padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Espaço entre os elementos dentro do card */
-  text-align: left; /* Alinha o texto à esquerda por padrão */
+  gap: 10px; 
+  text-align: left; 
 }
 
 .community-card h3 {
@@ -135,7 +133,7 @@
 }
 
 .view-community-button {
-  align-self: flex-end; /* Alinha o botão "Ver Comunidade" à direita */
+  align-self: flex-end; 
   padding: 8px 15px;
   background-color: #ff4500;
   color: white;
@@ -152,7 +150,6 @@
   background-color: #ff4500;
 }
 
-/* Mensagens de erro e sucesso */
 .error-message {
   color: #dc3545;
   margin-top: 10px;
@@ -167,7 +164,6 @@
   text-align: center;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
   .communities-content {
     width: 95%;
@@ -177,7 +173,7 @@
   }
   .create-community-section,
   .explore-communities-section,
-  .community-card { /* Ajusta o padding para telas menores */
+  .community-card { 
     padding: 20px;
   }
 }
@@ -193,7 +189,7 @@
   .create-community-form button {
     width: 100%;
   }
-  .community-card { /* Ajusta o padding para telas muito pequenas */
+  .community-card { 
     padding: 15px;
   }
   .community-card h3 {
