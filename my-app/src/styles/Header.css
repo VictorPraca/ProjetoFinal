@@ -1,6 +1,11 @@
 /* src/styles/Header.css */
 
 .app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -9,9 +14,6 @@
   color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 1000;
-  position: sticky; /* <-- ESSA LINHA É CRÍTICA */
-  top: 0;           /* <-- ESSA LINHA É CRÍTICA */
-  width: 100%;
   box-sizing: border-box;
 }
 
