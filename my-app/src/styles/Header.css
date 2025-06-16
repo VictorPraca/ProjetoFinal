@@ -1,199 +1,221 @@
 /* src/styles/Header.css */
 
-.header-container {
+.app-header {
   display: flex;
-  align-items: center; /* Alinha itens verticalmente ao centro */
-  justify-content: space-between; /* Distribui espaço entre os grupos esquerdo e direito */
-  
-  padding: 15px 30px; /* Espaçamento interno */
-  background-color: #2a2a2a; /* Cor de fundo do cabeçalho */
-  border-bottom: 1px solid #3a3a3a; /* Linha inferior */
-  color: white; /* Cor do texto padrão */
-  
-  height: 60px; /* Altura fixa do cabeçalho */
-  width: 100%; /* Ocupa toda a largura da tela */
-  box-sizing: border-box; /* Inclui padding na largura total */
-
-  /* Propriedades para fixar o header no topo da tela */
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 999; /* Garante que o header fique acima de outros conteúdos */
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #1a1a1b;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  position: sticky; /* <-- ESSA LINHA É CRÍTICA */
+  top: 0;           /* <-- ESSA LINHA É CRÍTICA */
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Grupo esquerdo do cabeçalho (botão do menu + título) */
+/* Grupo da esquerda: Botão de menu e título */
 .header-left-group {
   display: flex;
-  align-items: center; /* Alinha o botão e o título verticalmente */
-  gap: 15px; /* Espaçamento entre o botão e o título */
+  align-items: center;
+  gap: 15px; /* Espaço entre o botão de menu e o título */
 }
 
-/* Estilo do botão de toggle da sidebar */
 .menu-toggle-button {
-  background: none; /* Sem fundo */
-  border: none; /* Sem borda */
-  color: white; /* Cor do ícone */
-  font-size: 2em; /* Tamanho do ícone */
-  cursor: pointer; /* Cursor de clique */
-  padding: 5px;
-  border-radius: 5px;
-  transition: background-color 0.2s ease;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  margin-right: 5px;
 }
 
 .menu-toggle-button:hover {
-  background-color: rgba(255, 255, 255, 0.1); /* Efeito hover */
+  opacity: 0.8;
 }
 
-/* Estilo do título "Reddit" */
 .title {
-  margin: 0; /* Remove margens padrão do h1 */
+  margin: 0;
   font-size: 28px;
-  color: #FF4500; /* Cor laranja do Reddit */
-}
-
-/* Estilos para os botões de login/cadastro (quando não logado) */
-.login-button,
-.register-button {
-  padding: 8px 15px;
-  margin-left: 10px; /* Espaçamento entre os botões */
-  border-radius: 4px;
-  text-decoration: none; /* Remove sublinhado */
   font-weight: bold;
-  transition: background-color 0.2s ease;
+  color: #FF4500;
+  letter-spacing: 0.5px;
 }
 
-.login-button {
-  background-color: #007bff; /* Azul vibrante */
-  color: white;
-  border: none;
+/* --- GRUPOS DE AÇÃO DO LADO DIREITO (LOGADO E NÃO LOGADO) --- */
+
+/* Estilo genérico para os containers das ações do lado direito */
+.auth-buttons, /* Para quando NÃO está autenticado */
+.logged-in-actions { /* Para quando ESTÁ autenticado */
+    display: flex; /* CRUCIAL: Faz com que os itens dentro dele fiquem em linha */
+    align-items: center; /* Alinha verticalmente os itens (botões, foto) */
+    gap: 15px; /* Espaçamento entre os itens */
 }
 
-.login-button:hover {
-  background-color: #0056b3;
-}
-
-.register-button {
-  background-color: transparent; /* Fundo transparente */
-  color: #007bff;
-  border: 1px solid #007bff;
-}
-
-.register-button:hover {
-  background-color: #007bff;
-  color: white;
-}
-
+/* Estilo para o botão '+ Criar Post' */
 .create-post-header-button {
-  padding: 8px 15px;
-  background-color: #ff4500; /* Verde para criar */
+  background-color: #FF4500;
   color: white;
+  padding: 8px 18px;
   border: none;
-  border-radius: 4px;
+  border-radius: 9999px;
   text-decoration: none;
   font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
   transition: background-color 0.2s ease;
-  white-space: nowrap; /* Evita que o texto quebre a linha */
-  margin-right: 10px; /* Espaço antes do nome de usuário */
+  white-space: nowrap; /* Evita que o texto quebre em várias linhas */
 }
 
 .create-post-header-button:hover {
+  background-color: #e03c00;
+}
+
+/* Estilo para a foto de perfil no cabeçalho (quando logado) */
+.header-profile-pic {
+  width: 40px; /* Tamanho da foto */
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #555;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  flex-shrink: 0; /* Impede que a imagem encolha se houver pouco espaço */
+}
+
+.header-profile-pic:hover {
+  border-color: #FF4500;
+}
+
+/* Estilos para os botões de login/cadastro (se não estiver autenticado) */
+.auth-buttons .login-button,
+.auth-buttons .register-button {
+  background-color: transparent;
+  border: 1px solid #FF4500;
+  color: #FF4500;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.auth-buttons .login-button:hover,
+.auth-buttons .register-button:hover {
+  background-color: #FF4500;
   color: white;
-  background-color: #dd3500;
 }
 
-.logged {
-  display: flex;
-  align-items: center;
-  gap: 15px; /* Espaçamento entre a mensagem de boas-vindas, foto e botão */
-}
-
-/* Estilo para o span de nome de usuário */
-.username-display {
-    color: white;
-    font-weight: bold;
-    white-space: nowrap; /* Evita que o nome quebre a linha */
-}
-
-/* Contêiner da foto de perfil e do dropdown (para posicionamento relativo) */
+/* Estilos para o container do dropdown de perfil */
 .profile-dropdown-container {
-  position: relative; /* Essencial para o posicionamento absoluto do dropdown */
-  display: flex; /* Para alinhar a imagem dentro dele */
-  align-items: center;
-  cursor: pointer; /* Indica que é clicável */
+  position: relative; /* Necessário para posicionar o dropdown-menu */
 }
 
-/* Estilo do Link que envolve a imagem de perfil */
 .profile-link-wrapper {
-    display: flex;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden; /* Garante que a imagem não saia do círculo */
-    background-color: transparent; /* Certifique-se de que não tem fundo indesejado */
-    flex-shrink: 0; /* Impede que o item encolha */
+  display: block; /* Garante que o link ocupe o espaço da imagem */
+  line-height: 0; /* Remove espaço extra de linha */
 }
 
-/* Estilo da imagem de perfil no cabeçalho */
-.feed-profile-pic {
-  width: 100%; /* Preenche o wrapper */
-  height: 100%; /* Preenche o wrapper */
-  border-radius: 50%; /* Faz a imagem ser redonda */
-  object-fit: cover; /* Garante que a imagem preencha sem distorcer */
-}
-
-/* Estilos para o Dropdown Menu */
 .dropdown-menu {
   position: absolute;
-  top: 55px;
-  right: 0;
-  background-color: #2a2a2a; /* <--- Fundo mais escuro, similar ao da imagem */
-  border-radius: 8px; /* Mantém os cantos arredondados */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6); /* Sombra um pouco mais forte */
-  min-width: 170px; /* Ajusta largura para caber o texto */
-  z-index: 1000;
-  overflow: hidden; /* Garante que bordas arredondadas funcionem bem */
-  padding: 0; 
-  margin: 0;
+  top: calc(100% + 10px); /* Posição abaixo da imagem de perfil */
+  right: 0; /* Alinha o dropdown à direita da imagem */
+  background-color: #2b2b2b; /* Cor de fundo do dropdown */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 10px 0;
+  min-width: 150px; /* Largura mínima do dropdown */
+  z-index: 1000; /* Garante que fique acima de outros conteúdos */
 }
 
 .dropdown-menu ul {
+  list-style: none; /* Remove marcadores de lista */
   margin: 0;
   padding: 0;
 }
-/* Os itens da lista (li) dentro do dropdown */
+
 .dropdown-menu li {
-  list-style: none; 
-  border-bottom: 1px solid #444; 
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-.dropdown-menu li:last-child {
-  border-bottom: none; /* Remove a linha de separação do último item */
-}
-
-
-/* Estilos para os links/botões dentro do dropdown */
 .dropdown-menu .dropdown-item {
-   display: flex; 
-   align-items: center;
-   justify-content: flex-start;
-   padding: 10px 15px; /* Ajuste o padding, reduzindo lateralmente */
-   color: white;
-   text-decoration: none;
-   font-size: 1em;
-   font-weight: 400;
-   background-color: transparent;
-   border: none;
-   width: 100%;
-   text-align: left; 
-   cursor: pointer;
-   box-sizing: border-box;
-   transition: background-color 0.2s ease;
+  display: block;
+  padding: 10px 15px;
+  color: #f0f0f0;
+  text-decoration: none;
+  font-size: 0.95em;
+  transition: background-color 0.2s ease;
+  width: 100%;
+  text-align: left;
+  box-sizing: border-box;
 }
 
 .dropdown-menu .dropdown-item:hover {
-  color: #dd3500;
-  background-color: #444; /* Cor de fundo ao passar o mouse, um pouco mais clara */
+  background-color: #ff4500;
+  color: white;
+}
+
+.dropdown-menu button.dropdown-item {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+
+/* Media Queries para Responsividade */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 8px 15px;
+  }
+  .app-logo, .title {
+    font-size: 24px;
+  }
+  .create-post-header-button,
+  .auth-buttons .login-button,
+  .auth-buttons .register-button {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+  .header-profile-pic {
+    width: 35px;
+    height: 35px;
+  }
+  .header-actions {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    padding: 5px 10px;
+  }
+  .app-logo, .title {
+    font-size: 20px;
+  }
+  .create-post-header-button,
+  .auth-buttons .login-button,
+  .auth-buttons .register-button {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  .header-profile-pic {
+    width: 30px;
+    height: 30px;
+  }
+  .header-actions {
+    gap: 10px;
+  }
+  .dropdown-menu {
+    min-width: 120px;
+  }
+  .dropdown-menu .dropdown-item {
+    padding: 8px 12px;
+    font-size: 0.9em;
+  }
 }

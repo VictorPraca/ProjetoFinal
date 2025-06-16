@@ -37,13 +37,13 @@ const LoginPage = () => {
   return (
     
     <div className="center-container">
-      <h1 className="login-reddit-title">Reddit</h1>
+      <h1 className="login-reddit-title">Tidder</h1>
       <div className="card-login">
         <h2>Login</h2>
 
         {/* Adicione o formulário e o onSubmit */}
         <form onSubmit={handleSubmit}>
-          <label htmlFor="email-username">E-mail / Nome de Usuário:</label>
+          <label htmlFor="email-username">E-mail:</label>
           <input
             type="text"
             id="email-username"

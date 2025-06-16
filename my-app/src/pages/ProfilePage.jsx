@@ -1,27 +1,24 @@
-// src/pages/ProfilePage.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../services/api.js';
-import Header from '../components/Header.jsx'; // Importado como 'Header'
-import Posts from '../components/Posts.jsx'; // <--- Importe o Post
+import Header from '../components/Header.jsx';
+import Posts from '../components/Posts.jsx'; // Importa o componente Post (ou PostCard)
 import '../styles/ProfilePage.css';
-import { MOCK_COMMUNITIES, MOCK_POSTS, COMMENT_USERS } from '../mockData.js';
 
-// --- FIM DOS DADOS MOCKADOS DE POSTAGENS ---
-
+const BASE_BACKEND_URL = 'http://localhost:5000'; // Mesma base URL do backend
+const DEFAULT_USER_PROFILE_PIC = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'; // Foto padrão
 
 const ProfilePage = () => {
-  const { username } = useParams();
+  const { username } = useParams(); // Obtém o nome de usuário da URL
   const [profileData, setProfileData] = useState(null);
-  const [loadingProfile, setLoadingProfile] = useState(true); // Renomeado para evitar conflito
-  const [errorProfile, setErrorProfile] = useState(null);     // Renomeado para evitar conflito
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [errorProfile, setErrorProfile] = useState(null);
 
-  const [userPosts, setUserPosts] = useState([]);         // <--- Novo estado para as postagens do usuário
-  const [loadingUserPosts, setLoadingUserPosts] = useState(true); // <--- Novo estado de loading para posts
-  const [errorUserPosts, setErrorUserPosts] = useState(null);     // <--- Novo estado de erro para posts
+  const [userPosts, setUserPosts] = useState([]);
+  const [loadingUserPosts, setLoadingUserPosts] = useState(true);
+  const [errorUserPosts, setErrorUserPosts] = useState(null);
 
-
-  // Efeito para buscar os dados do perfil (foto, bio, etc.)
+  // Efeito para buscar os dados do perfil (foto, bio, etc.) por username
   useEffect(() => {
     const fetchProfile = async () => {
       setLoadingProfile(true);
@@ -34,91 +31,63 @@ const ProfilePage = () => {
         return;
       }
 
-      console.log(`ProfilePage: Buscando perfil para: ${username} (Simulado)...`);
+      console.log(`ProfilePage: Buscando perfil para: ${username} do backend...`);
       try {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        let fetchedData = null;
-        if (username === 'usuarioSimulado') {
-          fetchedData = {
-            username: 'usuarioSimulado',
-            email: 'simulado@example.com',
-            dob: '1990-01-01',
-            profilePicUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
-            bio: 'Este é um usuário simulado para testes no frontend. Adoro tecnologia e jogos!',
-          };
-        } else if (username === 'outroUsuario') {
-            fetchedData = {
-                username: 'outroUsuario',
-                email: 'outro@example.com',
-                dob: '1995-05-10',
-                profilePicUrl: 'https://cdn-icons-png.flaticon.com/512/147/147133.png',
-                bio: 'Olá! Sou um entusiasta de código e café.',
-            };
-        } else {
-          setErrorProfile('Perfil simulado não encontrado para este nome de usuário.');
-        }
-        setProfileData(fetchedData);
-        console.log('ProfilePage: Dados do perfil simulados carregados:', fetchedData);
+        // CHAMA A API DO BACKEND USANDO o USERNAME
+        const response = await api.get(`/api/users/username/${username}`);
+        
+        // Montar a URL da foto de perfil para o ProfileData
+        const fetchedProfileData = {
+            ...response.data,
+            profilePicture: response.data.profilePicture
+                ? `${BASE_BACKEND_URL}${response.data.profilePicture}`
+                : DEFAULT_USER_PROFILE_PIC
+        };
+
+        setProfileData(fetchedProfileData);
+        console.log('ProfilePage: Dados do perfil carregados do backend:', fetchedProfileData.username);
       } catch (err) {
-        console.error('ProfilePage: Erro ao buscar perfil (simulado):', err);
-        setErrorProfile('Não foi possível carregar o perfil. Tente novamente.');
+        console.error('ProfilePage: Erro ao buscar perfil do backend:', err.response?.data || err.message);
+        setErrorProfile(err.response?.data?.message || 'Não foi possível carregar o perfil. Tente novamente.');
       } finally {
         setLoadingProfile(false);
       }
     };
     fetchProfile();
-  }, [username]);
+  }, [username]); // Roda quando o username na URL muda
 
-
-  // <--- NOVO EFEITO: Para buscar as postagens do usuário específico ---
+  // Efeito para buscar as postagens do usuário específico por username
   useEffect(() => {
     const fetchUserPosts = async () => {
       setLoadingUserPosts(true);
       setErrorUserPosts(null);
-      setUserPosts([]); // Limpa posts anteriores
+      setUserPosts([]); 
 
-      if (!username) { // Só busca se o username estiver disponível
+      if (!username) {
         setLoadingUserPosts(false);
         return;
       }
 
-      console.log(`ProfilePage: Buscando postagens para: ${username} (Simulado)...`);
+      console.log(`ProfilePage: Buscando postagens para: ${username} do backend...`);
       try {
-        await new Promise(resolve => setTimeout(resolve, 800)); // Simula atraso
-
-        // Filtra as postagens mockadas pelo username
-        const postsByThisUser = MOCK_POSTS.filter(post => post.user.username === username);
-        setUserPosts(postsByThisUser);
-        console.log(`ProfilePage: Postagens de ${username} simuladas carregadas:`, postsByThisUser);
-
-      } catch (err) {
-        console.error('ProfilePage: Erro ao buscar postagens do usuário (simulado):', err);
-        setErrorUserPosts('Não foi possível carregar as postagens.');
-      } finally {
-        setLoadingUserPosts(false);
-      }
-      // --- FIM DA SIMULAÇÃO DE POSTS ---
-
-      // --- QUANDO O BACKEND ESTIVER PRONTO, VOCÊ FARÁ ALGO ASSIM: ---
-      /*
-      try {
-        const response = await api.get(`/users/${username}/posts`); // Ex: /api/users/usuarioSimulado/posts
+        // CHAMA A API DO BACKEND PARA AS POSTAGENS DO USUÁRIO
+        const response = await api.get(`/api/users/username/${username}/posts`);
+        
+        // Os dados já vêm prontos, a montagem da URL da mídia será feita no componente 'Posts.jsx'
         setUserPosts(response.data);
+        console.log(`ProfilePage: Postagens de ${username} carregadas do backend.`);
       } catch (err) {
-        console.error('ProfilePage: Erro ao buscar postagens reais do usuário:', err);
+        console.error('ProfilePage: Erro ao buscar postagens do usuário do backend:', err.response?.data || err.message);
         setErrorUserPosts(err.response?.data?.message || 'Erro ao carregar postagens do usuário.');
       } finally {
         setLoadingUserPosts(false);
       }
-      */
-      // --- FIM DO CÓDIGO REAL DO BACKEND ---
     };
 
     fetchUserPosts();
-  }, [username]); // Roda quando o username muda (ou seja, quando o perfil muda)
+  }, [username]); // Roda quando o username na URL muda
 
-
-  // Renderização condicional para estados globais da página
+  // Renderização condicional para estados globais da página (loading, error, not found)
   if (loadingProfile) {
     return (
       <div className="profile-container">
@@ -137,7 +106,6 @@ const ProfilePage = () => {
     );
   }
 
-  // Se o profileData não existe (username não encontrado no mock)
   if (!profileData) {
     return (
       <div className="profile-container">
@@ -150,19 +118,21 @@ const ProfilePage = () => {
   // Se o perfil foi carregado com sucesso, renderiza os detalhes e as postagens
   return (
     <div className="profile-container">
-      <Header />
+      <Header /> {/* O Header já está configurado para ser sticky via CSS */}
 
       {/* Seção do cabeçalho do perfil */}
       <div className="profile-header">
         <div className="profile-main-info">
           <img
-            src={profileData.profilePicUrl}
+            src={profileData.profilePicture}
             alt={profileData.username || 'Foto de Perfil'}
             className="profile-page-pic"
           />
           <h1>{profileData.username}</h1>
+          {/* NOVO: Bio diretamente abaixo do nome, se existir */}
+          {profileData.bio && <p className="profile-bio-text">{profileData.bio}</p>}
+          {!profileData.bio && <p className="profile-no-bio-message">Nenhuma biografia definida ainda.</p>}
         </div>
-        {profileData.bio && <p className="profile-bio">{profileData.bio}</p>}
       </div>
 
       {/* Seção de postagens do usuário */}
@@ -175,7 +145,7 @@ const ProfilePage = () => {
 
         {/* Mapeia e renderiza as postagens do usuário */}
         {!loadingUserPosts && !errorUserPosts && userPosts.length > 0 && (
-          <div className="user-posts-list"> {/* <--- Nova classe para a lista de posts */}
+          <div className="user-posts-list">
             {userPosts.map((post) => (
               <Posts key={post.id} post={post} />
             ))}

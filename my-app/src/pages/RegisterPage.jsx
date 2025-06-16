@@ -1,31 +1,31 @@
 import React, { useState } from 'react';
-// Importe seu CSS de página de login ou um novo CSS para registro
-import '../styles/LoginPage.css'; // Podemos reutilizar as classes de estilo como 'center-container' e 'card-login'
-// import './RegisterPage.css'; // Ou criar um arquivo CSS específico se preferir
-
-import api from '../services/api.js'; // Para enviar dados ao backend
-import { useNavigate } from 'react-router-dom'; // Para redirecionar após o cadastro
+import '../styles/LoginPage.css';
+import api from '../services/api.js';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
   // Estados para cada campo do formulário
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [dob, setDob] = useState(''); // Data de nascimento
-  const [profilePicUrl, setProfilePicUrl] = useState(''); // URL da foto de perfil
+  // MUDANÇA 1: Nome do estado para Data de Nascimento deve ser 'dateOfBirth'
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  // MUDANÇA 2: Estado para o arquivo de foto de perfil (objeto File), não URL string
+  const [profilePicture, setProfilePicture] = useState(null);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState(''); // Para mensagens de erro
-  const [success, setSuccess] = useState(''); // Para mensagens de sucesso
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const navigate = useNavigate(); // Hook para redirecionar
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Previne o recarregamento da página
-    setError('');       // Limpa erros anteriores
-    setSuccess('');     // Limpa sucessos anteriores
+    e.preventDefault();
+    setError('');
+    setSuccess('');
 
     // Validações básicas no frontend
-    if (!username || !email || !dob || !password || !confirmPassword) {
+    // MUDANÇA 3: Usar 'dateOfBirth' na validação
+    if (!username || !email || !dateOfBirth || !password || !confirmPassword) {
       setError('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -40,43 +40,56 @@ const RegisterPage = () => {
       return;
     }
 
-    // Validação de formato de e-mail (simples)
     if (!/\S+@\S+\.\S+/.test(email)) {
       setError('Por favor, insira um e-mail válido.');
       return;
     }
 
     try {
-      // Objeto com os dados do usuário a serem enviados para o backend
-      const userData = {
-        username,
-        email,
-        dob, // A data de nascimento pode precisar de formatação específica para o backend (ex: 'YYYY-MM-DD')
-        profilePicUrl: profilePicUrl || 'https://via.placeholder.com/150', // Fornece uma URL padrão se não for preenchida
-        password,
-      };
+      // MUDANÇA 4: Usar FormData para enviar todos os dados, especialmente se houver um arquivo
+      const formData = new FormData();
+      formData.append('username', username);
+      formData.append('email', email);
+      formData.append('password', password);
+      formData.append('dateOfBirth', dateOfBirth); // Nome do campo corresponde ao backend
 
-      // Chama a API de registro no backend
-      const response = await api.post('/auth/register', userData);
+      // MUDANÇA 5: Anexar o arquivo de foto de perfil se ele existir
+      // O nome do campo 'profilePicture' deve corresponder ao que o Multer espera no backend
+      if (profilePicture) {
+        formData.append('profilePicture', profilePicture);
+      }
 
-      setSuccess('Cadastro realizado com sucesso! Você pode fazer login agora.');
+      // MUDANÇA 6: Enviar FormData e definir o Content-Type como 'multipart/form-data'
+      const response = await api.post('/api/auth/register', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Indispensável para enviar arquivos
+        },
+      });
+
+      setSuccess(response.data.message || 'Cadastro realizado com sucesso! Você pode fazer login agora.');
       console.log('Usuário cadastrado:', response.data);
 
-      // Opcional: Redirecionar para a página de login após alguns segundos
+      // Limpar o formulário após o sucesso
+      setUsername('');
+      setEmail('');
+      setDateOfBirth('');
+      setProfilePicture(null); // Limpar o estado do arquivo também
+      setPassword('');
+      setConfirmPassword('');
+
       setTimeout(() => {
         navigate('/login');
-      }, 2000); // Redireciona após 2 segundos
-
+      }, 2000);
     } catch (err) {
       console.error('Erro no cadastro:', err.response?.data || err.message);
-      // Mensagem de erro do backend (ex: "Nome de usuário já existe", "E-mail já cadastrado")
-      setError(err.response?.data?.message || 'Erro ao cadastrar. Tente novamente mais tarde.');
+      // Ajuste para exibir mensagens de erro mais específicas do backend
+      setError(err.response?.data?.message || err.response?.data?.error || 'Erro ao cadastrar. Tente novamente mais tarde.');
     }
   };
 
   return (
-    <div className="center-container"> {/* Reutiliza classe de centralização */}
-      <div className="card-login"> {/* Reutiliza classe de estilo de card */}
+    <div className="center-container">
+      <div className="card-login">
         <h1>Cadastro</h1>
 
         <form onSubmit={handleSubmit}>
@@ -88,6 +101,7 @@ const RegisterPage = () => {
             placeholder="Escolha um nome de usuário único"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            required
           />
           <br/>
           <label htmlFor="email">E-mail:</label>
@@ -98,28 +112,31 @@ const RegisterPage = () => {
             placeholder="Seu e-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
 
-          <label htmlFor="dob">Data de Nascimento:</label>
+          {/* MUDANÇA 7: htmlFor e name correspondem ao estado 'dateOfBirth' */}
+          <label htmlFor="dateOfBirth">Data de Nascimento:</label>
           <input
-            type="date" // Tipo 'date' para seleção de data
-            id="dob"
-            name="dob"
-            value={dob}
-            onChange={(e) => setDob(e.target.value)}
+            type="date"
+            id="dateOfBirth"
+            name="dateOfBirth"
+            value={dateOfBirth}
+            onChange={(e) => setDateOfBirth(e.target.value)}
+            required
           />
           <br/>
 
-          <label htmlFor="profilePicUrl">URL da Foto de Perfil (Opcional):</label>
+          {/* MUDANÇA 8: Input para upload de arquivo de foto de perfil */}
+          <label htmlFor="profilePicture">Foto de Perfil (Opcional):</label>
           <input
-            type="text"
-            id="profilePicUrl"
-            name="profilePicUrl"
-            placeholder="Link para sua foto de perfil"
-            value={profilePicUrl}
-            onChange={(e) => setProfilePicUrl(e.target.value)}
+            type="file" // <-- CRUCIAL: tipo 'file' para upload
+            id="profilePicture"
+            name="profilePicture" // <-- CRUCIAL: nome do campo esperado pelo Multer no backend
+            accept="image/*" // Restringe a seleção para arquivos de imagem
+            onChange={(e) => setProfilePicture(e.target.files[0])} // Armazena o objeto File
           />
-
+          <br/>
           <label htmlFor="password">Senha:</label>
           <input
             type="password"
@@ -128,6 +145,7 @@ const RegisterPage = () => {
             placeholder="Crie uma senha segura"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
 
           <label htmlFor="confirmPassword">Confirmar Senha:</label>
@@ -138,6 +156,7 @@ const RegisterPage = () => {
             placeholder="Confirme sua senha"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            required
           />
 
           {error && <p style={{ color: 'red', marginBottom: '15px' }}>{error}</p>}

@@ -1,98 +1,89 @@
-import React, { useState, useRef, useEffect } from 'react'; // Importa useState, useRef, useEffect
+// src/components/Header.jsx
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext.jsx'; // Para verificar autenticação
-import Sidebar from './Sidebar.jsx'; // Importa o componente Sidebar
-import '../styles/Header.css'; // Importa os estilos CSS para o Header
+import { useAuth } from '../contexts/AuthContext.jsx';
+import Sidebar from './Sidebar.jsx';
+import '../styles/Header.css'; // Importa seus estilos CSS para o Header
+
+const BASE_BACKEND_URL = 'http://localhost:5000'; 
+const DEFAULT_PROFILE_PIC = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'; 
 
 const Header = () => {
-  // Obtém o estado de autenticação e as funções do contexto
-  const { isAuthenticated, user, logout } = useAuth();
-  
-  // Estados para controlar a visibilidade da Sidebar e do Dropdown do perfil
+  const { isAuthenticated, user, logout, loading } = useAuth();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
-  // Ref para o contêiner do dropdown, usado para detectar cliques fora
   const dropdownRef = useRef(null);
 
-  // Função para alternar a visibilidade da Sidebar
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // Função para alternar a visibilidade do Dropdown do perfil
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  // Efeito para fechar o dropdown ao clicar fora dele
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Se o clique não foi dentro do dropdown ou do seu botão, fecha o dropdown
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
       }
     };
 
-    // Adiciona o event listener ao documento quando o dropdown está aberto
     if (isDropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
-    // Remove o event listener quando o componente desmonta ou o dropdown fecha
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isDropdownOpen]); // O efeito roda novamente quando isDropdownOpen muda
+  }, [isDropdownOpen]);
+
+  const profileImageUrl = isAuthenticated && user?.profilePicture 
+    ? `${BASE_BACKEND_URL}${user.profilePicture}` 
+    : DEFAULT_PROFILE_PIC;
 
   return (
     <>
-      {/* O Sidebar é renderizado aqui e seu estado é controlado por isSidebarOpen */}
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-      {/* O cabeçalho principal da aplicação */}
-      <header className="header-container">
+      <header className="app-header"> {/* Container principal do header */}
         {/* Grupo da esquerda: Botão do menu e título */}
         <div className="header-left-group">
           <button className="menu-toggle-button" onClick={toggleSidebar}>
-            ☰ {/* Ícone de hambúrguer */}
+            ☰
           </button>
-          <h1 className='title'>Reddit</h1>
+          <h1 className='title'>Tidder</h1>
         </div>
 
-        {/* Renderização Condicional: Mostra controles de usuário logado ou botões de login/cadastro */}
+        {/* Renderização Condicional do lado direito do header */}
         {!isAuthenticated ? ( // Se o usuário NÃO ESTÁ AUTENTICADO
-          <div>
+          <div className="auth-buttons">
             <Link to="/login" className="login-button">Entrar</Link>
             <Link to="/register" className="register-button">Cadastrar-se</Link>
           </div>
         ) : ( // Se o usuário ESTÁ AUTENTICADO
-          <div className="logged">
-            {/* NOVO BOTÃO: Criar Postagem */}
-            <Link to="/create-post" className="create-post-header-button"> {/* <--- ESTE É O BOTÃO! */}
+          <div className="logged-in-actions"> {/* ESTE É O CONTAINER DA DIREITA */}
+            {/* Botão: Criar Postagem */}
+            <Link to="/create-post" className="create-post-header-button">
               + Criar Post
             </Link>
             
+            {/* Container da foto de perfil e dropdown */}
             <div className="profile-dropdown-container" ref={dropdownRef}>
-              {user && user.profilePicUrl && (
-                <Link to="#" onClick={toggleDropdown} className="profile-link-wrapper">
-                  <img
-                    src={user.profilePicUrl}
-                    alt={user.username || 'Avatar'}
-                    className="feed-profile-pic"
-                  />
-                </Link>
-              )}
-
+              <Link to="#" onClick={toggleDropdown} className="profile-link-wrapper">
+                <img
+                  src={profileImageUrl}
+                  alt={user?.username || 'Avatar'}
+                  className="header-profile-pic" /* <-- CLASSE PRINCIPAL DA FOTO DE PERFIL */
+                />
+              </Link>
               {isDropdownOpen && (
                 <div className="dropdown-menu">
                   <ul>
-                    <li>
-                      <Link to={`/profile/${user.username}`} onClick={toggleDropdown} className="dropdown-item">Perfil</Link>
-                    </li>
-                    <li>
-                      <button onClick={() => { logout(); toggleDropdown(); }} className="dropdown-item">Sair</button>
-                    </li>
+                    <li><Link to={`/profile/${user?.username}`} onClick={toggleDropdown} className="dropdown-item">Perfil</Link></li>
+                    <li><button onClick={() => { logout(); toggleDropdown(); }} className="dropdown-item">Sair</button></li>
                   </ul>
                 </div>
               )}

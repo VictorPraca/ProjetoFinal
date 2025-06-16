@@ -1,172 +1,227 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // Importar useCallback
 import { useParams, Link } from 'react-router-dom';
 import Header from '../components/Header.jsx';
-import Posts from '../components/Posts.jsx';
+import Posts from '../components/Posts.jsx'; // Para exibir as postagens da comunidade
 import api from '../services/api.js';
 import { useAuth } from '../contexts/AuthContext.jsx';
-import '../styles/CommunityDetailPage.css'; 
-import { MOCK_COMMUNITIES, MOCK_POSTS, COMMENT_USERS } from '../mockData.js';
+import '../styles/CommunityDetailPage.css'; // Estilos para a página de comunidades
 
-// --- FIM DOS DADOS MOCKADOS ---
+const BASE_BACKEND_URL = 'http://localhost:5000'; // Base URL para imagens de perfil/mídia
+const DEFAULT_USER_PROFILE_PIC = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
 
 const CommunityDetailPage = () => {
-  const { communityName } = useParams();
-  const [communityData, setCommunityData] = useState(null);
-  const [loadingCommunity, setLoadingCommunity] = useState(true);
-  const [errorCommunity, setErrorCommunity] = useState(null);
+  const { groupId } = useParams(); // Obtém o ID do grupo da URL como string
+  const { isAuthenticated, user } = useAuth();
+  
+  const [communityDetails, setCommunityDetails] = useState(null);
+  const [loadingDetails, setLoadingDetails] = useState(true);
+  const [errorDetails, setErrorDetails] = useState(null);
 
   const [communityPosts, setCommunityPosts] = useState([]);
-  const [loadingCommunityPosts, setLoadingCommunityPosts] = useState(true);
-  const [errorCommunityPosts, setErrorCommunityPosts] = useState(null);
+  const [loadingPosts, setLoadingPosts] = useState(true);
+  const [errorPosts, setErrorPosts] = useState(null);
 
-  // Efeito para buscar detalhes da comunidade
-  useEffect(() => {
-    const fetchCommunityDetails = async () => {
-      setLoadingCommunity(true);
-      setErrorCommunity(null);
-      setCommunityData(null);
+  const [isMember, setIsMember] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-      if (!communityName) {
-        setErrorCommunity('Nome da comunidade não especificado na URL.');
-        setLoadingCommunity(false);
-        return;
-      }
+  // NOVO: Função fetchCommunityDetails movida para fora do useEffect
+  // Usar useCallback para memorizar a função e evitar re-criação desnecessária
+  const fetchCommunityDetails = useCallback(async () => {
+    setLoadingDetails(true);
+    setErrorDetails(null);
+    setCommunityDetails(null);
+    setIsMember(false);
+    setIsAdmin(false);
 
-      console.log(`CommunityPage: Buscando detalhes para: ${communityName} (Simulado)...`);
-      try {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        const foundCommunity = MOCK_COMMUNITIES.find(comm => comm.slug === communityName);
-        setCommunityData(foundCommunity);
-        if (!foundCommunity) {
-          setErrorCommunity('Comunidade não encontrada.');
-        }
-        console.log('CommunityPage: Detalhes da comunidade simulados carregados:', foundCommunity);
-      } catch (err) {
-        console.error('CommunityPage: Erro ao buscar detalhes da comunidade (simulado):', err);
-        setErrorCommunity('Não foi possível carregar os detalhes da comunidade.');
-      } finally {
-        setLoadingCommunity(false);
-      }
-    };
-    fetchCommunityDetails();
-  }, [communityName]);
-
-  // Efeito para buscar postagens da comunidade
-  useEffect(() => {
-    const fetchCommunityPosts = async () => {
-      setLoadingCommunityPosts(true);
-      setErrorCommunityPosts(null);
-      setCommunityPosts([]);
-
-      if (!communityName || !communityData?.id) {
-        setLoadingCommunityPosts(false);
-        return;
-      }
-
-      console.log(`CommunityPage: Buscando postagens para: ${communityName} (Simulado)...`);
-      try {
-        await new Promise(resolve => setTimeout(resolve, 800));
-        const postsInCommunity = MOCK_POSTS.filter(post => post.communityId === communityData.id);
-        setCommunityPosts(postsInCommunity);
-        console.log(`CommunityPage: Postagens de ${communityName} simuladas carregadas:`, postsInCommunity);
-      } catch (err) {
-        console.error('CommunityPage: Erro ao buscar postagens da comunidade (simulado):', err);
-        setErrorCommunityPosts('Não foi possível carregar as postagens da comunidade.');
-      } finally {
-        setLoadingCommunityPosts(false);
-      }
-    };
-    if (communityData) { // Só busca posts se os dados da comunidade já foram carregados
-        fetchCommunityPosts();
+    const communityIdNum = parseInt(groupId, 10);
+    if (isNaN(communityIdNum) || communityIdNum <= 0) {
+      setErrorDetails('ID da comunidade inválido na URL.');
+      setLoadingDetails(false);
+      return;
     }
-  }, [communityName, communityData]);
 
-  // Funções para simular entrar/sair da comunidade
-  const handleJoinLeaveCommunity = () => {
-    if (communityData) {
-      setCommunityData(prev => ({
-        ...prev,
-        isMember: !prev.isMember,
-        membersCount: prev.isMember ? prev.membersCount - 1 : prev.membersCount + 1,
-      }));
-      console.log(`CommunityPage: Usuário ${communityData.isMember ? 'saiu' : 'entrou'} da comunidade ${communityName}`);
+    console.log(`CommunityDetailPage: Buscando detalhes para ID: ${communityIdNum} do backend...`);
+    try {
+      const response = await api.get(`/api/groups/${communityIdNum}`);
+      const fetchedData = response.data;
+
+      if (fetchedData.Creator?.profilePicture) {
+          fetchedData.Creator.profilePicture = `${BASE_BACKEND_URL}${fetchedData.Creator.profilePicture}`;
+      } else {
+          fetchedData.Creator.profilePicture = DEFAULT_USER_PROFILE_PIC;
+      }
+
+      setCommunityDetails(fetchedData);
+      console.log('CommunityDetailPage: Detalhes da comunidade carregados:', fetchedData.name);
+
+      if (isAuthenticated && user && fetchedData.Users) {
+          const memberInfo = fetchedData.Users.find(m => m.id === user.id);
+          if (memberInfo) {
+              setIsMember(true);
+              if (memberInfo.GroupMember?.role === 'administrator') {
+                  setIsAdmin(true);
+              }
+          }
+      }
+
+    } catch (err) {
+      console.error('CommunityDetailPage: Erro ao buscar detalhes da comunidade:', err.response?.data || err.message);
+      setErrorDetails(err.response?.data?.message || 'Não foi possível carregar os detalhes da comunidade.');
+    } finally {
+      setLoadingDetails(false);
+    }
+  }, [groupId, isAuthenticated, user]); // Dependências do useCallback
+
+  // NOVO: Função fetchCommunityPosts movida para fora do useEffect
+  const fetchCommunityPosts = useCallback(async () => {
+    setLoadingPosts(true);
+    setErrorPosts(null);
+    setCommunityPosts([]);
+
+    const communityIdNum = parseInt(groupId, 10);
+    if (isNaN(communityIdNum) || communityIdNum <= 0 || !isAuthenticated) {
+      setLoadingPosts(false);
+      return;
+    }
+
+    console.log(`CommunityDetailPage: Buscando postagens para comunidade ID: ${communityIdNum} do backend...`);
+    try {
+      const response = await api.get(`/api/groups/${communityIdNum}/posts`);
+      setCommunityPosts(response.data);
+      console.log(`CommunityDetailPage: Postagens da comunidade ${communityIdNum} carregadas.`);
+    } catch (err) {
+      console.error('CommunityDetailPage: Erro ao buscar postagens da comunidade:', err.response?.data || err.message);
+      setErrorPosts(err.response?.data?.message || 'Não foi possível carregar as postagens da comunidade.');
+    } finally {
+      setLoadingPosts(false);
+    }
+  }, [groupId, isAuthenticated]); // Dependências do useCallback
+
+  // Efeito para chamar fetchCommunityDetails na montagem ou mudança de groupId/auth
+  useEffect(() => {
+    if (isAuthenticated) { // Só busca detalhes se o usuário estiver autenticado
+        fetchCommunityDetails();
+    } else {
+        setLoadingDetails(false);
+        setErrorDetails('Você precisa estar logado para ver os detalhes da comunidade.');
+    }
+  }, [fetchCommunityDetails, isAuthenticated]); // Depende da função e da autenticação
+
+  // Efeito para chamar fetchCommunityPosts na montagem ou mudança de groupId/auth
+  useEffect(() => {
+    if (isAuthenticated) { // Busca posts apenas se autenticado
+        fetchCommunityPosts();
+    } else {
+        setLoadingPosts(false);
+        setErrorPosts('Faça login para ver as postagens da comunidade.');
+    }
+  }, [fetchCommunityPosts, isAuthenticated]); // Depende da função e autenticação
+
+  const handleJoinLeaveCommunity = async () => {
+    if (!isAuthenticated || !user) {
+        alert('Você precisa estar logado para entrar/sair de comunidades.');
+        return;
+    }
+    setLoadingDetails(true); // Re-carrega os detalhes para atualizar o estado de membro
+    try {
+        const communityIdNum = parseInt(groupId, 10);
+        if (isNaN(communityIdNum) || communityIdNum <= 0) {
+            alert('ID da comunidade inválido.');
+            setLoadingDetails(false);
+            return;
+        }
+
+        if (isMember) {
+            await api.post('/api/groups/leave', { groupId: communityIdNum });
+            alert('Você saiu da comunidade.');
+        } else {
+            await api.post('/api/groups/join', { groupId: communityIdNum });
+            alert('Você entrou na comunidade!');
+        }
+        // Após a ação, re-buscamos os detalhes para atualizar os membros/status
+        // Chamada explícita à função, que agora está fora do useEffect
+        fetchCommunityDetails(); 
+    } catch (error) {
+        console.error('Erro ao entrar/sair da comunidade:', error.response?.data || error.message);
+        alert('Erro ao processar sua solicitação. Tente novamente.');
+    } finally {
+        setLoadingDetails(false);
     }
   };
 
-  // Renderização condicional para estados globais da página (loading/error da comunidade)
-  if (loadingCommunity) {
+
+  if (loadingDetails) {
     return (
-      <div className="community-page-layout"> {/* Usaremos este para o layout */}
+      <div className="community-detail-container">
         <Header />
         <p>Carregando detalhes da comunidade...</p>
       </div>
     );
   }
 
-  if (errorCommunity) {
+  if (errorDetails) {
     return (
-      <div className="community-page-layout">
+      <div className="community-detail-container">
         <Header />
-        <p style={{ color: 'red' }}>Erro ao carregar comunidade: {errorCommunity}</p>
+        <p style={{ color: 'red' }}>Erro: {errorDetails}</p>
       </div>
     );
   }
 
-  if (!communityData) {
+  if (!communityDetails) {
     return (
-      <div className="community-page-layout">
+      <div className="community-detail-container">
         <Header />
         <p>Comunidade não encontrada.</p>
       </div>
     );
   }
 
-  // Se tudo carregou, exibe o layout de duas colunas
   return (
-    <div>
+    <div className="community-detail-container">
       <Header />
-      <div className="community-page-layout"> {/* Contêiner principal para o layout de duas colunas */}
-        
-        {/* Coluna Esquerda: Informações da Comunidade */}
-        <aside className="community-info-sidebar"> {/* Usando <aside> para semântica */}
-          <div className="community-info-card">
-            <h1>{communityData.name}</h1>
-            <p className="community-description">{communityData.description}</p>
-            <div className="community-meta-details">
-              <span>{communityData.membersCount} membros</span>
-              <span>Criada em: {new Date(communityData.createdAt).toLocaleDateString()}</span>
-              {communityData.isAdmin && <span className="admin-tag">Você é Admin</span>}
-            </div>
-            <button onClick={handleJoinLeaveCommunity} className={`join-leave-button ${communityData.isMember ? 'leave' : 'join'}`}>
-              {communityData.isMember ? 'Sair da Comunidade' : 'Entrar na Comunidade'}
-            </button>
-          </div>
-
-          {/* Seção para criar nova postagem na comunidade (pode ir aqui ou no centro) */}
-          <div className="create-post-community-section">
-            <h3>Criar Nova Postagem</h3>
-            <p>Em breve, você poderá criar postagens aqui!</p>
-            {/* Futuramente, você pode integrar um formulário de criação de postagem aqui.
-                Ex: <CreatePostForm communityId={communityData.id} onPostCreated={handlePostCreated} /> */}
-          </div>
-        </aside>
-
-        {/* Coluna Central: Postagens da Comunidade */}
-        <main className="community-posts-main"> {/* Usando <main> para semântica */}
-          {loadingCommunityPosts && <p>Carregando postagens...</p>}
-          {errorCommunityPosts && <p className="error-message">{errorCommunityPosts}</p>}
-          {!loadingCommunityPosts && !errorCommunityPosts && communityPosts.length === 0 && (
-            <p>Nenhuma postagem nesta comunidade.</p>
-          )}
-
-          <div className="community-posts-list">
-            {!loadingCommunityPosts && !errorCommunityPosts && communityPosts.length > 0 && (
-              communityPosts.map((post) => (
-                <Posts key={post.id} post={post} />
-              ))
+      <div className="community-detail-content">
+        {/* Banner ou cabeçalho da comunidade */}
+        <div className="community-banner">
+            <h1>c/{communityDetails.name}</h1>
+            <p className="community-banner-description">{communityDetails.description || 'Nenhuma descrição.'}</p>
+            <p className="community-banner-meta">
+                Criada por: <Link to={`/profile/${communityDetails.Creator?.username}`}>{communityDetails.Creator?.username}</Link>
+                <span> • Membros: {communityDetails.Users?.length || 0}</span>
+                <span> • Criada em: {new Date(communityDetails.createdAt).toLocaleDateString()}</span>
+            </p>
+            
+            {isAuthenticated && (
+                <button 
+                    onClick={handleJoinLeaveCommunity} 
+                    className={`community-join-button ${isMember ? 'leave' : 'join'}`}
+                    disabled={loadingDetails} // Desabilita enquanto carrega
+                >
+                    {loadingDetails ? 'Processando...' : (isMember ? 'Sair da Comunidade' : 'Entrar na Comunidade')}
+                </button>
             )}
-          </div>
-        </main>
+            {!isAuthenticated && <p className="community-auth-prompt">Faça login para interagir com esta comunidade.</p>}
+            
+            {isAdmin && <span className="community-admin-tag">Você é Administrador</span>}
+        </div>
+
+        {/* Seção de postagens da comunidade */}
+        <div className="community-posts-section">
+            <h2>Postagens da Comunidade</h2>
+            {loadingPosts && <p>Carregando postagens...</p>}
+            {errorPosts && <p className="error-message">{errorPosts}</p>}
+            {!loadingPosts && !errorPosts && communityPosts.length === 0 && (
+            <p>Nenhuma postagem nesta comunidade ainda. Seja o primeiro a postar!</p>
+            )}
+
+            <div className="community-posts-list">
+            {!loadingPosts && !errorPosts && communityPosts.length > 0 && (
+                communityPosts.map((post) => (
+                <Posts key={post.id} post={post} />
+                ))
+            )}
+            </div>
+        </div>
       </div>
     </div>
   );

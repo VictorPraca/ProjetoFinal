@@ -1,17 +1,67 @@
-/* src/styles/global.css */
-
-html, body, #root, .App {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    /* REMOVA OU MUDE PARA 'auto' SE VOCÊ TIVER OVERFLOW: HIDDEN AQUI */
-    /* overflow: hidden; */ /* Se isso estiver aqui, a rolagem não funcionará */
-    overflow-y: auto; /* Permite rolagem vertical apenas no body/html */
-    overflow-x: hidden; /* Esconde rolagem horizontal se não for necessária */
-    background-color: #1a1a1a;
-    color: white;
-    font-family: Arial, sans-serif;
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%; /* Garante que ocupem a largura total */
+  min-height: 100vh; /* Garante que ocupem a altura total da viewport */
+  /* Remove qualquer overflow que possa cortar o conteúdo sticky */
+  overflow-x: hidden; /* Oculta barras de rolagem horizontais indesejadas */
+  overflow-y: auto;  /* Permite rolagem vertical padrão quando necessário */
 }
 
-/* ... (outros estilos globais) ... */
+/* O elemento raiz do seu aplicativo React (geralmente #root) também deve ter isso */
+#root { /* Verifique o ID do seu div raiz em public/index.html ou main.jsx/index.js */
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex; /* Para que o App (e seus Headers) se alinhem */
+  flex-direction: column; /* Para empilhar conteúdo verticalmente */
+}
+
+
+body {
+  font-family: 'Inter', Arial, sans-serif; /* Define uma fonte padrão */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0b0b0b; /* Cor de fundo principal da aplicação */
+  color: #f0f0f0; /* Cor de texto padrão */
+}
+
+/* Reset para listas, links e botões */
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit; /* Links herdam a cor do texto pai */
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+/* Box-sizing global para facilitar o layout */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Esconder elementos visualmente mas mantê-los para leitores de tela */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

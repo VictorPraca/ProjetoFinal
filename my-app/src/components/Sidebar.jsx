@@ -11,7 +11,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       <nav className="sidebar-nav">
         <ul>
           <li>
-            <Link to="/" onClick={toggleSidebar}>Feed</Link>
+            <Link to="/" onClick={toggleSidebar}>Home</Link>
           </li>
           <li>
             <Link to="/communities" onClick={toggleSidebar}>Comunidades</Link> {/* <--- NOVO LINK */}

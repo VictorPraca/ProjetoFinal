@@ -2,9 +2,10 @@
 import axios from 'axios';
 
 // A URL base da sua API de backend.
-// **MUITO IMPORTANTE:** Consulte seu time de backend para pegar a URL correta.
-// Pode ser algo como 'http://localhost:3001/api' durante o desenvolvimento.
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
+// *** TEMPORARIAMENTE FORÇANDO A PORTA 5000 PARA DEBUGAR O ERRO ***
+// REMOVA ESTA LINHA e volte para a original (com import.meta.env)
+// quando o problema de conexão for resolvido.
+const API_BASE_URL = 'http://localhost:5000'; 
 
 const api = axios.create({
   baseURL: API_BASE_URL,

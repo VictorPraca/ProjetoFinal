@@ -1,19 +1,28 @@
-// src/components/MessageBubble.jsx
 import React from 'react';
-import '../styles/MessagesPage.css'; // O CSS das mensagens estará no CSS da página
 
-const MessageBubble = ({ message, isCurrentUser }) => {
-  const messageClass = isCurrentUser ? 'message-bubble current-user' : 'message-bubble other-user';
-  const timestamp = new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+// Este componente é para exibir uma única bolha de mensagem
+const MessageBubble = ({ message, isCurrentUser, currentUser, partnerUser, BASE_BACKEND_URL, DEFAULT_USER_PROFILE_PIC }) => {
+  // Determine a foto de perfil a ser exibida na bolha (do remetente da mensagem)
+  const senderProfilePic = message.Sender?.profilePicture 
+    ? `${BASE_BACKEND_URL}${message.Sender.profilePicture}` 
+    : DEFAULT_USER_PROFILE_PIC;
+
+  // Determine o nome do remetente
+  const senderName = message.Sender?.username || 'Usuário Desconhecido';
 
   return (
-    <div className={messageClass}>
-      <div className="message-content">
+    <div className={`message-item ${isCurrentUser ? 'sent' : 'received'}`}>
+      <img 
+        src={senderProfilePic} 
+        alt={senderName} 
+        className="message-profile-pic" 
+      />
+      <div className="message-content-bubble">
+        {/* Mostra o nome do remetente apenas se a mensagem for recebida (não do usuário atual) */}
+        {!isCurrentUser && <span className="message-sender-name">{senderName}</span>}
         <p>{message.content}</p>
+        <span className="message-timestamp">{new Date(message.sentAt).toLocaleTimeString()}</span>
       </div>
-      <span className="message-timestamp">{timestamp}</span>
-      {/* Opcional: Icone de status da mensagem (enviada, recebida, lida) */}
-      {/* {isCurrentUser && message.status === 'lida' && <span className="message-status">✓✓</span>} */}
     </div>
   );
 };
