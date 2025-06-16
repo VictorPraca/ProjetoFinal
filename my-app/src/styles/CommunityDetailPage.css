@@ -1,7 +1,7 @@
 /* my-app/src/styles/CommunityDetailPage.css */
 
 .community-detail-container {
-  padding-top: calc(60px + 30px); /* Espaço para o header fixo */
+  padding-top: calc(60px + 30px);
   padding-bottom: 30px;
   background-color: #0b0b0b;
   min-height: 100vh;
@@ -14,20 +14,18 @@
 }
 
 .community-detail-content {
-  max-width: 900px; /* Largura um pouco maior para o conteúdo da página */
+  max-width: 900px;
   width: 90%;
   margin-top: 20px;
-  /* Remove background-color e padding daqui, pois serão do banner e da seção de posts */
 }
 
-/* NOVO: Estilo para o banner/cabeçalho da comunidade */
 .community-banner {
   background-color: #1a1a1b;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   padding: 30px;
   text-align: center;
-  margin-bottom: 20px; /* Espaço entre o banner e a seção de posts */
+  margin-bottom: 20px;
 }
 
 .community-banner h1 {
@@ -54,26 +52,25 @@
 }
 
 .community-banner-meta a {
-    color: #007bff; /* Cor do link do criador */
+    color: #007bff;
     text-decoration: none;
 }
 .community-banner-meta a:hover {
     text-decoration: underline;
 }
 
-/* Botão de Entrar/Sair da Comunidade */
 .community-join-button {
   padding: 10px 20px;
-  border-radius: 9999px; /* Cantos arredondados */
+  border-radius: 9999px;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-  border: 1px solid #ff4500; /* Borda padrão */
+  border: 1px solid #ff4500;
   background-color: #ff4500;
   color: white;
 }
 
-.community-join-button.leave { /* Estilo quando o usuário é membro (sair) */
+.community-join-button.leave {
   background-color: transparent;
   color: #ff4500;
   border-color: #ff4500;
@@ -81,11 +78,11 @@
 
 .community-join-button:hover:not(:disabled) {
   opacity: 0.8;
-  background-color: #e03c00; /* Tom mais escuro para o botão de join */
+  background-color: #e03c00;
 }
 
 .community-join-button.leave:hover:not(:disabled) {
-  background-color: rgba(255, 69, 0, 0.1); /* Fundo suave para o botão de leave */
+  background-color: rgba(255, 69, 0, 0.1);
   color: #ff4500;
 }
 
@@ -104,26 +101,107 @@
 }
 
 .community-admin-tag {
-    background-color: #dc3545;
+    background-color: #007bff;
     color: white;
     padding: 4px 8px;
-    width: 150px;
-    height: 20px;
-    border-radius: 20px;
+    border-radius: 4px;
     font-size: 0.8em;
     font-weight: bold;
     margin-top: 10px;
-    display: inline-block; /* Permite margens/paddings */
+    display: inline-block;
+}
+
+/* NOVO: Seção de Membros da Comunidade */
+.community-members-section {
+    background-color: #1a1a1b;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    padding: 20px 30px;
+    margin-bottom: 20px;
+}
+
+.community-members-section h2 {
+    font-size: 2em;
+    color: #f0f0f0;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.no-members-message {
+    text-align: center;
+    color: #bbb;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.members-list {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os membros quebrem linha */
+    gap: 15px; /* Espaçamento entre os itens de membro */
+    justify-content: center; /* Centraliza a lista de membros */
+}
+
+.member-item {
+    display: flex;
+    flex-direction: column; /* Foto, nome e papel um abaixo do outro */
+    align-items: center; /* Centraliza o conteúdo do item */
+    background-color: #2b2b2b;
+    border-radius: 8px;
+    padding: 10px;
+    width: 120px; /* Largura fixa para cada card de membro */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.member-profile-pic {
+    width: 60px; /* Tamanho da foto do membro */
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 8px;
+    border: 1px solid #555;
+}
+
+.member-username-link {
+    font-weight: bold;
+    color: #f0f0f0;
+    text-decoration: none;
+    font-size: 1em;
+    margin-bottom: 5px;
+}
+
+.member-username-link:hover {
+    text-decoration: underline;
+    color: #ff4500;
+}
+
+.member-role-tag {
+    font-size: 0.75em;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.member-role-tag.admin {
+    background-color: #ff4500; /* Laranja para admin */
+    color: white;
+}
+
+.member-role-tag.member {
+    background-color: #007bff; /* Azul para membro */
+    color: white;
 }
 
 
 /* Seção de postagens da comunidade */
 .community-posts-section {
-  background-color: #1a1a1b; /* Fundo similar ao banner */
+  background-color: #1a1a1b;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  padding: 20px 30px; /* Padding interno */
-  margin-bottom: 20px; /* Espaço abaixo da seção */
+  padding: 20px 30px;
+  margin-bottom: 20px;
 }
 
 .community-posts-section h2 {
@@ -137,7 +215,7 @@
 .community-posts-list {
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Espaço entre os posts */
+  gap: 20px;
 }
 
 /* Mensagens de erro e sucesso */
@@ -151,11 +229,12 @@
 /* Responsividade */
 @media (max-width: 768px) {
   .community-detail-content {
-    padding: 0; /* Remove padding do container para gerenciar padding nos sub-seções */
+    padding: 0;
     width: 95%;
   }
   .community-banner,
-  .community-posts-section {
+  .community-posts-section,
+  .community-members-section { /* Ajusta também a seção de membros */
     padding: 20px;
   }
   .community-banner h1 {
@@ -164,6 +243,13 @@
   .community-banner-description {
     font-size: 1em;
   }
+  .member-item { /* Ajusta tamanho do card de membro */
+    width: 100px;
+  }
+  .member-profile-pic {
+    width: 50px;
+    height: 50px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -171,7 +257,8 @@
     width: 98%;
   }
   .community-banner,
-  .community-posts-section {
+  .community-posts-section,
+  .community-members-section {
     padding: 15px;
   }
   .community-banner h1 {
@@ -180,7 +267,21 @@
   .community-banner-description {
     font-size: 0.9em;
   }
-  .community-posts-section h2 {
+  .community-posts-section h2,
+  .community-members-section h2 { /* Ajusta título da seção de membros */
     font-size: 1.8em;
+  }
+  .member-item {
+    width: 90px;
+  }
+  .member-profile-pic {
+    width: 45px;
+    height: 45px;
+  }
+  .member-username-link {
+    font-size: 0.9em;
+  }
+  .member-role-tag {
+    font-size: 0.7em;
   }
 }

@@ -177,11 +177,11 @@ exports.getGroupDetails = async (req, res) => {
         const groupId = req.params.groupId;
         const group = await Group.findByPk(groupId, {
             include: [
-                { model: User, as: 'Creator', attributes: ['id', 'username'] },
+                { model: User, as: 'Creator', attributes: ['id', 'username', 'profilePicture'] },
                 {
-                    model: User,
-                    through: { attributes: ['role'] },
-                    attributes: ['id', 'username', 'profilePicture']
+                    model: User, // <--- Este é o modelo dos membros
+                    through: { attributes: ['role'] }, // <--- CRÍTICO: Traz o papel (role) do membro
+                    attributes: ['id', 'username', 'profilePicture'] // Atributos do membro
                 }
             ]
         });
