@@ -20,12 +20,10 @@ const MessagesPage = () => {
   const [loadingPartners, setLoadingPartners] = useState(true);
   const [errorPartners, setErrorPartners] = useState(null);
   const [loadingConversation, setLoadingConversation] = useState(false);
-  // CORREÇÃO AQUI: Inicializando corretamente o estado com useState(null)
   const [errorConversation, setErrorConversation] = useState(null); 
 
   const messagesEndRef = useRef(null);
 
-  // Efeito para buscar a lista de parceiros de conversa do backend
   useEffect(() => {
     const fetchPartners = async () => {
       setLoadingPartners(true);
@@ -59,7 +57,6 @@ const MessagesPage = () => {
     fetchPartners();
   }, [isAuthenticated, currentUser]);
 
-  // Efeito para buscar as mensagens da conversa selecionada do backend
   useEffect(() => {
     const fetchConversation = async () => {
       if (!selectedPartnerId || !isAuthenticated || !currentUser) {
@@ -84,15 +81,12 @@ const MessagesPage = () => {
     
     fetchConversation(); 
   }, [selectedPartnerId, isAuthenticated, currentUser]);
-
-  // Efeito para manter o scroll no final do chat quando novas mensagens chegam
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [conversation]);
 
-  // Função para enviar uma nova mensagem
   const handleSendMessage = async (e) => {
     e.preventDefault();
     
@@ -119,7 +113,6 @@ const MessagesPage = () => {
     }
   };
 
-  // Funções auxiliares para obter nome e foto do participante
   const getPartnerInfo = (partnerId) => {
     return partners.find(p => p.id === partnerId);
   };
@@ -132,7 +125,6 @@ const MessagesPage = () => {
     return partner ? partner.username : 'Usuário Desconhecido';
   };
 
-  // Se o usuário não está logado, mostra uma mensagem de prompt
   if (!isAuthenticated || !currentUser) {
     return (
       <div className="messages-page-container">
@@ -142,12 +134,10 @@ const MessagesPage = () => {
     );
   }
 
-  // Layout principal da página de mensagens
   return (
     <div className="messages-page-container">
       <Header />
       <div className="messages-layout">
-        {/* Coluna da esquerda: Lista de Parceiros de Conversa */}
         <div className="partners-list-sidebar">
           <h2>Conversas</h2>
           {loadingPartners && <p>Carregando conversas...</p>}
@@ -177,7 +167,6 @@ const MessagesPage = () => {
           )}
         </div>
 
-        {/* Coluna da direita: Área de Conversa / Chat */}
         <div className="chat-area">
           {!selectedPartnerId ? (
             <p className="select-partner-message">Selecione um parceiro para começar a conversar.</p>

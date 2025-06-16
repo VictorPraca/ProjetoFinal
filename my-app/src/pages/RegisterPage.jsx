@@ -4,12 +4,9 @@ import api from '../services/api.js';
 import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
-  // Estados para cada campo do formulário
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  // MUDANÇA 1: Nome do estado para Data de Nascimento deve ser 'dateOfBirth'
   const [dateOfBirth, setDateOfBirth] = useState('');
-  // MUDANÇA 2: Estado para o arquivo de foto de perfil (objeto File), não URL string
   const [profilePicture, setProfilePicture] = useState(null);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -23,8 +20,6 @@ const RegisterPage = () => {
     setError('');
     setSuccess('');
 
-    // Validações básicas no frontend
-    // MUDANÇA 3: Usar 'dateOfBirth' na validação
     if (!username || !email || !dateOfBirth || !password || !confirmPassword) {
       setError('Por favor, preencha todos os campos obrigatórios.');
       return;
@@ -46,34 +41,29 @@ const RegisterPage = () => {
     }
 
     try {
-      // MUDANÇA 4: Usar FormData para enviar todos os dados, especialmente se houver um arquivo
       const formData = new FormData();
       formData.append('username', username);
       formData.append('email', email);
       formData.append('password', password);
-      formData.append('dateOfBirth', dateOfBirth); // Nome do campo corresponde ao backend
+      formData.append('dateOfBirth', dateOfBirth);
 
-      // MUDANÇA 5: Anexar o arquivo de foto de perfil se ele existir
-      // O nome do campo 'profilePicture' deve corresponder ao que o Multer espera no backend
       if (profilePicture) {
         formData.append('profilePicture', profilePicture);
       }
 
-      // MUDANÇA 6: Enviar FormData e definir o Content-Type como 'multipart/form-data'
       const response = await api.post('/api/auth/register', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data', // Indispensável para enviar arquivos
+          'Content-Type': 'multipart/form-data', 
         },
       });
 
       setSuccess(response.data.message || 'Cadastro realizado com sucesso! Você pode fazer login agora.');
       console.log('Usuário cadastrado:', response.data);
 
-      // Limpar o formulário após o sucesso
       setUsername('');
       setEmail('');
       setDateOfBirth('');
-      setProfilePicture(null); // Limpar o estado do arquivo também
+      setProfilePicture(null);
       setPassword('');
       setConfirmPassword('');
 
@@ -82,7 +72,6 @@ const RegisterPage = () => {
       }, 2000);
     } catch (err) {
       console.error('Erro no cadastro:', err.response?.data || err.message);
-      // Ajuste para exibir mensagens de erro mais específicas do backend
       setError(err.response?.data?.message || err.response?.data?.error || 'Erro ao cadastrar. Tente novamente mais tarde.');
     }
   };
@@ -115,7 +104,6 @@ const RegisterPage = () => {
             required
           />
 
-          {/* MUDANÇA 7: htmlFor e name correspondem ao estado 'dateOfBirth' */}
           <label htmlFor="dateOfBirth">Data de Nascimento:</label>
           <input
             type="date"
@@ -127,14 +115,13 @@ const RegisterPage = () => {
           />
           <br/>
 
-          {/* MUDANÇA 8: Input para upload de arquivo de foto de perfil */}
           <label htmlFor="profilePicture">Foto de Perfil (Opcional):</label>
           <input
-            type="file" // <-- CRUCIAL: tipo 'file' para upload
+            type="file" 
             id="profilePicture"
-            name="profilePicture" // <-- CRUCIAL: nome do campo esperado pelo Multer no backend
-            accept="image/*" // Restringe a seleção para arquivos de imagem
-            onChange={(e) => setProfilePicture(e.target.files[0])} // Armazena o objeto File
+            name="profilePicture" 
+            accept="image/*"
+            onChange={(e) => setProfilePicture(e.target.files[0])} 
           />
           <br/>
           <label htmlFor="password">Senha:</label>

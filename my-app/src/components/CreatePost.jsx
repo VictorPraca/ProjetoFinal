@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header.jsx';
-import { useAuth } from '../contexts/AuthContext.jsx'; // Para pegar o usuário logado
-import api from '../services/api.js'; // Para simular o envio da postagem
-import { useNavigate } from 'react-router-dom'; // Para redirecionar após a criação
-import '../styles/CreatePost.css'; // O CSS para esta página
+import { useAuth } from '../contexts/AuthContext.jsx'; 
+import api from '../services/api.js';
+import { useNavigate } from 'react-router-dom';
+import '../styles/CreatePost.css'; 
 
 const CreatePost = () => {
-  // CORREÇÃO AQUI: Desestruturar 'isAuthenticated' também de useAuth()
+
   const { user, isAuthenticated } = useAuth(); 
   const navigate = useNavigate();
 
@@ -28,11 +28,11 @@ const CreatePost = () => {
         console.error('Erro ao buscar comunidades para CreatePost:', err);
       }
     };
-    // NOVO: Apenas busca comunidades se o usuário estiver autenticado
+
     if (isAuthenticated) { 
       fetchCommunities();
     }
-  }, [isAuthenticated]); // Depende de isAuthenticated para re-buscar se o status mudar
+  }, [isAuthenticated]); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +40,7 @@ const CreatePost = () => {
     setError('');
     setSuccess('');
 
-    if (!user || !isAuthenticated) { // Garantir que está logado
+    if (!user || !isAuthenticated) { 
       setError('Você precisa estar logado para criar uma postagem.');
       setIsSubmitting(false);
       return;
@@ -100,7 +100,6 @@ const CreatePost = () => {
       <div className="create-post-page-container">
         <div className="create-post-form-wrapper">
             <h2>Criar Nova Postagem</h2>
-            {/* NOVO: Renderiza o formulário apenas se autenticado */}
             {isAuthenticated ? (
               <form onSubmit={handleSubmit} className="create-post-form">
                   {communities.length > 0 && (

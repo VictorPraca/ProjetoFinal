@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react'; // Importar useCallback
+import React, { useState, useEffect, useCallback } from 'react'; 
 import { useParams, Link } from 'react-router-dom';
 import Header from '../components/Header.jsx';
-import Posts from '../components/Posts.jsx'; // Para exibir as postagens da comunidade
+import Posts from '../components/Posts.jsx'; 
 import api from '../services/api.js';
 import { useAuth } from '../contexts/AuthContext.jsx';
-import '../styles/CommunityDetailPage.css'; // Estilos para a página de comunidades
+import '../styles/CommunityDetailPage.css';
 
-const BASE_BACKEND_URL = 'http://localhost:5000'; // Base URL para imagens de perfil/mídia
+const BASE_BACKEND_URL = 'http://localhost:5000'; 
 const DEFAULT_USER_PROFILE_PIC = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
 
 const CommunityDetailPage = () => {
-  const { groupId } = useParams(); // Obtém o ID do grupo da URL como string
+  const { groupId } = useParams(); 
   const { isAuthenticated, user } = useAuth();
   
   const [communityDetails, setCommunityDetails] = useState(null);
@@ -24,8 +24,6 @@ const CommunityDetailPage = () => {
   const [isMember, setIsMember] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // NOVO: Função fetchCommunityDetails movida para fora do useEffect
-  // Usar useCallback para memorizar a função e evitar re-criação desnecessária
   const fetchCommunityDetails = useCallback(async () => {
     setLoadingDetails(true);
     setErrorDetails(null);
@@ -70,9 +68,8 @@ const CommunityDetailPage = () => {
     } finally {
       setLoadingDetails(false);
     }
-  }, [groupId, isAuthenticated, user]); // Dependências do useCallback
+  }, [groupId, isAuthenticated, user]);
 
-  // NOVO: Função fetchCommunityPosts movida para fora do useEffect
   const fetchCommunityPosts = useCallback(async () => {
     setLoadingPosts(true);
     setErrorPosts(null);
@@ -95,34 +92,32 @@ const CommunityDetailPage = () => {
     } finally {
       setLoadingPosts(false);
     }
-  }, [groupId, isAuthenticated]); // Dependências do useCallback
+  }, [groupId, isAuthenticated]); 
 
-  // Efeito para chamar fetchCommunityDetails na montagem ou mudança de groupId/auth
   useEffect(() => {
-    if (isAuthenticated) { // Só busca detalhes se o usuário estiver autenticado
+    if (isAuthenticated) { 
         fetchCommunityDetails();
     } else {
         setLoadingDetails(false);
         setErrorDetails('Você precisa estar logado para ver os detalhes da comunidade.');
     }
-  }, [fetchCommunityDetails, isAuthenticated]); // Depende da função e da autenticação
+  }, [fetchCommunityDetails, isAuthenticated]);
 
-  // Efeito para chamar fetchCommunityPosts na montagem ou mudança de groupId/auth
   useEffect(() => {
-    if (isAuthenticated) { // Busca posts apenas se autenticado
+    if (isAuthenticated) {
         fetchCommunityPosts();
     } else {
         setLoadingPosts(false);
         setErrorPosts('Faça login para ver as postagens da comunidade.');
     }
-  }, [fetchCommunityPosts, isAuthenticated]); // Depende da função e autenticação
+  }, [fetchCommunityPosts, isAuthenticated]); 
 
   const handleJoinLeaveCommunity = async () => {
     if (!isAuthenticated || !user) {
         alert('Você precisa estar logado para entrar/sair de comunidades.');
         return;
     }
-    setLoadingDetails(true); // Re-carrega os detalhes para atualizar o estado de membro
+    setLoadingDetails(true); 
     try {
         const communityIdNum = parseInt(groupId, 10);
         if (isNaN(communityIdNum) || communityIdNum <= 0) {
@@ -138,8 +133,7 @@ const CommunityDetailPage = () => {
             await api.post('/api/groups/join', { groupId: communityIdNum });
             alert('Você entrou na comunidade!');
         }
-        // Após a ação, re-buscamos os detalhes para atualizar os membros/status
-        // Chamada explícita à função, que agora está fora do useEffect
+
         fetchCommunityDetails(); 
     } catch (error) {
         console.error('Erro ao entrar/sair da comunidade:', error.response?.data || error.message);
@@ -181,7 +175,6 @@ const CommunityDetailPage = () => {
     <div className="community-detail-container">
       <Header />
       <div className="community-detail-content">
-        {/* Banner ou cabeçalho da comunidade */}
         <div className="community-banner">
             <h1>c/{communityDetails.name}</h1>
             <p className="community-banner-description">{communityDetails.description || 'Nenhuma descrição.'}</p>
@@ -197,7 +190,7 @@ const CommunityDetailPage = () => {
                 <button 
                     onClick={handleJoinLeaveCommunity} 
                     className={`community-join-button ${isMember ? 'leave' : 'join'}`}
-                    disabled={loadingDetails} // Desabilita enquanto carrega
+                    disabled={loadingDetails}
                 >
                     {loadingDetails ? 'Processando...' : (isMember ? 'Sair da Comunidade' : 'Entrar na Comunidade')}
                 </button>
@@ -205,8 +198,6 @@ const CommunityDetailPage = () => {
             {!isAuthenticated && <p className="community-auth-prompt">Faça login para interagir com esta comunidade.</p>}
             <br/>
         </div>
-
-        {/* Seção de postagens da comunidade */}
         <div className="community-posts-section">
             <h2>Postagens da Comunidade</h2>
             {loadingPosts && <p>Carregando postagens...</p>}

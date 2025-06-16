@@ -1,13 +1,13 @@
-// backend/src/controllers/postController.js
+
 const Post = require('../models/postModel');
 const Interaction = require('../models/interactionModel');
 const User = require('../models/userModel');
-const { Sequelize } = require('sequelize'); // Importar Sequelize para funções de agregação
+const { Sequelize } = require('sequelize'); 
 
-// Função para criar uma nova postagem
+
 exports.createPost = async (req, res) => {
   try {
-    const { content, contentType, communityId } = req.body; // NOVO: Pega communityId
+    const { content, contentType, communityId } = req.body; 
     const userId = req.user.id;
     let mediaUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
@@ -18,16 +18,14 @@ exports.createPost = async (req, res) => {
         return res.status(400).json({ message: `Para o tipo ${contentType}, é necessário um arquivo de mídia.` });
     }
 
-    // Opcional: Verificar se o communityId existe se for fornecido
     if (communityId) {
         const community = await require('../models/groupModel').Group.findByPk(communityId);
         if (!community) {
             return res.status(404).json({ message: 'Comunidade especificada não encontrada.' });
         }
-        // Futuramente: verificar se o usuário é membro da comunidade antes de permitir postar nela
     }
 
-    const newPost = await Post.create({ userId, content, contentType, mediaUrl, communityId: communityId || null }); // NOVO: Salva communityId
+    const newPost = await Post.create({ userId, content, contentType, mediaUrl, communityId: communityId || null }); 
 
     const populatedPost = await Post.findByPk(newPost.id, {
         include: [{ model: User, attributes: ['id', 'username', 'profilePicture'] }]
@@ -40,19 +38,16 @@ exports.createPost = async (req, res) => {
   }
 };
 
-// Função para obter todas as postagens (para o feed)
 exports.getPosts = async (req, res) => {
   try {
     const posts = await Post.findAll({
-      // Garante que o username e profilePicture do usuário da postagem sejam incluídos
       include: [{ model: User, attributes: ['id', 'username', 'profilePicture'] }], 
-      order: [['createdAt', 'DESC']], // Ordena as postagens da mais recente para a mais antiga
+      order: [['createdAt', 'DESC']], 
     });
 
-    const currentUserId = req.user ? req.user.id : null; // O ID do usuário logado, definido pelo middleware 'protect'
+    const currentUserId = req.user ? req.user.id : null; 
 
     const postsWithInteractions = await Promise.all(posts.map(async (post) => {
-        // Converte para JSON para poder adicionar propriedades
         const postData = post.toJSON(); 
 
         const likes = await Interaction.count({ where: { postId: postData.id, type: 'like' } });
@@ -70,7 +65,7 @@ exports.getPosts = async (req, res) => {
         }
         
         return {
-            ...postData, // Usa a versão JSON
+            ...postData, 
             likes: likes,
             dislikes: dislikes,
             comments: commentsCount, 
@@ -85,20 +80,18 @@ exports.getPosts = async (req, res) => {
   }
 };
 
-
-// Função para adicionar ou remover likes/dislikes
 exports.toggleLikeDislike = async (req, res) => {
   try {
-    // NOVO: Verificação de autenticação
+
     if (!req.user || !req.user.id) {
         console.error('Erro de autenticação: req.user ou req.user.id indefinido.');
         return res.status(401).json({ message: 'Você precisa estar logado para realizar esta ação.' });
     }
-    const userId = req.user.id; // Agora userId estará definido se a verificação passou
+    const userId = req.user.id; 
 
-    console.log('ToggleLikeDislike: userId:', userId); // Debug: verifique o userId no console do backend
+    console.log('ToggleLikeDislike: userId:', userId); 
 
-    const { postId, commentId, type } = req.body; // Recebe postId OU commentId
+    const { postId, commentId, type } = req.body; 
 
     if (!['like', 'dislike'].includes(type)) {
       return res.status(400).json({ message: 'Tipo de interação inválido. Use "like" ou "dislike".' });
@@ -183,7 +176,6 @@ exports.toggleLikeDislike = async (req, res) => {
   }
 };
 
-// Função para adicionar um comentário ou resposta a um comentário
 exports.addComment = async (req, res) => {
   try {
     const { postId, content, parentId } = req.body;
@@ -193,7 +185,7 @@ exports.addComment = async (req, res) => {
       return res.status(400).json({ message: 'Conteúdo do comentário não pode ser vazio.' });
     }
 
-    if (!postId && !parentId) { // Comentário deve ter um post ou um pai
+    if (!postId && !parentId) {
         return res.status(400).json({ message: 'Comentário deve ser associado a um postId ou parentId.' });
     }
     if (postId) {
@@ -211,10 +203,10 @@ exports.addComment = async (req, res) => {
 
     const newComment = await Interaction.create({
       userId,
-      postId: postId || null, // ID do post principal
+      postId: postId || null, 
       type: 'comment',
       commentContent: content.trim(),
-      parentId: parentId || null, // ID do comentário pai se for resposta
+      parentId: parentId || null, 
     });
 
     const populatedComment = await Interaction.findByPk(newComment.id, {
@@ -228,13 +220,11 @@ exports.addComment = async (req, res) => {
   }
 };
 
-// Função para obter todos os comentários de uma postagem (incluindo respostas e seus likes/dislikes)
 exports.getComments = async (req, res) => {
   try {
     const postId = req.params.postId;
-    const currentUserId = req.user ? req.user.id : null; // ID do usuário logado
+    const currentUserId = req.user ? req.user.id : null;
 
-    // Função recursiva para buscar comentários, respostas e suas interações
     const populateCommentInteractions = async (commentId) => {
         const comment = await Interaction.findByPk(commentId, {
             include: [
@@ -245,16 +235,12 @@ exports.getComments = async (req, res) => {
 
         const commentData = comment.toJSON();
 
-        // Contar likes/dislikes para ESTE comentário
-        // CORRIGIDO: Usando 'targetCommentId' (o nome correto da coluna no modelo)
         commentData.likes = await Interaction.count({ where: { targetCommentId: commentData.id, type: 'like' } });
         commentData.dislikes = await Interaction.count({ where: { targetCommentId: commentData.id, type: 'dislike' } });
-        
-        // Verificar interação do usuário logado com ESTE comentário
+
         let userInteractionType = null;
         if (currentUserId) {
             const userInteraction = await Interaction.findOne({
-                // CORRIGIDO: Usando 'targetCommentId'
                 where: { targetCommentId: commentData.id, userId: currentUserId, type: { [Sequelize.Op.in]: ['like', 'dislike'] } }
             });
             if (userInteraction) {
@@ -263,27 +249,24 @@ exports.getComments = async (req, res) => {
         }
         commentData.userHasInteracted = userInteractionType;
 
-        // Buscar e popular respostas recursivamente
         const replies = await Interaction.findAll({
             where: { parentId: commentData.id, type: 'comment' },
             order: [['createdAt', 'ASC']]
         });
-        // Mapeia e chama a função recursivamente para cada resposta
+
         commentData.Replies = await Promise.all(replies.map(reply => populateCommentInteractions(reply.id)));
 
         return commentData;
     };
 
-    // Busca apenas comentários de nível superior para esta postagem
     const topLevelComments = await Interaction.findAll({
       where: { postId, type: 'comment', parentId: null },
       order: [['createdAt', 'ASC']],
     });
-
-    // Popula cada comentário principal com suas respostas aninhadas e interações
+s
     const commentsWithFullInteractions = await Promise.all(
-    topLevelComments.map(async comment => { // <-- MUDEI AQUI PARA async
-        return await populateCommentInteractions(comment.id); // <-- Await aqui
+    topLevelComments.map(async comment => { 
+        return await populateCommentInteractions(comment.id);
     }));
 
     res.json(commentsWithFullInteractions);
@@ -293,7 +276,6 @@ exports.getComments = async (req, res) => {
   }
 };
 
-// Função para obter o resumo de interações de uma postagem específica (likes, dislikes, comentários)
 exports.getPostInteractionsSummary = async (req, res) => {
   try {
     const postId = req.params.postId;

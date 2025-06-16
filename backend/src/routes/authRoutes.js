@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
 const { protect } = require('../utils/authUtils'); 
-const upload = require('../utils/multerConfig'); // Configuração do Multer
+const upload = require('../utils/multerConfig'); 
 
-router.post('/register', upload.single('profilePicture'), authController.register); // 'profilePicture' é o nome do campo no formulário
+router.post('/register', upload.single('profilePicture'), authController.register); 
 router.post('/login', authController.login);
 router.get('/validate-token', protect, authController.validateToken);
 

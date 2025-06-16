@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext.jsx';
-import api from '../services/api.js'; // Mesmo que simulado
+import api from '../services/api.js';
 import '../styles/CreateComment.css';
 
 const CreateComment = ({ postId, parentId = null, onCommentCreated, isReply = false }) => {
@@ -10,7 +10,7 @@ const CreateComment = ({ postId, parentId = null, onCommentCreated, isReply = fa
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // ← Impede recarregamento da página
+    e.preventDefault(); 
     setIsSubmitting(true);
     setError('');
 
@@ -40,7 +40,6 @@ const CreateComment = ({ postId, parentId = null, onCommentCreated, isReply = fa
         replies: []
       };
 
-      // Simulação de envio à API
       console.log('CreateComment: Simulando envio...');
       await new Promise(resolve => setTimeout(resolve, 800));
 

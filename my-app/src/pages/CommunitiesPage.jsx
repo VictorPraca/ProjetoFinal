@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header.jsx';
-import api from '../services/api.js'; // Importa a instância da API
-import { useAuth } from '../contexts/AuthContext.jsx'; // Para o usuário logado
-import '../styles/CommunitiesPage.css'; // Estilos para a página de comunidades
-import { Link } from 'react-router-dom'; // Importa Link
+import api from '../services/api.js'; 
+import { useAuth } from '../contexts/AuthContext.jsx'; 
+import '../styles/CommunitiesPage.css'; 
+import { Link } from 'react-router-dom'; 
 
 const CommunitiesPage = () => {
   const { isAuthenticated, user } = useAuth();
@@ -12,20 +12,18 @@ const CommunitiesPage = () => {
   const [errorCommunities, setErrorCommunities] = useState(null);
 
   const [newCommunityName, setNewCommunityName] = useState('');
-  // CORREÇÃO AQUI: Garante que é um useState e não apenas uma string
   const [newCommunityDescription, setNewCommunityDescription] = useState(''); 
   const [creatingCommunity, setCreatingCommunity] = useState(false);
   const [createError, setCreateError] = useState(null);
   const [createSuccess, setCreateSuccess] = useState(null);
 
-  // Efeito para buscar todas as comunidades
   useEffect(() => {
     const fetchCommunities = async () => {
       setLoadingCommunities(true);
       setErrorCommunities(null);
       console.log('CommunitiesPage: Buscando comunidades do backend...');
       try {
-        const response = await api.get('/api/groups'); // Rota GET para todas as comunidades/grupos
+        const response = await api.get('/api/groups'); 
         setCommunities(response.data);
         console.log('CommunitiesPage: Comunidades carregadas do backend.');
       } catch (err) {
@@ -36,15 +34,14 @@ const CommunitiesPage = () => {
       }
     };
 
-    if (isAuthenticated) { // Busca apenas se o usuário estiver autenticado
+    if (isAuthenticated) { 
       fetchCommunities();
     } else {
-      setLoadingCommunities(false); // Se não autenticado, para o loading
+      setLoadingCommunities(false); 
       setErrorCommunities('Você precisa estar logado para ver as comunidades.');
     }
-  }, [isAuthenticated]); // Roda quando o status de autenticação muda
+  }, [isAuthenticated]); 
 
-  // Função para lidar com a criação de uma nova comunidade
   const handleCreateCommunity = async (e) => {
     e.preventDefault();
     setCreatingCommunity(true);
@@ -63,12 +60,12 @@ const CommunitiesPage = () => {
     }
 
     try {
-      const response = await api.post('/api/groups', { // Rota POST para criar comunidade/grupo
+      const response = await api.post('/api/groups', { 
         name: newCommunityName.trim(),
-        description: newCommunityDescription.trim(), // <--- ESTA LINHA VAI FUNCIONAR AGORA
+        description: newCommunityDescription.trim(),
       });
       setCreateSuccess(response.data.message || 'Comunidade criada com sucesso!');
-      setCommunities(prev => [...prev, response.data.group]); // Adiciona a nova comunidade à lista
+      setCommunities(prev => [...prev, response.data.group]); 
       setNewCommunityName('');
       setNewCommunityDescription('');
     } catch (err) {
@@ -85,7 +82,6 @@ const CommunitiesPage = () => {
       <div className="communities-content">
         <h1>Comunidades</h1>
 
-        {/* Seção para Criar Nova Comunidade */}
         <div className="create-community-section">
           <h2>Criar Nova Comunidade</h2>
           {isAuthenticated ? (
@@ -99,8 +95,8 @@ const CommunitiesPage = () => {
               />
               <textarea
                 placeholder="Descrição (Ex: Discuta sobre desenvolvimento web, frameworks e ferramentas...)"
-                value={newCommunityDescription} // <--- ESTA LINHA IRÁ FUNCIONAR
-                onChange={(e) => setNewCommunityDescription(e.target.value)} // <--- ESTA LINHA IRÁ FUNCIONAR
+                value={newCommunityDescription} 
+                onChange={(e) => setNewCommunityDescription(e.target.value)} 
                 rows="3"
               ></textarea>
               {createError && <p className="error-message">{createError}</p>}
@@ -114,7 +110,6 @@ const CommunitiesPage = () => {
           )}
         </div>
 
-        {/* Seção para Explorar Comunidades */}
         <div className="explore-communities-section">
           <h2>Explorar Comunidades</h2>
           {loadingCommunities && <p>Carregando comunidades...</p>}

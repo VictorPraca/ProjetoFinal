@@ -1,70 +1,61 @@
-// src/contexts/AuthContext.jsx
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import api from '../services/api'; // Importa a instância configurada do Axios para comunicação com o backend
-import { useNavigate } from 'react-router-dom'; // Para redirecionar após login/logout
+import api from '../services/api'; 
+import { useNavigate } from 'react-router-dom';
 
-// 1. Criação do Contexto
-// O valor inicial é null, será preenchido pelo AuthProvider
 const AuthContext = createContext(null);
 
-// 2. Componente Provedor de Autenticação
-export const AuthProvider = ({ children }) => {
-  // Estados para gerenciar o usuário logado, o status de carregamento e a navegação
-  const [user, setUser] = useState(null); // Armazena os dados do usuário logado
-  const [loading, setLoading] = useState(true); // Indica se a verificação inicial de autenticação está em andamento
-  const navigate = useNavigate(); // Hook para navegação programática
 
-  // Efeito para verificar o token no localStorage na inicialização da aplicação
-  // Isso mantém o usuário logado se ele fechar e reabrir o navegador
+export const AuthProvider = ({ children }) => {
+
+  const [user, setUser] = useState(null); 
+  const [loading, setLoading] = useState(true); 
+  const navigate = useNavigate(); 
+
   useEffect(() => {
     const loadUser = async () => {
       console.log('AuthContext: Iniciando verificação de autenticação...');
-      const token = localStorage.getItem('authToken'); // Tenta obter o token do localStorage
+      const token = localStorage.getItem('authToken');
 
       if (token) {
         console.log('AuthContext: Token encontrado no localStorage. Tentando validar no backend...');
         try {
-          // Chama uma rota do backend para validar o token
-          // O middleware 'protect' do backend irá verificar o token JWT.
-          // Se for válido, o backend pode retornar os dados atualizados do usuário.
+
           const response = await api.get('/api/auth/validate-token');
-          setUser(response.data.user); // Define os dados do usuário recebidos do backend
+          setUser(response.data.user); 
           console.log('AuthContext: Token validado e usuário carregado:', response.data.user.username);
         } catch (error) {
           console.error('AuthContext: Erro ao validar token ou carregar usuário:', error.response?.data?.message || error.message);
-          // Se o token for inválido, expirado ou houver erro na validação, remove-o
+
           localStorage.removeItem('authToken');
-          setUser(null); // Garante que o usuário não está logado
-          // Opcional: redirecionar para login se o token for inválido/expirado ao carregar
-          // navigate('/login');
+          setUser(null);
+
         }
       } else {
         console.log('AuthContext: Nenhum token encontrado no localStorage. Usuário não logado.');
-        setUser(null); // Garante que o usuário não está logado
+        setUser(null);
       }
-      setLoading(false); // Finaliza o estado de carregamento
+      setLoading(false); 
       console.log('AuthContext: Verificação de autenticação finalizada. Loading:', false);
     };
 
-    loadUser(); // Chama a função ao montar o componente
-  }, []); // O array vazio garante que este efeito roda apenas uma vez (na montagem)
+    loadUser(); 
+  }, []); 
 
-  // Função de Login: Envia as credenciais para o backend e armazena o token
   const login = async (email, password) => {
     console.log('AuthContext: Tentando fazer login com o backend...');
     try {
-      // Faz a requisição POST para a rota de login do backend
-      const response = await api.post('/api/auth/login', { email, password });
-      const { token, user: userData } = response.data; // Espera 'token' e 'user' na resposta do backend
 
-      localStorage.setItem('authToken', token); // Armazena o token JWT no localStorage
-      setUser(userData); // Define os dados do usuário no estado do contexto
+      const response = await api.post('/api/auth/login', { email, password });
+      const { token, user: userData } = response.data; 
+
+      localStorage.setItem('authToken', token); 
+      setUser(userData);
       console.log('AuthContext: Login bem-sucedido. Redirecionando para / (Feed)');
-      navigate('/'); // Redireciona para a página principal (Feed) após o login
-      return true; // Retorna true para indicar sucesso
+      navigate('/'); 
+      return true; 
     } catch (error) {
       console.error('AuthContext: Erro no login:', error.response?.data || error.message);
-      // Lança o erro para que o componente que chamou 'login' (ex: LoginPage) possa tratá-lo
+
       throw error;
     }
   };

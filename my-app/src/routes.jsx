@@ -1,8 +1,6 @@
-// src/routes.jsx (CORRIGIDO)
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-// Importe suas páginas
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import FeedPage from './pages/FeedPage';
@@ -12,21 +10,16 @@ import NotFoundPage from './pages/NotFoundPage';
 import MessagesPage from './pages/MessagesPage.jsx';
 import CommunityDetailPage from './pages/CommunityDetailPage.jsx';
 
-// Importe o componente para proteger rotas (ESSENCIAL!)
 import ProtectedRoute from './components/ProtectedRoutes';
 import CreatePost from './components/CreatePost.jsx';
 
 
 const AppRoutes = () => {
-  // AQUI ESTÁ A CORREÇÃO:
-  return ( // <--- ADICIONE ESTE PARÊNTESE DE ABERTURA AQUI!
+
+  return ( 
     <Routes>
-      {/* Rotas Públicas (não precisam de proteção) */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-
-      {/* Rotas Protegidas - O usuário precisa estar logado para acessá-las */}
-      {/* Envolva a FeedPage com ProtectedRoute */}
       <Route
         path="/"
         element={
@@ -35,7 +28,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-      {/* Envolva a ProfilePage com ProtectedRoute */}
       <Route
         path="/profile/:username"
         element={
@@ -58,27 +50,27 @@ const AppRoutes = () => {
             path="/messages"
             element={
                 <ProtectedRoute>
-                    <MessagesPage /> {/* <--- Nova rota */}
+                    <MessagesPage /> 
                 </ProtectedRoute>
             }
       />
 
-      <Route // <--- O ERRO PODE ESTAR NO INÍCIO DESTA LINHA OU NOS ATRIBUTOS
-            path="/community/:groupId"
-            element={
-                <ProtectedRoute>
-                    <CommunityDetailPage /> {/* <--- OU ALGUM PROBLEMA NESTA LINHA DO COMPONENTE */}
-                </ProtectedRoute>
-            } // <--- OU NO FECHAMENTO DAS CHAVES/PARÊNTESES AQUI
-        />
-<Route // <--- O ERRO PODE ESTAR NO INÍCIO DESTA LINHA OU NOS ATRIBUTOS
-            path="/create-post"
-            element={
-                <ProtectedRoute>
-                    <CreatePost /> {/* <--- OU ALGUM PROBLEMA NESTA LINHA DO COMPONENTE */}
-                </ProtectedRoute>
-            } // <--- OU NO FECHAMENTO DAS CHAVES/PARÊNTESES AQUI
-        />
+      <Route 
+             path="/community/:groupId"
+              element={
+                  <ProtectedRoute>
+                      <CommunityDetailPage /> 
+                  </ProtectedRoute>
+            } 
+      />
+      <Route 
+              path="/create-post"
+              element={
+                  <ProtectedRoute>
+                        <CreatePost /> 
+                  </ProtectedRoute>
+              } 
+          />
 
       
 

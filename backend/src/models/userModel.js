@@ -30,7 +30,7 @@ const User = sequelize.define('User', {
     allowNull: false,
   },
   profilePicture: {
-    type: DataTypes.STRING, // Caminho para a imagem
+    type: DataTypes.STRING, 
     allowNull: true,
   },
 }, {
@@ -49,7 +49,6 @@ const User = sequelize.define('User', {
   },
 });
 
-// Relação de conexão entre usuários (muitos para muitos)
 User.belongsToMany(User, { as: 'Connections', through: 'UserConnections', foreignKey: 'UserId', otherKey: 'ConnectionId' });
 
 module.exports = User;

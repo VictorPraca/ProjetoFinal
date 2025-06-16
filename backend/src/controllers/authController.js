@@ -1,9 +1,7 @@
-// backend/src/controllers/authController.js
 const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// Controlador para registrar um novo usuário
 exports.register = async (req, res) => {
   try {
     const { username, email, password, dateOfBirth } = req.body;
@@ -43,7 +41,6 @@ exports.register = async (req, res) => {
   }
 };
 
-// Controlador para login de usuário
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -66,18 +63,12 @@ exports.login = async (req, res) => {
   }
 };
 
-// Controlador para validar um token JWT e retornar dados do usuário
-// O middleware 'protect' já verificou o token e anexou o objeto 'user' à requisição
-exports.validateToken = async (req, res) => { // <-- A FUNÇÃO DEVE ESTAR DEFINIDA E EXPORTADA AQUI
+exports.validateToken = async (req, res) => { 
   try {
-    // req.user é populado pelo middleware 'protect'.
-    // Se protect falhou (e.g., token inválido/expirado), ele já retornou 401.
-    // Se chegou aqui, significa que o token é válido e req.user deve existir.
+
     if (!req.user) {
-        // Isso não deveria acontecer se 'protect' funcionar corretamente, mas é um fallback.
         return res.status(401).json({ message: 'Token válido, mas usuário não encontrado (erro interno).' });
     }
-    // Retorna os dados do usuário logado (já filtrados de senha pelo protect)
     res.json({ message: 'Token válido.', user: req.user });
   } catch (error) {
     console.error('Erro ao validar token:', error);

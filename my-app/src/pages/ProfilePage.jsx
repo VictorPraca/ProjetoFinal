@@ -27,9 +27,9 @@ const ProfilePage = () => {
   const [tagError, setTagError] = useState(null);
 
 
-  // Função para buscar os detalhes do perfil
+
   const fetchProfileDetails = useCallback(async () => {
-    setLoadingProfile(true); // Inicia o loading
+    setLoadingProfile(true);
     setErrorProfile(null);
     setProfileData(null);
     setUserTags([]); 
@@ -37,13 +37,12 @@ const ProfilePage = () => {
 
     if (!username) {
       setErrorProfile('Nome de usuário não especificado na URL.');
-      setLoadingProfile(false); // Finaliza o loading em caso de erro
+      setLoadingProfile(false);
       return;
     }
 
     console.log(`ProfilePage: Buscando perfil para: ${username} do backend...`);
     try {
-      // PRIMEIRO: Tentar buscar os detalhes básicos do perfil
       const profileResponse = await api.get(`/api/users/username/${username}`);
       const fetchedData = profileResponse.data;
 
@@ -56,32 +55,28 @@ const ProfilePage = () => {
       setProfileData(fetchedData);
       console.log('ProfilePage: Dados do perfil carregados:', fetchedData.username);
 
-      // SEGUNDO: Tentar buscar as tags APÓS carregar o perfil com sucesso
-      if (isAuthenticated) { // Apenas tenta buscar tags se autenticado
+      if (isAuthenticated) { 
         try {
           const tagsResponse = await api.get(`/api/tags/user/${username}`);
           setUserTags(tagsResponse.data.map(tag => tag.name)); 
           console.log('ProfilePage: Tags do usuário carregadas:', tagsResponse.data);
         } catch (tagErr) {
-          // Erro ao buscar tags não deve impedir o carregamento do perfil principal
           console.error('ProfilePage: Erro ao buscar tags:', tagErr.response?.data || tagErr.message);
           setTagError(tagErr.response?.data?.message || 'Não foi possível carregar as tags.');
-          setUserTags([]); // Garante que não há tags incompletas
+          setUserTags([]);
         }
       } else {
-        setUserTags([]); // Não mostra tags se não autenticado
+        setUserTags([]); 
       }
 
     } catch (err) {
-      // Erro ao buscar o perfil principal (ex: 404 para o username)
       console.error('ProfilePage: Erro ao buscar perfil principal:', err.response?.data || err.message);
       setErrorProfile(err.response?.data?.message || 'Não foi possível carregar o perfil.');
     } finally {
-      setLoadingProfile(false); // <--- GARANTE QUE O LOADING É FINALIZADO AQUI
+      setLoadingProfile(false);
     }
-  }, [username, isAuthenticated]); // Depende do username e do status de autenticação
+  }, [username, isAuthenticated]);
 
-  // Função para buscar postagens do usuário
   const fetchUserPosts = useCallback(async () => {
     setLoadingUserPosts(true);
     setErrorUserPosts(null);
@@ -199,7 +194,6 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Seção de Tags */}
       <div className="profile-tags-section">
         <h2>Interesses</h2>
         {tagError && <p className="error-message">{tagError}</p>}
@@ -230,7 +224,7 @@ const ProfilePage = () => {
                     <button onClick={() => { setEditingTags(false); setTagError(null); fetchProfileDetails(); }} className="cancel-tags-button">Cancelar</button>
                 </div>
             </div>
-        ) : ( // Modo de visualização de tags
+        ) : ( 
             <div className="tags-view-mode">
                 {userTags.length === 0 ? (
                     <p className="no-tags-message">Nenhuma tag adicionada ainda.</p>
@@ -241,15 +235,13 @@ const ProfilePage = () => {
                         ))}
                     </div>
                 )}
-                {isOwnProfile && ( // Só mostra o botão de editar no próprio perfil
+                {isOwnProfile && (
                     <button onClick={() => setEditingTags(true)} className="edit-tags-button">Editar Tags</button>
                 )}
             </div>
         )}
       </div>
 
-
-      {/* Seção de postagens do usuário */}
       <div className="profile-content">
         <h2>Postagens</h2>
         {loadingUserPosts && <p>Carregando postagens...</p>}

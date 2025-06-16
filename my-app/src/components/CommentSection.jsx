@@ -1,9 +1,8 @@
-// my-app/src/components/CommentSection.jsx
 import React, { useState, useEffect } from 'react'
 import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/CommentSection.css';
-import { Link } from 'react-router-dom'; // <-- Importa o Link
+import { Link } from 'react-router-dom';
 
 const BASE_BACKEND_URL = 'http://localhost:5000';
 const DEFAULT_USER_PROFILE_PIC = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
@@ -122,9 +121,8 @@ const CommentSection = ({ postId, onCommentAdded }) => {
             className="comment-profile-pic" 
           />
           <div className="comment-info">
-            {/* MUDANÇA AQUI: Envolve o nome de usuário com o Link */}
             <h4>
-              <Link to={`/profile/${comment.User?.username}`}> {/* Link para o perfil do comentador */}
+              <Link to={`/profile/${comment.User?.username}`}> 
                 {comment.User?.username}
               </Link>
             </h4>

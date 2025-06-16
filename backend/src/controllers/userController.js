@@ -1,9 +1,8 @@
 const User = require('../models/userModel');
 const { Sequelize } = require('sequelize');
 const Post = require('../models/postModel');
-const Interaction = require('../models/interactionModel'); // Para contagem de interações
+const Interaction = require('../models/interactionModel'); 
 
-// Controlador para obter o perfil de um usuário por ID (geralmente não usado pelo frontend diretamente)
 exports.getUserProfileById = async (req, res) => {
   try {
     const userId = req.params.id; 
@@ -20,7 +19,6 @@ exports.getUserProfileById = async (req, res) => {
   }
 };
 
-// NOVO: Controlador para obter o perfil de um usuário por username
 exports.getUserProfileByUsername = async (req, res) => {
   try {
     const username = req.params.username; 
@@ -35,7 +33,6 @@ exports.getUserProfileByUsername = async (req, res) => {
   }
 };
 
-// NOVO: Controlador para buscar postagens de um usuário específico
 exports.getUserPosts = async (req, res) => {
   try {
     const username = req.params.username;
@@ -45,22 +42,20 @@ exports.getUserPosts = async (req, res) => {
     }
 
     const posts = await Post.findAll({
-      where: { userId: user.id }, // Busca posts por ID do usuário
-      include: [{ model: User, attributes: ['id', 'username', 'profilePicture'] }], // Inclui o próprio usuário
+      where: { userId: user.id }, 
+      include: [{ model: User, attributes: ['id', 'username', 'profilePicture'] }], 
       order: [['createdAt', 'DESC']],
     });
 
-    const currentUserId = req.user ? req.user.id : null; // Para saber a interação do usuário logado
+    const currentUserId = req.user ? req.user.id : null; 
 
     const postsWithInteractions = await Promise.all(posts.map(async (post) => {
         const postData = post.toJSON();
 
-        // Contar likes/dislikes para este post (apenas likes/dislikes de posts)
         const likes = await Interaction.count({ where: { postId: postData.id, type: 'like', targetCommentId: null } });
         const dislikes = await Interaction.count({ where: { postId: postData.id, type: 'dislike', targetCommentId: null } });
         const commentsCount = await Interaction.count({ where: { postId: postData.id, type: 'comment' } });
 
-        // Verificar interação do usuário logado com este post
         let userInteractionType = null;
         if (currentUserId) {
             const userInteraction = await Interaction.findOne({
@@ -88,11 +83,10 @@ exports.getUserPosts = async (req, res) => {
 };
 
 
-// Controlador para enviar uma solicitação de conexão (permanece o mesmo)
 exports.sendConnectionRequest = async (req, res) => {
     try {
         const { receiverId } = req.body;
-        const senderId = req.user.id; // ID do usuário logado
+        const senderId = req.user.id; 
 
         if (senderId === receiverId) {
             return res.status(400).json({ message: 'Não é possível enviar solicitação de conexão para si mesmo.' });
@@ -119,11 +113,10 @@ exports.sendConnectionRequest = async (req, res) => {
     }
 };
 
-// Controlador para aceitar uma solicitação de conexão (permanece o mesmo)
 exports.acceptConnectionRequest = async (req, res) => {
     try {
         const { senderId } = req.body;
-        const receiverId = req.user.id; // ID do usuário logado (que está aceitando)
+        const receiverId = req.user.id; 
 
         const sender = await User.findByPk(senderId);
         const receiver = await User.findByPk(receiverId);

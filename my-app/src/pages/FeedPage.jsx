@@ -1,9 +1,9 @@
-// my-app/src/pages/FeedPage.jsx
+
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header.jsx';
-import Posts from '../components/Posts.jsx'; // Importa o componente 'Posts' como default
+import Posts from '../components/Posts.jsx'; 
 import '../styles/FeedPage.css';
-import api from '../services/api.js'; // Importe a instância da API
+import api from '../services/api.js'; 
 
 const FeedPage = () => {
   const [posts, setPosts] = useState([]);
@@ -22,7 +22,7 @@ const FeedPage = () => {
 
       try {
         const response = await api.get('/api/posts');
-        setPosts(response.data); // Os dados já virão com 'User' e 'userHasInteracted'
+        setPosts(response.data); 
         console.log('FeedPage: Postagens carregadas do backend.');
       } catch (err) {
         console.error('FeedPage: Erro ao buscar postagens do backend:', err.response?.data || err.message);
@@ -49,7 +49,7 @@ const FeedPage = () => {
         <div className="posts-list">
           {!loadingPosts && !errorPosts && posts.length > 0 && (
             posts.map((post) => (
-              <Posts key={post.id} post={post} /> // Renderiza o componente 'Posts'
+              <Posts key={post.id} post={post} /> 
             ))
           )}
         </div>

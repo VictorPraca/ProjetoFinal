@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/Sidebar.css'; // Vamos criar este arquivo CSS
+import '../styles/Sidebar.css'; 
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
@@ -14,12 +14,11 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <Link to="/" onClick={toggleSidebar}>Home</Link>
           </li>
           <li>
-            <Link to="/communities" onClick={toggleSidebar}>Comunidades</Link> {/* <--- NOVO LINK */}
+            <Link to="/communities" onClick={toggleSidebar}>Comunidades</Link> 
           </li>
           <li>
             <Link to="/messages" onClick={toggleSidebar}>Mensagens</Link>
           </li>
-          {/* Adicione mais links conforme necessário */}
         </ul>
       </nav>
     </div>

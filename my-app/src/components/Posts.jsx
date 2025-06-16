@@ -3,7 +3,7 @@ import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import CommentSection from './CommentSection';
 import '../styles/FeedPage.css';
-import { Link } from 'react-router-dom'; // <-- Importa o Link
+import { Link } from 'react-router-dom';
 
 const BASE_BACKEND_URL = 'http://localhost:5000';
 const DEFAULT_USER_PROFILE_PIC = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
@@ -60,9 +60,8 @@ const Posts = ({ post: initialPost }) => {
       <div className="post-header">
         <img src={userProfilePicSrc} alt={post.User?.username || 'Foto de Perfil'} className="post-profile-pic" />
         <div className="post-info">
-          {/* MUDANÇA AQUI: Envolve o nome de usuário com o Link */}
           <h3>
-            <Link to={`/profile/${post.User?.username}`}> {/* Link para a página de perfil */}
+            <Link to={`/profile/${post.User?.username}`}> 
               {post.User?.username}
             </Link>
           </h3> 

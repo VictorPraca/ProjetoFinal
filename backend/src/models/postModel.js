@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const User = require('./userModel');
-const { Group } = require('./groupModel'); // Importar o modelo Group
+const { Group } = require('./groupModel'); 
 
 const Post = sequelize.define('Post', {
   id: {
@@ -25,7 +25,7 @@ const Post = sequelize.define('Post', {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
-  communityId: { // <-- ESSA COLUNA!
+  communityId: { 
     type: DataTypes.INTEGER,
     allowNull: true, 
     references: {
@@ -41,7 +41,7 @@ const Post = sequelize.define('Post', {
 Post.belongsTo(User, { foreignKey: 'userId', allowNull: false }); 
 User.hasMany(Post, { foreignKey: 'userId' }); 
 
-Post.belongsTo(Group, { foreignKey: 'communityId', allowNull: true }); // <-- E ESSA RELAÇÃO!
+Post.belongsTo(Group, { foreignKey: 'communityId', allowNull: true }); 
 Group.hasMany(Post, { foreignKey: 'communityId' });
 
 module.exports = Post;

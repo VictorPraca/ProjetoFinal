@@ -23,7 +23,6 @@ const Group = sequelize.define('Group', {
   },
 });
 
-// Tabela de associação para membros do grupo
 const GroupMember = sequelize.define('GroupMember', {
   role: {
     type: DataTypes.ENUM('member', 'administrator'),
@@ -34,7 +33,6 @@ const GroupMember = sequelize.define('GroupMember', {
 User.belongsToMany(Group, { through: GroupMember, foreignKey: 'userId' });
 Group.belongsToMany(User, { through: GroupMember, foreignKey: 'groupId' });
 
-// Adicionar um campo para o criador do grupo, se necessário
 Group.belongsTo(User, { as: 'Creator', foreignKey: 'creatorId' });
 
 module.exports = { Group, GroupMember };

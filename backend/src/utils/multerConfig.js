@@ -3,7 +3,7 @@ const path = require('path');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Pasta onde os arquivos serão armazenados
+    cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
     cb(null, `<span class="math-inline">\{file\.fieldname\}\-</span>{Date.now()}${path.extname(file.originalname)}`);
@@ -12,9 +12,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 1024 * 1024 * 5 }, // 5MB
+  limits: { fileSize: 1024 * 1024 * 5 }, 
   fileFilter: (req, file, cb) => {
-    const filetypes = /jpeg|jpg|png|gif|mp4|mov|avi/; // Tipos de arquivo permitidos
+    const filetypes = /jpeg|jpg|png|gif|mp4|mov|avi/;
     const mimetype = filetypes.test(file.mimetype);
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 

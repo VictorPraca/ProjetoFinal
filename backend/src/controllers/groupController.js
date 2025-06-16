@@ -1,15 +1,14 @@
 const { Group, GroupMember } = require('../models/groupModel');
 const GroupMessage = require('../models/groupMessageModel');
 const User = require('../models/userModel');
-const Post = require('../models/postModel'); // Importa o modelo Post
-const Interaction = require('../models/interactionModel'); // Importa o modelo Interaction para likes/dislikes
+const Post = require('../models/postModel'); 
+const Interaction = require('../models/interactionModel'); 
 const { Sequelize } = require('sequelize');
 
-// Controlador para criar um novo grupo/comunidade
-exports.createGroup = async (req, res) => { // <-- GARANTA QUE ESTÁ DEFINIDO E EXPORTADO ASSIM
+exports.createGroup = async (req, res) => { 
   try {
     const { name, description } = req.body;
-    const creatorId = req.user.id; // O criador é o usuário logado
+    const creatorId = req.user.id; 
 
     if (!name || name.trim() === '') {
       return res.status(400).json({ message: 'O nome da comunidade não pode ser vazio.' });
@@ -34,7 +33,7 @@ exports.createGroup = async (req, res) => { // <-- GARANTA QUE ESTÁ DEFINIDO E 
   }
 };
 
-// Controlador para um usuário entrar em um grupo
+
 exports.joinGroup = async (req, res) => {
   try {
     const { groupId } = req.body;
@@ -58,7 +57,6 @@ exports.joinGroup = async (req, res) => {
   }
 };
 
-// Controlador para um usuário sair de um grupo
 exports.leaveGroup = async (req, res) => {
     try {
         const { groupId } = req.body;
@@ -77,7 +75,6 @@ exports.leaveGroup = async (req, res) => {
     }
 };
 
-// Controlador para obter mensagens de um grupo
 exports.getGroupMessages = async (req, res) => {
   try {
     const groupId = req.params.groupId;
@@ -100,7 +97,6 @@ exports.getGroupMessages = async (req, res) => {
   }
 };
 
-// Controlador para postar uma mensagem em um grupo
 exports.postGroupMessage = async (req, res) => {
   try {
     const { groupId, content } = req.body;
@@ -128,7 +124,6 @@ exports.postGroupMessage = async (req, res) => {
   }
 };
 
-// Controlador para administradores apagarem mensagens de outros membros
 exports.deleteGroupMessage = async (req, res) => {
   try {
     const messageId = req.params.messageId;
@@ -158,7 +153,6 @@ exports.deleteGroupMessage = async (req, res) => {
   }
 };
 
-// Controlador para listar todas as comunidades
 exports.getAllGroups = async (req, res) => {
     try {
         const groups = await Group.findAll({
@@ -171,7 +165,6 @@ exports.getAllGroups = async (req, res) => {
     }
 };
 
-// Controlador para obter detalhes de um grupo e seus membros
 exports.getGroupDetails = async (req, res) => {
     try {
         const groupId = req.params.groupId;
@@ -195,8 +188,7 @@ exports.getGroupDetails = async (req, res) => {
     }
 };
 
-// NOVO: Controlador para obter postagens de um grupo específico
-exports.getGroupPosts = async (req, res) => { // <-- A função getGroupPosts
+exports.getGroupPosts = async (req, res) => { 
   try {
     const groupId = req.params.groupId;
     const userId = req.user ? req.user.id : null;
@@ -207,7 +199,7 @@ exports.getGroupPosts = async (req, res) => { // <-- A função getGroupPosts
     }
 
     const posts = await Post.findAll({
-      where: { communityId: groupId }, // Condição que requer communityId no Post
+      where: { communityId: groupId }, 
       include: [{ model: User, attributes: ['id', 'username', 'profilePicture'] }],
       order: [['createdAt', 'DESC']],
     });
