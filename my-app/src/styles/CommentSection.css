@@ -157,16 +157,16 @@
 }
 
 .comment-interactions .comment-dislikes.disliked {
-    color: #dc3545; /* Vermelho */
+    color: #ff4500; /* Vermelho */
     background-color: rgba(220, 53, 69, 0.2);
-    border-color: #dc3545;
+    border-color: #ff4500;
 }
 
 /* Estilo para o botão "Responder" em comentários */
 .comment-interactions .reply-button {
     background: transparent; /* Fundo transparente */
     border: none; /* Remove borda padrão de botão */
-    color: #007bff; /* Azul para "Responder" */
+    color: #ff4500; /* Azul para "Responder" */
     font-size: 0.85em;
     cursor: pointer;
     padding: 0; /* Remove padding padrão de botão */
@@ -177,7 +177,7 @@
 
 .comment-interactions .reply-button:hover {
     text-decoration: underline; /* Sublinhado no hover */
-    color: #66b3ff;
+    color: #ff4500;
     background-color: transparent; /* Garante que o fundo não muda */
     border-color: transparent; /* Garante que a borda não muda */
 }
@@ -209,7 +209,7 @@
     align-self: flex-end;
     padding: 5px 10px;
     font-size: 0.85em;
-    background-color: #007bff;
+    background-color: #ff4500;
     color: white;
     border: none;
     border-radius: 5px;
@@ -218,5 +218,5 @@
 }
 
 .reply-form button:hover {
-    background-color: #0056b3;
+    background-color: #ff4500;
 }
