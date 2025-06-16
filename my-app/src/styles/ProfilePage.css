@@ -1,9 +1,7 @@
 /* my-app/src/styles/ProfilePage.css */
 
 .profile-container {
-  /* Ajuste o padding-top para compensar a altura do header fixo.
-     Seu header tem aproximadamente 60px de altura. Adicionamos uma margem de segurança. */
-  padding-top: calc(60px + 30px); /* Garante que o conteúdo comece abaixo do header */
+  padding-top: calc(60px + 30px);
   padding-bottom: 20px;
   background-color: #0b0b0b;
   min-height: 100vh;
@@ -16,18 +14,18 @@
 }
 
 .profile-header {
-  background-color: #1a1a1b; /* Fundo do card de cabeçalho do perfil */
+  background-color: #1a1a1b;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Sombra */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   padding: 30px;
-  max-width: 650px; /* Largura máxima */
-  width: 90%; /* Ocupa 90% da largura em telas menores */
-  text-align: center; /* Centraliza o conteúdo (foto, nome) */
-  margin-top: 20px; /* Margem do topo para separar do header */
+  max-width: 650px;
+  width: 90%;
+  text-align: center;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px; /* Espaço entre os elementos */
+  gap: 15px;
 }
 
 .profile-main-info {
@@ -38,65 +36,202 @@
 }
 
 .profile-page-pic {
-  width: 120px; /* Tamanho grande para foto de perfil */
+  width: 120px;
   height: 120px;
-  border-radius: 50%; /* Torna circular */
-  object-fit: cover; /* Ajusta a imagem para preencher */
-  border: 3px solid #ff4500; /* Borda laranja */
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ff4500;
 }
 
 .profile-header h1 {
   margin: 0;
-  font-size: 2.5em; /* Tamanho do nome de usuário */
+  font-size: 2.5em;
   color: #f0f0f0;
 }
 
-/* Se você ainda tiver um parágrafo .profile-bio no HTML, este estilo será aplicado */
-.profile-bio {
+.profile-bio-text {
   font-size: 1.1em;
   color: #d0d0d0;
-  margin-top: 10px;
+  margin: 0;
   line-height: 1.5;
   max-width: 500px;
   text-align: center;
 }
 
-/* Estilo para o NOVO card com nome de usuário e bio */
-.profile-info-card {
-  background-color: #1a1a1b; /* Mesmo fundo do post-card */
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  max-width: 700px;
-  width: 100%;
-  margin-top: 20px; /* Espaço entre o profile-header e este card */
-  text-align: left; /* Alinha o texto dentro do card à esquerda */
-  box-sizing: border-box;
-}
-
-.profile-info-card h2 {
-  margin: 0 0 10px 0; /* Margem inferior para separar do parágrafo */
-  font-size: 1.8em;
-  color: #ff4500; /* Cor do nome de usuário no card */
-}
-
-.profile-info-card p {
-  margin: 0;
-  font-size: 1em;
-  line-height: 1.5;
-  color: #d0d0d0;
-}
-
-.profile-info-card .no-bio-message {
+.profile-no-bio-message {
     font-style: italic;
     color: #888;
+    margin: 0;
+    font-size: 1em;
+    text-align: center;
+}
+
+/* NOVO: Estilos para a seção de Tags/Interesses */
+.profile-tags-section {
+  background-color: #1a1a1b;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 20px 30px; /* Padding ajustado */
+  max-width: 650px;
+  width: 90%;
+  margin-top: 20px;
+  text-align: left; /* Alinhamento do conteúdo interno */
+}
+
+.profile-tags-section h2 {
+  font-size: 1.8em;
+  color: #ff4500;
+  margin-top: 0;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.no-tags-message {
+  text-align: center;
+  color: #bbb;
+  font-style: italic;
+  margin-bottom: 15px;
+}
+
+.tags-view-mode,
+.tags-edit-mode {
+  display: flex;
+  flex-wrap: wrap; /* Permite que as tags quebrem linha */
+  gap: 10px; /* Espaço entre as tags */
+  align-items: center;
+  justify-content: center; /* Centraliza as tags horizontalmente */
+  margin-bottom: 15px;
+  min-height: 40px; /* Altura mínima para o container de tags */
+}
+
+.tag-bubble {
+  background-color: #333;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 9999px; /* Formato de pílula */
+  font-size: 0.9em;
+  white-space: nowrap; /* Impede que o texto da tag quebre */
+}
+
+.edit-tags-button {
+  background-color: #007bff; /* Azul para o botão de editar */
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+  margin-top: 10px; /* Espaço acima do botão */
+  align-self: center; /* Centraliza o botão dentro do flex container do view mode */
+}
+
+.edit-tags-button:hover {
+  background-color: #0056b3;
+}
+
+/* Estilos para o modo de edição */
+.add-tag-form {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.add-tag-form input {
+  flex-grow: 1; /* Ocupa o espaço restante */
+  padding: 8px 12px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  font-size: 0.95em;
+}
+
+.add-tag-form button {
+  padding: 8px 15px;
+  background-color: #ff4500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.add-tag-form button:hover {
+  background-color: #e03c00;
+}
+
+.editable-tag {
+  background-color: #555; /* Cor diferente para tags em edição */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.remove-tag-button {
+  background: none;
+  border: none;
+  color: #ccc;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.1em;
+  padding: 0 3px;
+  line-height: 1; /* Alinhamento vertical */
+  transition: color 0.2s ease;
+}
+
+.remove-tag-button:hover {
+  color: #dc3545; /* Vermelho no hover */
+}
+
+.tag-actions-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.save-tags-button,
+.cancel-tags-button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.save-tags-button {
+    background-color: #28a745; /* Verde */
+    color: white;
+    border: none;
+}
+.save-tags-button:hover {
+    background-color: #218838;
+}
+
+.cancel-tags-button {
+    background-color: #6c757d; /* Cinza */
+    color: white;
+    border: none;
+}
+.cancel-tags-button:hover {
+    background-color: #5a6268;
 }
 
 
+/* Seção de postagens */
 .profile-content {
   width: 100%;
   max-width: 650px;
-  margin-top: 30px; /* Espaço entre o card de info e a seção de posts */
+  margin-top: 30px;
+}
+
+.profile-content h2 {
+    font-size: 2em;
+    color: #f0f0f0;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 .user-posts-list {
@@ -105,15 +240,13 @@
   gap: 20px;
 }
 
-/* Reutiliza estilos de post-card do FeedPage.css */
-/* Certifique-se de que FeedPage.css está sendo carregado onde PostCard é usado (e que PostCard tem suas próprias classes) */
-
 /* Media Queries para Responsividade */
 @media (max-width: 768px) {
   .profile-container {
-    padding-top: calc(60px + 15px) 15px 15px;
+    padding-top: calc(60px + 15px);
   }
   .profile-header,
+  .profile-tags-section, /* Ajusta também a seção de tags */
   .profile-info-card {
     padding: 20px;
     width: 95%;
@@ -125,20 +258,28 @@
   .profile-header h1 {
     font-size: 2em;
   }
-  .profile-info-card h2 {
-    font-size: 1.6em;
-  }
-  .profile-bio,
-  .profile-info-card p {
+  .profile-bio-text,
+  .profile-no-bio-message,
+  .no-tags-message { /* Ajusta a fonte das mensagens */
     font-size: 0.95em;
   }
-  .profile-content {
-    margin-top: 20px;
+  .profile-tags-section h2,
+  .profile-content h2 {
+    font-size: 1.6em;
+  }
+  .add-tag-form {
+    flex-direction: column; /* Em telas menores, input e botão empilham */
+    align-items: center;
+  }
+  .add-tag-form input,
+  .add-tag-form button {
+    width: 100%; /* Ocupam largura total */
   }
 }
 
 @media (max-width: 480px) {
   .profile-header,
+  .profile-tags-section,
   .profile-info-card {
     padding: 15px;
     width: 98%;
@@ -150,11 +291,12 @@
   .profile-header h1 {
     font-size: 1.8em;
   }
-  .profile-info-card h2 {
+  .profile-tags-section h2,
+  .profile-content h2 {
     font-size: 1.4em;
   }
-  .profile-bio,
-  .profile-info-card p {
-    font-size: 0.9em;
+  .tag-bubble {
+    padding: 6px 10px;
+    font-size: 0.85em;
   }
 }
