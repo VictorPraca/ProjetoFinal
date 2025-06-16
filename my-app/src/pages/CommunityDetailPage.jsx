@@ -190,7 +190,9 @@ const CommunityDetailPage = () => {
                 <span> • Membros: {communityDetails.Users?.length || 0}</span>
                 <span> • Criada em: {new Date(communityDetails.createdAt).toLocaleDateString()}</span>
             </p>
-            
+            {isAdmin && <span className="community-admin-tag">Você é Administrador</span>}
+            <br/>
+            <br/>
             {isAuthenticated && (
                 <button 
                     onClick={handleJoinLeaveCommunity} 
@@ -201,8 +203,7 @@ const CommunityDetailPage = () => {
                 </button>
             )}
             {!isAuthenticated && <p className="community-auth-prompt">Faça login para interagir com esta comunidade.</p>}
-            
-            {isAdmin && <span className="community-admin-tag">Você é Administrador</span>}
+            <br/>
         </div>
 
         {/* Seção de postagens da comunidade */}

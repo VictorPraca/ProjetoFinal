@@ -137,7 +137,7 @@
 .view-community-button {
   align-self: flex-end; /* Alinha o botão "Ver Comunidade" à direita */
   padding: 8px 15px;
-  background-color: #007bff;
+  background-color: #ff4500;
   color: white;
   border: none;
   border-radius: 5px;
@@ -149,7 +149,7 @@
 }
 
 .view-community-button:hover {
-  background-color: #0056b3;
+  background-color: #ff4500;
 }
 
 /* Mensagens de erro e sucesso */
