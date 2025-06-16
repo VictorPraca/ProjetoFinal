@@ -48,7 +48,7 @@ const LoginPage = () => {
             type="text"
             id="email-username"
             name="email-username"
-            placeholder="E-mail/User"
+            placeholder="E-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
