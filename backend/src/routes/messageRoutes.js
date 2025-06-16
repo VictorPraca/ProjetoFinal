@@ -8,4 +8,4 @@ router.post('/', protect, messageController.sendMessage); // Enviar mensagem pri
 router.get('/conversation/:otherUserId', protect, messageController.getConversation); // Obter conversa com outro usuário (passa ID)
 router.get('/partners', protect, messageController.getConversationPartners); // Obter usuários com quem o logado conversou
 
-module.exports = router;
+module.exports = router; // <-- ESSA LINHA PRECISA ESTAR AQUI!

@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import api from '../services/api.js';
 import Header from '../components/Header.jsx';
-import Posts from '../components/Posts.jsx'; // Importa o componente Post (ou PostCard)
+import Posts from '../components/Posts.jsx';
+import { useAuth } from '../contexts/AuthContext.jsx'; 
 import '../styles/ProfilePage.css';
 
-const BASE_BACKEND_URL = 'http://localhost:5000'; // Mesma base URL do backend
-const DEFAULT_USER_PROFILE_PIC = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'; // Foto padrão
+const BASE_BACKEND_URL = 'http://localhost:5000';
+const DEFAULT_USER_PROFILE_PIC = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
 
 const ProfilePage = () => {
-  const { username } = useParams(); // Obtém o nome de usuário da URL
+  const { username } = useParams();
+  const { user: currentUser, isAuthenticated } = useAuth();
+  
   const [profileData, setProfileData] = useState(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [errorProfile, setErrorProfile] = useState(null);
@@ -18,76 +21,138 @@ const ProfilePage = () => {
   const [loadingUserPosts, setLoadingUserPosts] = useState(true);
   const [errorUserPosts, setErrorUserPosts] = useState(null);
 
-  // Efeito para buscar os dados do perfil (foto, bio, etc.) por username
+  const [userTags, setUserTags] = useState([]);
+  const [editingTags, setEditingTags] = useState(false);
+  const [newTagInput, setNewTagInput] = useState('');
+  const [tagError, setTagError] = useState(null);
+
+
+  // Função para buscar os detalhes do perfil
+  const fetchProfileDetails = useCallback(async () => {
+    setLoadingProfile(true); // Inicia o loading
+    setErrorProfile(null);
+    setProfileData(null);
+    setUserTags([]); 
+    setTagError(null); 
+
+    if (!username) {
+      setErrorProfile('Nome de usuário não especificado na URL.');
+      setLoadingProfile(false); // Finaliza o loading em caso de erro
+      return;
+    }
+
+    console.log(`ProfilePage: Buscando perfil para: ${username} do backend...`);
+    try {
+      // PRIMEIRO: Tentar buscar os detalhes básicos do perfil
+      const profileResponse = await api.get(`/api/users/username/${username}`);
+      const fetchedData = profileResponse.data;
+
+      if (fetchedData.profilePicture) {
+          fetchedData.profilePicture = `${BASE_BACKEND_URL}${fetchedData.profilePicture}`;
+      } else {
+          fetchedData.profilePicture = DEFAULT_USER_PROFILE_PIC;
+      }
+
+      setProfileData(fetchedData);
+      console.log('ProfilePage: Dados do perfil carregados:', fetchedData.username);
+
+      // SEGUNDO: Tentar buscar as tags APÓS carregar o perfil com sucesso
+      if (isAuthenticated) { // Apenas tenta buscar tags se autenticado
+        try {
+          const tagsResponse = await api.get(`/api/tags/user/${username}`);
+          setUserTags(tagsResponse.data.map(tag => tag.name)); 
+          console.log('ProfilePage: Tags do usuário carregadas:', tagsResponse.data);
+        } catch (tagErr) {
+          // Erro ao buscar tags não deve impedir o carregamento do perfil principal
+          console.error('ProfilePage: Erro ao buscar tags:', tagErr.response?.data || tagErr.message);
+          setTagError(tagErr.response?.data?.message || 'Não foi possível carregar as tags.');
+          setUserTags([]); // Garante que não há tags incompletas
+        }
+      } else {
+        setUserTags([]); // Não mostra tags se não autenticado
+      }
+
+    } catch (err) {
+      // Erro ao buscar o perfil principal (ex: 404 para o username)
+      console.error('ProfilePage: Erro ao buscar perfil principal:', err.response?.data || err.message);
+      setErrorProfile(err.response?.data?.message || 'Não foi possível carregar o perfil.');
+    } finally {
+      setLoadingProfile(false); // <--- GARANTE QUE O LOADING É FINALIZADO AQUI
+    }
+  }, [username, isAuthenticated]); // Depende do username e do status de autenticação
+
+  // Função para buscar postagens do usuário
+  const fetchUserPosts = useCallback(async () => {
+    setLoadingUserPosts(true);
+    setErrorUserPosts(null);
+    setUserPosts([]); 
+
+    if (!username) {
+      setLoadingUserPosts(false);
+      return;
+    }
+
+    console.log(`ProfilePage: Buscando postagens para: ${username} do backend...`);
+    try {
+      const response = await api.get(`/api/users/username/${username}/posts`);
+      setUserPosts(response.data);
+      console.log(`ProfilePage: Postagens de ${username} carregadas.`);
+    } catch (err) {
+      console.error('ProfilePage: Erro ao buscar postagens do usuário:', err.response?.data || err.message);
+      setErrorUserPosts(err.response?.data?.message || 'Erro ao carregar postagens do usuário.');
+    } finally {
+      setLoadingUserPosts(false);
+    }
+  }, [username]);
+
   useEffect(() => {
-    const fetchProfile = async () => {
-      setLoadingProfile(true);
-      setErrorProfile(null);
-      setProfileData(null);
-
-      if (!username) {
-        setErrorProfile('Nome de usuário não especificado na URL.');
-        setLoadingProfile(false);
-        return;
-      }
-
-      console.log(`ProfilePage: Buscando perfil para: ${username} do backend...`);
-      try {
-        // CHAMA A API DO BACKEND USANDO o USERNAME
-        const response = await api.get(`/api/users/username/${username}`);
-        
-        // Montar a URL da foto de perfil para o ProfileData
-        const fetchedProfileData = {
-            ...response.data,
-            profilePicture: response.data.profilePicture
-                ? `${BASE_BACKEND_URL}${response.data.profilePicture}`
-                : DEFAULT_USER_PROFILE_PIC
-        };
-
-        setProfileData(fetchedProfileData);
-        console.log('ProfilePage: Dados do perfil carregados do backend:', fetchedProfileData.username);
-      } catch (err) {
-        console.error('ProfilePage: Erro ao buscar perfil do backend:', err.response?.data || err.message);
-        setErrorProfile(err.response?.data?.message || 'Não foi possível carregar o perfil. Tente novamente.');
-      } finally {
-        setLoadingProfile(false);
-      }
-    };
-    fetchProfile();
-  }, [username]); // Roda quando o username na URL muda
-
-  // Efeito para buscar as postagens do usuário específico por username
-  useEffect(() => {
-    const fetchUserPosts = async () => {
-      setLoadingUserPosts(true);
-      setErrorUserPosts(null);
-      setUserPosts([]); 
-
-      if (!username) {
-        setLoadingUserPosts(false);
-        return;
-      }
-
-      console.log(`ProfilePage: Buscando postagens para: ${username} do backend...`);
-      try {
-        // CHAMA A API DO BACKEND PARA AS POSTAGENS DO USUÁRIO
-        const response = await api.get(`/api/users/username/${username}/posts`);
-        
-        // Os dados já vêm prontos, a montagem da URL da mídia será feita no componente 'Posts.jsx'
-        setUserPosts(response.data);
-        console.log(`ProfilePage: Postagens de ${username} carregadas do backend.`);
-      } catch (err) {
-        console.error('ProfilePage: Erro ao buscar postagens do usuário do backend:', err.response?.data || err.message);
-        setErrorUserPosts(err.response?.data?.message || 'Erro ao carregar postagens do usuário.');
-      } finally {
-        setLoadingUserPosts(false);
-      }
-    };
-
+    fetchProfileDetails();
     fetchUserPosts();
-  }, [username]); // Roda quando o username na URL muda
+  }, [fetchProfileDetails, fetchUserPosts]);
 
-  // Renderização condicional para estados globais da página (loading, error, not found)
+
+  const handleAddTag = (e) => {
+    e.preventDefault();
+    setTagError(null);
+    if (!newTagInput.trim()) {
+        setTagError('A tag não pode ser vazia.');
+        return;
+    }
+    const lowerCaseTag = newTagInput.trim().toLowerCase();
+    if (userTags.includes(lowerCaseTag)) {
+        setTagError('Esta tag já foi adicionada.');
+        return;
+    }
+    if (userTags.length >= 5) {
+        setTagError('Máximo de 5 tags permitidas.');
+        return;
+    }
+    setUserTags(prev => [...prev, lowerCaseTag]);
+    setNewTagInput('');
+  };
+
+  const handleRemoveTag = (tagToRemove) => {
+    setUserTags(prev => prev.filter(tag => tag !== tagToRemove));
+  };
+
+  const handleSaveTags = async () => {
+    setTagError(null);
+    if (!isAuthenticated || !currentUser) {
+      setTagError('Você precisa estar logado para salvar as tags.');
+      return;
+    }
+    try {
+        await api.post('/api/tags', { tags: userTags }); 
+        setEditingTags(false); 
+        fetchProfileDetails(); 
+        alert('Tags salvas com sucesso!');
+    } catch (err) {
+        console.error('Erro ao salvar tags:', err.response?.data || err.message);
+        setTagError(err.response?.data?.message || 'Erro ao salvar tags. Tente novamente.');
+    }
+  };
+
+
   if (loadingProfile) {
     return (
       <div className="profile-container">
@@ -115,12 +180,12 @@ const ProfilePage = () => {
     );
   }
 
-  // Se o perfil foi carregado com sucesso, renderiza os detalhes e as postagens
+  const isOwnProfile = isAuthenticated && currentUser?.username === username;
+
   return (
     <div className="profile-container">
-      <Header /> {/* O Header já está configurado para ser sticky via CSS */}
+      <Header />
 
-      {/* Seção do cabeçalho do perfil */}
       <div className="profile-header">
         <div className="profile-main-info">
           <img
@@ -129,28 +194,77 @@ const ProfilePage = () => {
             className="profile-page-pic"
           />
           <h1>{profileData.username}</h1>
-          {/* NOVO: Bio diretamente abaixo do nome, se existir */}
           {profileData.bio && <p className="profile-bio-text">{profileData.bio}</p>}
           {!profileData.bio && <p className="profile-no-bio-message">Nenhuma biografia definida ainda.</p>}
         </div>
       </div>
 
+      {/* Seção de Tags */}
+      <div className="profile-tags-section">
+        <h2>Interesses</h2>
+        {tagError && <p className="error-message">{tagError}</p>}
+        
+        {editingTags ? (
+            <div className="tags-edit-mode">
+                <div className="current-tags-list">
+                    {userTags.length === 0 && <p className="no-tags-message">Nenhuma tag adicionada ainda.</p>}
+                    {userTags.map(tag => (
+                        <span key={tag} className="tag-bubble editable-tag">
+                            {tag}
+                            <button onClick={() => handleRemoveTag(tag)} className="remove-tag-button">x</button>
+                        </span>
+                    ))}
+                </div>
+                <form onSubmit={handleAddTag} className="add-tag-form">
+                    <input 
+                        type="text" 
+                        value={newTagInput} 
+                        onChange={(e) => setNewTagInput(e.target.value)} 
+                        placeholder="Adicionar nova tag (máx. 5)" 
+                        maxLength="20"
+                    />
+                    <button type="submit" className="add-tag-button">Adicionar</button>
+                </form>
+                <div className="tag-actions-buttons">
+                    <button onClick={handleSaveTags} className="save-tags-button">Salvar Tags</button>
+                    <button onClick={() => { setEditingTags(false); setTagError(null); fetchProfileDetails(); }} className="cancel-tags-button">Cancelar</button>
+                </div>
+            </div>
+        ) : ( // Modo de visualização de tags
+            <div className="tags-view-mode">
+                {userTags.length === 0 ? (
+                    <p className="no-tags-message">Nenhuma tag adicionada ainda.</p>
+                ) : (
+                    <div className="current-tags-list">
+                        {userTags.map(tag => (
+                            <span key={tag} className="tag-bubble">{tag}</span>
+                        ))}
+                    </div>
+                )}
+                {isOwnProfile && ( // Só mostra o botão de editar no próprio perfil
+                    <button onClick={() => setEditingTags(true)} className="edit-tags-button">Editar Tags</button>
+                )}
+            </div>
+        )}
+      </div>
+
+
       {/* Seção de postagens do usuário */}
       <div className="profile-content">
+        <h2>Postagens</h2>
         {loadingUserPosts && <p>Carregando postagens...</p>}
         {errorUserPosts && <p style={{ color: 'red' }}>Erro: {errorUserPosts}</p>}
         {!loadingUserPosts && !errorUserPosts && userPosts.length === 0 && (
           <p>{profileData.username} não possui posts.</p>
         )}
 
-        {/* Mapeia e renderiza as postagens do usuário */}
-        {!loadingUserPosts && !errorUserPosts && userPosts.length > 0 && (
-          <div className="user-posts-list">
-            {userPosts.map((post) => (
+        <div className="user-posts-list">
+          {!loadingUserPosts && !errorUserPosts && userPosts.length > 0 && (
+            userPosts.map((post) => (
               <Posts key={post.id} post={post} />
-            ))}
-          </div>
-        )}
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
