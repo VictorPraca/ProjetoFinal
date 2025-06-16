@@ -73,11 +73,9 @@ const AppRoutes = () => {
           />
 
       
-
-      {/* Rota curinga para 404 (página não encontrada) */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
-  ); // E o parêntese de fechamento já está no final
+  );
 };
 
 export default AppRoutes;
