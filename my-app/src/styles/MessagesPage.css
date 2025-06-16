@@ -287,6 +287,26 @@
   background-color: #e03c00;
 }
 
+.message-timestamp {
+  font-size: 0.7em;
+  color: #888;
+  text-align: right;
+  display: flex; /* Para alinhar o tempo e o status */
+  gap: 5px; /* Espaço entre o tempo e o status */
+  justify-content: flex-end; /* Alinha o tempo e status à direita */
+  align-items: center;
+  margin-top: 5px;
+}
+.message-item.sent .message-timestamp {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* NOVO: Estilo para o texto de status da mensagem */
+.message-status {
+    font-size: 0.9em; /* Um pouco menor que o timestamp */
+    font-weight: bold;
+    color: #4CAF50; /* Verde para status padrão */
+}
 
 /* Responsividade */
 @media (max-width: 900px) {
