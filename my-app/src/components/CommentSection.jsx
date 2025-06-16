@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+// my-app/src/components/CommentSection.jsx
+import React, { useState, useEffect } from 'react'
 import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
-import '../styles/CommentSection.css'; // Importa os estilos CSS para a seção de comentários
+import '../styles/CommentSection.css';
+import { Link } from 'react-router-dom'; // <-- Importa o Link
 
 const BASE_BACKEND_URL = 'http://localhost:5000';
 const DEFAULT_USER_PROFILE_PIC = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
@@ -12,7 +14,7 @@ const CommentSection = ({ postId, onCommentAdded }) => {
   const [newCommentText, setNewCommentText] = useState('');
   const [loadingComments, setLoadingComments] = useState(true);
   const [errorComments, setErrorComments] = useState(null);
-  const [replyingTo, setReplyingTo] = useState(null); // ID do comentário que está sendo respondido
+  const [replyingTo, setReplyingTo] = useState(null);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -43,14 +45,13 @@ const CommentSection = ({ postId, onCommentAdded }) => {
 
     try {
       const response = await api.post('/api/posts/interact/comment', {
-        postId, // postId do post principal
+        postId,
         content: newCommentText.trim(),
-        parentId, // Passa o parentId se for uma resposta
+        parentId,
       });
       
       const addedComment = response.data.comment;
       
-      // Atualiza a lista de comentários no frontend
       if (parentId) {
         setComments(prevComments => 
             prevComments.map(comment => 
@@ -63,9 +64,9 @@ const CommentSection = ({ postId, onCommentAdded }) => {
         setComments(prevComments => [addedComment, ...prevComments]);
       }
       
-      setNewCommentText(''); // Limpa o campo de texto
-      setReplyingTo(null); // Limpa o estado de resposta
-      onCommentAdded(addedComment); // Notifica o componente pai (Posts.jsx) que um comentário foi adicionado
+      setNewCommentText('');
+      setReplyingTo(null);
+      onCommentAdded(addedComment);
       console.log('Comentário adicionado:', addedComment);
     } catch (error) {
       console.error('Erro ao adicionar comentário:', error.response?.data || error.message);
@@ -73,17 +74,14 @@ const CommentSection = ({ postId, onCommentAdded }) => {
     }
   };
 
-  // NOVO: Função para alternar like/dislike em COMENTÁRIOS
-  const handleToggleCommentLikeDislike = async (commentId, type) => { // ID do comentário e 'like'/'dislike'
+  const handleToggleCommentLikeDislike = async (commentId, type) => {
     if (!isAuthenticated) {
       alert('Você precisa estar logado para interagir.');
       return;
     }
     try {
-      // Envia commentId, não postId para interação em comentário
       const response = await api.post('/api/posts/interact/toggle-like-dislike', { commentId, type });
       
-      // Encontrar e atualizar o comentário na lista de comentários (e suas respostas)
       setComments(prevComments => {
         const updateComment = (commentList) => {
           return commentList.map(comment => {
@@ -95,7 +93,6 @@ const CommentSection = ({ postId, onCommentAdded }) => {
                 userHasInteracted: response.data.userInteractionType
               };
             }
-            // Se o comentário tem respostas, chama recursivamente para atualizá-las
             if (comment.Replies && comment.Replies.length > 0) {
               return {
                 ...comment,
@@ -115,8 +112,6 @@ const CommentSection = ({ postId, onCommentAdded }) => {
     }
   };
 
-
-  // Renderiza comentários recursivamente para lidar com respostas aninhadas
   const renderComments = (commentList, level = 0) => {
     return commentList.map(comment => (
       <div key={comment.id} className={`comment-item level-${level}`}>
@@ -127,13 +122,17 @@ const CommentSection = ({ postId, onCommentAdded }) => {
             className="comment-profile-pic" 
           />
           <div className="comment-info">
-            <h4>{comment.User?.username}</h4>
+            {/* MUDANÇA AQUI: Envolve o nome de usuário com o Link */}
+            <h4>
+              <Link to={`/profile/${comment.User?.username}`}> {/* Link para o perfil do comentador */}
+                {comment.User?.username}
+              </Link>
+            </h4>
             <span>{new Date(comment.createdAt).toLocaleDateString('pt-BR')}</span>
           </div>
         </div>
         <p>{comment.commentContent}</p>
         
-        {/* NOVO: Botões de Like/Dislike para Comentários */}
         <div className="comment-interactions">
             <span 
                 className={`comment-likes ${comment.userHasInteracted === 'like' ? 'liked' : ''}`}
@@ -147,12 +146,12 @@ const CommentSection = ({ postId, onCommentAdded }) => {
             >
                 👎 {comment.dislikes || 0}
             </span>
-            {isAuthenticated && ( // Mostra o botão de responder apenas se logado
+            {isAuthenticated && (
                 <button className="reply-button" onClick={() => setReplyingTo(comment.id)}>Responder</button>
             )}
         </div>
 
-        {replyingTo === comment.id && ( // Formulário de resposta aparece se clicado em "Responder"
+        {replyingTo === comment.id && (
             <div className="reply-form">
                 <textarea
                     value={newCommentText}
@@ -167,7 +166,7 @@ const CommentSection = ({ postId, onCommentAdded }) => {
 
         {comment.Replies && comment.Replies.length > 0 && (
           <div className="comment-replies">
-            {renderComments(comment.Replies, level + 1)} {/* Renderiza recursivamente as respostas */}
+            {renderComments(comment.Replies, level + 1)}
           </div>
         )}
       </div>

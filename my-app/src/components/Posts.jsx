@@ -1,37 +1,31 @@
-// my-app/src/components/Posts.jsx
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import CommentSection from './CommentSection';
-import '../styles/FeedPage.css'; // Importa estilos de feed/posts
+import '../styles/FeedPage.css';
+import { Link } from 'react-router-dom'; // <-- Importa o Link
 
 const BASE_BACKEND_URL = 'http://localhost:5000';
 const DEFAULT_USER_PROFILE_PIC = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
 
-const Posts = ({ post: initialPost }) => { // Componente nomeado 'Posts'
-  // Remove os console.logs de depuração agora que encontramos o problema
-  // console.log('Posts Component - post prop:', initialPost);
-  // console.log('Posts Component - username:', initialPost.user?.username); 
-
+const Posts = ({ post: initialPost }) => {
   const { isAuthenticated, user } = useAuth();
   const [post, setPost] = useState(initialPost);
-  const [showComments, setShowComments] = useState(false); // Estado para mostrar/esconder seção de comentários
+  const [showComments, setShowComments] = useState(false);
 
-  // Atualiza o estado da postagem se a prop externa mudar
   useEffect(() => {
     setPost(initialPost);
   }, [initialPost]);
 
-  // CORRIGIDO: Acessando post.User (com 'U' maiúsculo) para username e profilePicture
-  const userProfilePicSrc = post.User?.profilePicture // <-- MUDANÇA AQUI
-    ? `${BASE_BACKEND_URL}${post.User.profilePicture}` // <-- MUDANÇA AQUI
+  const userProfilePicSrc = post.User?.profilePicture
+    ? `${BASE_BACKEND_URL}${post.User.profilePicture}`
     : DEFAULT_USER_PROFILE_PIC;
 
   const postMediaSrc = post.mediaUrl
     ? `${BASE_BACKEND_URL}${post.mediaUrl}`
     : null;
 
-  const handleToggleLikeDislike = async (type) => { // 'like' ou 'dislike'
+  const handleToggleLikeDislike = async (type) => {
     if (!isAuthenticated) {
       alert('Você precisa estar logado para interagir.');
       return;
@@ -64,9 +58,14 @@ const Posts = ({ post: initialPost }) => { // Componente nomeado 'Posts'
   return (
     <div className="post-card">
       <div className="post-header">
-        <img src={userProfilePicSrc} alt={post.User?.username || 'Foto de Perfil'} className="post-profile-pic" /> {/* <-- MUDANÇA AQUI */}
+        <img src={userProfilePicSrc} alt={post.User?.username || 'Foto de Perfil'} className="post-profile-pic" />
         <div className="post-info">
-          <h3>{post.User?.username}</h3> {/* <-- MUDANÇA AQUI */}
+          {/* MUDANÇA AQUI: Envolve o nome de usuário com o Link */}
+          <h3>
+            <Link to={`/profile/${post.User?.username}`}> {/* Link para a página de perfil */}
+              {post.User?.username}
+            </Link>
+          </h3> 
           <span>{post.createdAt ? new Date(post.createdAt).toLocaleDateString('pt-BR') : ''}</span>
         </div>
       </div>
