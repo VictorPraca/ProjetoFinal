@@ -64,7 +64,7 @@ const AppRoutes = () => {
       />
 
       <Route // <--- O ERRO PODE ESTAR NO INÍCIO DESTA LINHA OU NOS ATRIBUTOS
-            path="/community/:communityName"
+            path="/community/:groupId"
             element={
                 <ProtectedRoute>
                     <CommunityDetailPage /> {/* <--- OU ALGUM PROBLEMA NESTA LINHA DO COMPONENTE */}

@@ -44,6 +44,28 @@
   gap: 15px; /* Espaço entre os elementos do formulário */
 }
 
+.community-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  box-sizing: border-box;
+  font-size: 1em;
+  appearance: none; /* Remove o estilo padrão do SO */
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%204%205%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M2%200L0%202h4L2%200z%20M2%205L0%203h4L2%205z%22%2F%3E%3C%2Fsvg%3E'); /* Seta customizada para dropdown */
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 8px;
+}
+
+.community-select:focus {
+  outline: none;
+  border-color: #ff4500;
+}
+
+
 /* Botões de seleção de tipo (Texto, Imagem, Vídeo) */
 .content-type-selector {
   display: flex;

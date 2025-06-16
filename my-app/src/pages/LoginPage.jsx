@@ -37,7 +37,7 @@ const LoginPage = () => {
   return (
     
     <div className="center-container">
-      <h1 className="login-reddit-title">Reddit</h1>
+      <h1 className="login-reddit-title">Tidder</h1>
       <div className="card-login">
         <h2>Login</h2>
 

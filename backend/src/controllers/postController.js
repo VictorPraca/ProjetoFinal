@@ -7,9 +7,9 @@ const { Sequelize } = require('sequelize'); // Importar Sequelize para funções
 // Função para criar uma nova postagem
 exports.createPost = async (req, res) => {
   try {
-    const { content, contentType } = req.body;
-    const userId = req.user.id; // ID do usuário logado (definido pelo middleware 'protect')
-    let mediaUrl = req.file ? `/uploads/${req.file.filename}` : null; // Se houver upload de arquivo, pega o caminho
+    const { content, contentType, communityId } = req.body; // NOVO: Pega communityId
+    const userId = req.user.id;
+    let mediaUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
     if (!content && !mediaUrl) {
       return res.status(400).json({ message: 'A postagem não pode ser vazia. Forneça texto ou mídia.' });
@@ -18,9 +18,17 @@ exports.createPost = async (req, res) => {
         return res.status(400).json({ message: `Para o tipo ${contentType}, é necessário um arquivo de mídia.` });
     }
 
-    const newPost = await Post.create({ userId, content, contentType, mediaUrl });
+    // Opcional: Verificar se o communityId existe se for fornecido
+    if (communityId) {
+        const community = await require('../models/groupModel').Group.findByPk(communityId);
+        if (!community) {
+            return res.status(404).json({ message: 'Comunidade especificada não encontrada.' });
+        }
+        // Futuramente: verificar se o usuário é membro da comunidade antes de permitir postar nela
+    }
 
-    // Opcional: Retornar a postagem com os dados do usuário para o frontend
+    const newPost = await Post.create({ userId, content, contentType, mediaUrl, communityId: communityId || null }); // NOVO: Salva communityId
+
     const populatedPost = await Post.findByPk(newPost.id, {
         include: [{ model: User, attributes: ['id', 'username', 'profilePicture'] }]
     });

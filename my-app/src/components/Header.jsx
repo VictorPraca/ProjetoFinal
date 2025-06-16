@@ -54,7 +54,7 @@ const Header = () => {
           <button className="menu-toggle-button" onClick={toggleSidebar}>
             ☰
           </button>
-          <h1 className='title'>Reddit</h1>
+          <h1 className='title'>Tidder</h1>
         </div>
 
         {/* Renderização Condicional do lado direito do header */}

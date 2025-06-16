@@ -1,68 +1,101 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/* my-app/src/index.css */
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+/* Reset agressivo para HTML e BODY */
+html, body {
+  margin: 0;
+  padding: 0;
+  border: 0; /* Garante que não há bordas padrão */
+  width: 100%;
+  min-height: 100vh; /* Garante que a altura mínima é 100% da viewport */
+  
+  /* CRÍTICO: Sobrescreve possíveis overflows que prendem o sticky */
+  overflow: visible !important; /* Permite que o conteúdo flua, não confinando o sticky */
+  overflow-x: hidden !important; /* Oculta barras de rolagem horizontais indesejadas */
+  
+  /* CRÍTICO: Sobrescreve transform, filter, perspective que quebram o sticky */
+  transform: none !important;
+  filter: none !important;
+  perspective: none !important; 
+  
+  scroll-behavior: smooth; /* Rolagem suave (opcional) */
+}
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+/* Garante que o elemento raiz do seu app React (#root) também não tem margens/paddings e ocupe a altura total */
+#root { /* Verifique o ID do seu div raiz em public/index.html ou main.jsx/index.js */
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex; /* Para que os elementos filhos (como o Header) se alinhem */
+  flex-direction: column; /* Para empilhar conteúdo verticalmente */
+  
+  /* CRÍTICO: Também para o #root, caso ele seja o culpado */
+  overflow: visible !important;
+  transform: none !important;
+  filter: none !important;
+  perspective: none !important;
+}
+
+/* NOVO: Regra para a classe .App (o div que envolve tudo em seu App.jsx) */
+.App { /* Verifique se esta é a classe do div principal em seu App.jsx, se houver um */
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  
+  /* CRÍTICO: Aplica os mesmos resets de overflow/transform para o .App */
+  overflow: visible !important;
+  overflow-x: hidden !important;
+  transform: none !important;
+  filter: none !important;
+  perspective: none !important;
+}
+
+
+/* Estilos de fonte e cor globais */
+body {
+  font-family: 'Inter', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #0b0b0b; /* Cor de fundo principal da aplicação */
+  color: #f0f0f0; /* Cor de texto padrão */
+}
+
+/* Box-sizing global para facilitar o layout */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Reset para listas, links e botões */
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  text-decoration: none;
+  color: inherit;
 }
 
 button {
-
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  border: none;
+  background: none;
+  font-family: 'Inter', Arial, sans-serif;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Esconder elementos visualmente mas mantê-los para leitores de tela */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }

@@ -1,217 +1,369 @@
-/* src/styles/MessagesPage.css */
+/* my-app/src/styles/MessagesPage.css */
 
 .messages-page-container {
-  display: flex; /* Layout de duas colunas */
-  padding-top: calc(60px + 20px); /* Padding para o header fixo */
-  background-color: #1a1a1a;
+  padding-top: calc(60px + 30px); /* Espaço para o header fixo */
+  padding-bottom: 20px;
+  background-color: #0b0b0b;
   min-height: 100vh;
-  color: #e0e0e0;
-  font-family: Arial, sans-serif;
-}
-
-/* Lista de Conversas (coluna esquerda) */
-.conversations-list {
-  flex: 0 0 300px; /* Largura fixa de 300px, não cresce nem encolhe */
-  background-color: #2b2b2b;
-  border-right: 1px solid #3a3a3a;
-  overflow-y: auto; /* Permite rolagem se houver muitas conversas */
-  padding: 20px 0;
-  box-sizing: border-box;
-}
-
-.conversations-list h2 {
-  font-size: 1.8em;
   color: #f0f0f0;
-  padding: 0 20px 15px;
-  margin-top: 0;
-  border-bottom: 1px solid #3a3a3a;
-  margin-bottom: 15px;
+  font-family: 'Inter', Arial, sans-serif;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza o messages-layout */
+  width: 100%; /* Garante que o container da página ocupe toda a largura */
 }
 
-.conversation-item {
+.messages-page-container .auth-prompt {
+    text-align: center;
+    color: #bbb;
+    font-style: italic;
+    font-size: 1.1em;
+    margin-top: 50px;
+}
+
+.messages-layout {
+  display: flex;
+  background-color: #1a1a1b;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  /* REMOVIDO max-width */ /* <-- REMOVA ESTA PROPRIEDADE PARA OCUPAR A LARGURA TOTAL */
+  width: 90%; /* Ajustado para 90% para ter um pouco de margem nas laterais */
+  min-height: 70vh;
+  margin-top: 20px;
+  overflow: hidden; 
+  flex-grow: 1; /* Permite que o layout ocupe o espaço vertical disponível */
+  /* NOVO: Ajuste para que ocupe mais largura em telas grandes */
+  max-width: 1200px; /* Um max-width ainda é bom para não ficar esticado demais */
+}
+
+/* Coluna da esquerda: Lista de Parceiros */
+.partners-list-sidebar {
+  flex: 0 0 280px; /* Largura fixa */
+  background-color: #2b2b2b;
+  border-right: 1px solid #333;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.partners-list-sidebar h2 {
+  font-size: 1.5em;
+  color: #ff4500;
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.partners-list-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.partners-list-sidebar .partner-item {
   display: flex;
   align-items: center;
-  padding: 15px 20px;
+  gap: 10px;
+  padding: 10px 15px;
   cursor: pointer;
-  border-bottom: 1px solid #3a3a3a;
+  border-radius: 5px;
   transition: background-color 0.2s ease;
+  margin-bottom: 5px;
 }
 
-.conversation-item:hover {
-  background-color: #333;
+.partners-list-sidebar .partner-item:hover {
+  background-color: #3a3a3a;
 }
 
-.conversation-item.selected {
-  background-color: #d33800; /* Cor para conversa selecionada */
+.partners-list-sidebar .partner-item.active {
+  background-color: #ff4500;
   color: white;
 }
 
-.conversation-pic {
+.partners-list-sidebar .partner-item.active span {
+  color: white;
+}
+
+.partners-list-sidebar .partner-profile-pic {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 15px;
-  border: 1px solid #444;
+  border: 1px solid #555;
 }
 
-.conversation-info {
-  flex-grow: 1;
-  overflow: hidden; /* Para lidar com texto longo */
+.partners-list-sidebar .partner-info-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+}
+.partners-list-sidebar .partner-info-text span {
+    font-weight: bold;
+    color: #f0f0f0;
+}
+.partners-list-sidebar .partner-info-text p.last-message {
+    font-size: 0.85em;
+    color: #bbb;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.conversation-info h3 {
-  margin: 0 0 5px 0;
-  font-size: 1.1em;
-  color: #f0f0f0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
-.conversation-item.selected h3,
-.conversation-item.selected .last-message,
-.conversation-item.selected .last-message-time {
-  color: white; /* Garante texto branco na conversa selecionada */
-}
-
-.last-message {
-  margin: 0;
-  font-size: 0.9em;
-  color: #aaa;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.last-message-time {
-  font-size: 0.8em;
-  color: #888;
-  white-space: nowrap;
-}
-
-/* Área de Chat (coluna direita) */
+/* Coluna da direita: Área de Chat */
 .chat-area {
-  flex-grow: 1; /* Ocupa o restante do espaço */
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  background-color: #1f1f1f;
-  padding: 20px;
-  box-sizing: border-box;
+  position: relative;
 }
 
-.no-conversation-selected {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-  font-size: 1.2em;
-  color: #aaa;
+/* Mensagem quando nenhum parceiro está selecionado */
+.chat-area .select-partner-message {
+    text-align: center;
+    font-style: italic;
+    color: #bbb;
+    margin: auto; /* Centraliza vertical e horizontalmente */
+    width: 100%;
+    padding: 20px;
 }
+
+/* Mensagens de status dentro das colunas (Ex: "Nenhuma conversa encontrada.") */
+.partners-list-sidebar p,
+.chat-area .message-list p { 
+    text-align: center;
+    font-style: italic;
+    color: #bbb;
+    margin-top: 20px;
+}
+
+/* Mensagem de status no chat (Ex: "Inicie sua conversa!") */
+.chat-area .message-list p:first-child:last-child { 
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
 
 .chat-header {
-  display: flex;
-  align-items: center;
-  padding-bottom: 15px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #3a3a3a;
-}
-
-.chat-header-pic {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 15px;
-  border: 1px solid #ff4500;
+  background-color: #2b2b2b;
+  padding: 15px 20px;
+  border-bottom: 1px solid #333;
+  text-align: center;
 }
 
 .chat-header h3 {
   margin: 0;
-  font-size: 1.5em;
+  font-size: 1.3em;
   color: #f0f0f0;
 }
 
-.messages-display {
-  flex-grow: 1; /* Permite que a área de mensagens ocupe o espaço restante */
-  overflow-y: auto; /* Rolagem para as mensagens */
-  padding-right: 10px; /* Espaço para a scrollbar */
-  margin-bottom: 20px;
-}
-
-/* Estilos para as bolhas de mensagem */
-.message-bubble {
+.message-list {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
   display: flex;
-  margin-bottom: 10px;
-  max-width: 80%; /* Largura máxima da bolha */
-  padding: 10px 15px;
-  border-radius: 20px;
-  position: relative; /* Para o timestamp */
-  line-height: 1.4;
-  word-wrap: break-word; /* Quebra texto longo */
+  flex-direction: column;
+  gap: 15px;
 }
 
-.message-bubble p {
-  margin: 0;
-  padding-right: 50px; /* Espaço para o timestamp */
+.message-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 }
+
+.message-profile-pic {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid #555;
+}
+
+.message-content-bubble {
+  background-color: #3a3a3a;
+  border-radius: 15px;
+  padding: 10px 15px;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+.message-content-bubble p {
+  margin: 0;
+  font-size: 0.95em;
+  line-height: 1.4;
+  color: #e0e0e0;
+}
+
+.message-item.sent {
+  justify-content: flex-end;
+}
+
+.message-item.sent .message-content-bubble {
+  background-color: #ff4500;
+  color: white;
+}
+
+.message-item.sent .message-sender-name {
+    display: none;
+}
+
+.message-item.received {
+  justify-content: flex-start;
+}
+
+.message-item.received .message-content-bubble {
+  background-color: #2b2b2b;
+}
+
+.message-sender-name {
+    font-weight: bold;
+    font-size: 0.85em;
+    color: #bbb;
+    margin-bottom: 5px;
+    display: block;
+}
+.message-item.sent .message-sender-name {
+    color: rgba(255, 255, 255, 0.8);
+}
+
 
 .message-timestamp {
-  position: absolute;
-  bottom: 5px;
-  right: 10px;
   font-size: 0.7em;
-  color: rgba(255, 255, 255, 0.6);
-  white-space: nowrap;
+  color: #888;
+  text-align: right;
+  display: block;
+  margin-top: 5px;
+}
+.message-item.sent .message-timestamp {
+    color: rgba(255, 255, 255, 0.6);
 }
 
-.message-bubble.current-user {
-  align-self: flex-end; /* Alinha a mensagem do usuário atual à direita */
-  background-color: #ff4400; /* Cor azul para mensagens do usuário atual */
-  color: white;
-  border-bottom-right-radius: 5px; /* Deixa uma ponta mais quadrada */
-  margin-left: auto; /* Empurra para a direita */
-}
 
-.message-bubble.other-user {
-  align-self: flex-start; /* Alinha a mensagem do outro usuário à esquerda */
-  background-color: #444; /* Cor cinza para mensagens do outro usuário */
-  color: white;
-  border-bottom-left-radius: 5px; /* Deixa uma ponta mais quadrada */
-  margin-right: auto; /* Empurra para a esquerda */
-}
-
-/* Formulário de Input de Mensagem */
+/* Área de Input de Mensagem (Fixa na parte inferior) */
 .message-input-form {
+  border-top: 1px solid #333;
+  padding: 15px 20px;
+  background-color: #2b2b2b;
   display: flex;
   gap: 10px;
-  padding-top: 15px;
-  border-top: 1px solid #3a3a3a;
+  flex-shrink: 0;
 }
 
-.message-input {
-  flex-grow: 1; /* Ocupa o máximo de espaço */
-  padding: 12px 15px;
+.message-input-form textarea {
+  flex-grow: 1;
+  padding: 10px;
   border: 1px solid #444;
-  border-radius: 25px; /* Borda arredondada */
+  border-radius: 5px;
   background-color: #333;
   color: white;
-  font-size: 1em;
   box-sizing: border-box;
+  resize: none;
+  min-height: 40px;
+  font-size: 0.95em;
 }
 
-.send-button {
+.message-input-form button {
   padding: 10px 20px;
   background-color: #ff4500;
   color: white;
   border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 1em;
+  border-radius: 5px;
   font-weight: bold;
+  cursor: pointer;
   transition: background-color 0.2s ease;
+  flex-shrink: 0;
 }
 
-.send-button:hover {
-  background-color: #d33800;
+.message-input-form button:hover {
+  background-color: #e03c00;
+}
+
+
+/* Responsividade */
+@media (max-width: 900px) {
+  .messages-layout {
+    flex-direction: column;
+    max-width: 95%; /* Permite que ocupe um pouco mais em telas médias */
+  }
+  .partners-list-sidebar {
+    border-right: none;
+    border-bottom: 1px solid #333;
+    flex: none;
+    width: 100%;
+    max-height: 250px;
+  }
+  .partners-list-sidebar ul {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+  }
+  .partners-list-sidebar .partner-item {
+      flex-direction: column;
+      text-align: center;
+      width: 120px;
+  }
+  .chat-area {
+    width: 100%;
+  }
+  .message-content-bubble {
+    max-width: 85%;
+  }
+}
+
+@media (max-width: 600px) {
+  .partners-list-sidebar {
+    padding: 15px;
+  }
+  .partners-list-sidebar h2 {
+    font-size: 1.3em;
+  }
+  .partner-item {
+    padding: 8px 12px;
+  }
+  .partner-profile-pic {
+    width: 35px;
+    height: 35px;
+  }
+  .chat-header h3 {
+    font-size: 1.1em;
+  }
+  .message-list {
+    padding: 15px;
+  }
+  .message-item {
+    gap: 8px;
+  }
+  .message-profile-pic {
+    width: 28px;
+    height: 28px;
+  }
+  .message-content-bubble {
+    font-size: 0.9em;
+    padding: 8px 12px;
+  }
+  .message-sender-name {
+      font-size: 0.8em;
+  }
+  .message-timestamp {
+      font-size: 0.65em;
+  }
+  .message-input-form {
+    padding: 10px 15px;
+  }
+  .message-input-form textarea {
+    min-height: 35px;
+  }
+  .message-input-form button {
+    padding: 8px 15px;
+    font-size: 0.9em;
+  }
 }

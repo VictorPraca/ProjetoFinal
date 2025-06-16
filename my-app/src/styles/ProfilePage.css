@@ -68,7 +68,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   padding: 20px;
   max-width: 700px;
-  width: 90%;
+  width: 100%;
   margin-top: 20px; /* Espaço entre o profile-header e este card */
   text-align: left; /* Alinha o texto dentro do card à esquerda */
   box-sizing: border-box;
@@ -95,7 +95,7 @@
 
 .profile-content {
   width: 100%;
-  max-width: 710px;
+  max-width: 650px;
   margin-top: 30px; /* Espaço entre o card de info e a seção de posts */
 }
 

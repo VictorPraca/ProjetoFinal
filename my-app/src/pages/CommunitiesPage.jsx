@@ -1,43 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/Header.jsx'; 
-import api from '../services/api.js'; // Para simular chamadas ao backend
-import { Link } from 'react-router-dom'; // Para links para comunidades individuais (futuro)
-import '../styles/CommunitiesPage.css'; 
-
-
-// --- FIM DOS DADOS MOCKADOS DE COMUNIDADES ---
+import Header from '../components/Header.jsx';
+import api from '../services/api.js'; // Importa a instância da API
+import { useAuth } from '../contexts/AuthContext.jsx'; // Para o usuário logado
+import '../styles/CommunitiesPage.css'; // Estilos para a página de comunidades
+import { Link } from 'react-router-dom'; // Importa Link
 
 const CommunitiesPage = () => {
+  const { isAuthenticated, user } = useAuth();
   const [communities, setCommunities] = useState([]);
   const [loadingCommunities, setLoadingCommunities] = useState(true);
   const [errorCommunities, setErrorCommunities] = useState(null);
 
-  // Estados para o formulário de criação de comunidade
   const [newCommunityName, setNewCommunityName] = useState('');
-  const [newCommunityDescription, setNewCommunityDescription] = useState('');
+  // CORREÇÃO AQUI: Garante que é um useState e não apenas uma string
+  const [newCommunityDescription, setNewCommunityDescription] = useState(''); 
   const [creatingCommunity, setCreatingCommunity] = useState(false);
   const [createError, setCreateError] = useState(null);
   const [createSuccess, setCreateSuccess] = useState(null);
 
-  // Efeito para buscar a lista de comunidades (simuladamente)
+  // Efeito para buscar todas as comunidades
   useEffect(() => {
     const fetchCommunities = async () => {
       setLoadingCommunities(true);
       setErrorCommunities(null);
-      console.log('CommunitiesPage: Buscando comunidades (Simulado)...');
+      console.log('CommunitiesPage: Buscando comunidades do backend...');
       try {
-        await new Promise(resolve => setTimeout(resolve, 800)); // Simula atraso
-        setCommunities(MOCK_COMMUNITIES); // Define as comunidades mockadas
-        console.log('CommunitiesPage: Comunidades simuladas carregadas.');
+        const response = await api.get('/api/groups'); // Rota GET para todas as comunidades/grupos
+        setCommunities(response.data);
+        console.log('CommunitiesPage: Comunidades carregadas do backend.');
       } catch (err) {
-        console.error('CommunitiesPage: Erro ao buscar comunidades (simulado):', err);
-        setErrorCommunities('Não foi possível carregar as comunidades.');
+        console.error('CommunitiesPage: Erro ao buscar comunidades do backend:', err.response?.data || err.message);
+        setErrorCommunities(err.response?.data?.message || 'Não foi possível carregar as comunidades.');
       } finally {
         setLoadingCommunities(false);
       }
     };
-    fetchCommunities();
-  }, []); // Rodar apenas uma vez
+
+    if (isAuthenticated) { // Busca apenas se o usuário estiver autenticado
+      fetchCommunities();
+    } else {
+      setLoadingCommunities(false); // Se não autenticado, para o loading
+      setErrorCommunities('Você precisa estar logado para ver as comunidades.');
+    }
+  }, [isAuthenticated]); // Roda quando o status de autenticação muda
 
   // Função para lidar com a criação de uma nova comunidade
   const handleCreateCommunity = async (e) => {
@@ -46,103 +51,86 @@ const CommunitiesPage = () => {
     setCreateError(null);
     setCreateSuccess(null);
 
-    if (!newCommunityName.trim() || !newCommunityDescription.trim()) {
-      setCreateError('Nome e descrição da comunidade são obrigatórios.');
+    if (!isAuthenticated || !user) {
+      setCreateError('Você precisa estar logado para criar uma comunidade.');
+      setCreatingCommunity(false);
+      return;
+    }
+    if (!newCommunityName.trim()) {
+      setCreateError('O nome da comunidade não pode ser vazio.');
       setCreatingCommunity(false);
       return;
     }
 
     try {
-      // Simulação de chamada à API para criar comunidade
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Criar um ID simples para o mock
-      const newId = `comm${communities.length + 1}`; 
-      const newCommunity = {
-        id: newId,
-        name: newCommunityName,
-        description: newCommunityDescription,
-        createdAt: new Date().toISOString(),
-        membersCount: 1, // O criador é o primeiro membro
-        isAdmin: true, // O criador é admin
-      };
-
-      // Adiciona a nova comunidade à lista (no frontend)
-      setCommunities(prev => [...prev, newCommunity]);
-      setCreateSuccess(`Comunidade "${newCommunityName}" criada com sucesso!`);
+      const response = await api.post('/api/groups', { // Rota POST para criar comunidade/grupo
+        name: newCommunityName.trim(),
+        description: newCommunityDescription.trim(), // <--- ESTA LINHA VAI FUNCIONAR AGORA
+      });
+      setCreateSuccess(response.data.message || 'Comunidade criada com sucesso!');
+      setCommunities(prev => [...prev, response.data.group]); // Adiciona a nova comunidade à lista
       setNewCommunityName('');
       setNewCommunityDescription('');
-      console.log('Comunidade simulada criada:', newCommunity);
-
     } catch (err) {
-      console.error('CommunitiesPage: Erro ao criar comunidade (simulado):', err);
-      setCreateError('Erro ao criar comunidade. Tente novamente.');
+      console.error('Erro ao criar comunidade:', err.response?.data || err.message);
+      setCreateError(err.response?.data?.message || 'Erro ao criar comunidade. Tente novamente.');
     } finally {
       setCreatingCommunity(false);
     }
   };
 
-
   return (
-    <div>
-      <Header /> {/* Seu cabeçalho fixo */}
-      <div className="communities-page-content"> {/* Contêiner principal da página */}
+    <div className="communities-page-container">
+      <Header />
+      <div className="communities-content">
         <h1>Comunidades</h1>
 
-        {/* Formulário para Criar Nova Comunidade */}
+        {/* Seção para Criar Nova Comunidade */}
         <div className="create-community-section">
           <h2>Criar Nova Comunidade</h2>
-          <form onSubmit={handleCreateCommunity} className="create-community-form">
-            <label htmlFor="communityName">Nome da Comunidade:</label>
-            <input
-              type="text"
-              id="communityName"
-              value={newCommunityName}
-              onChange={(e) => setNewCommunityName(e.target.value)}
-              placeholder="Ex: Desenvolvedores Frontend"
-            />
-
-            <label htmlFor="communityDescription">Descrição:</label>
-            <textarea
-              id="communityDescription"
-              value={newCommunityDescription}
-              onChange={(e) => setNewCommunityDescription(e.target.value)}
-              placeholder="Descreva sua comunidade"
-              rows="3"
-            ></textarea>
-
-            {createError && <p className="error-message">{createError}</p>}
-            {createSuccess && <p className="success-message">{createSuccess}</p>}
-
-            <button type="submit" disabled={creatingCommunity}>
-              {creatingCommunity ? 'Criando...' : 'Criar Comunidade'}
-            </button>
-          </form>
+          {isAuthenticated ? (
+            <form onSubmit={handleCreateCommunity} className="create-community-form">
+              <input
+                type="text"
+                placeholder="Nome da Comunidade (Ex: Desenvolvedores Frontend)"
+                value={newCommunityName}
+                onChange={(e) => setNewCommunityName(e.target.value)}
+                required
+              />
+              <textarea
+                placeholder="Descrição (Ex: Discuta sobre desenvolvimento web, frameworks e ferramentas...)"
+                value={newCommunityDescription} // <--- ESTA LINHA IRÁ FUNCIONAR
+                onChange={(e) => setNewCommunityDescription(e.target.value)} // <--- ESTA LINHA IRÁ FUNCIONAR
+                rows="3"
+              ></textarea>
+              {createError && <p className="error-message">{createError}</p>}
+              {createSuccess && <p className="success-message">{createSuccess}</p>}
+              <button type="submit" disabled={creatingCommunity}>
+                {creatingCommunity ? 'Criando...' : 'Criar Comunidade'}
+              </button>
+            </form>
+          ) : (
+            <p className="auth-prompt">Faça login para criar novas comunidades.</p>
+          )}
         </div>
 
-        {/* Lista de Comunidades Existentes */}
-        <div className="communities-list-section">
+        {/* Seção para Explorar Comunidades */}
+        <div className="explore-communities-section">
           <h2>Explorar Comunidades</h2>
           {loadingCommunities && <p>Carregando comunidades...</p>}
           {errorCommunities && <p className="error-message">{errorCommunities}</p>}
           {!loadingCommunities && !errorCommunities && communities.length === 0 && (
-            <p>Nenhuma comunidade encontrada.</p>
+            <p>Nenhuma comunidade encontrada. Crie a primeira!</p>
           )}
-
-          <div className="communities-grid">
+          
+          <div className="communities-list">
             {!loadingCommunities && !errorCommunities && communities.length > 0 && (
-               communities.map((community) => (
+              communities.map(community => (
                 <div key={community.id} className="community-card">
-                  {/* O Link agora usa o 'slug' da comunidade */}
-                  <Link to={`/community/${community.slug}`} className="community-name-link"> {/* <--- MUDANÇA AQUI */}
-                    <h3>{community.name}</h3>
-                  </Link>
-                  <p>{community.description}</p>
-                  <div className="community-meta">
-                    <span>{community.membersCount} membros</span>
-                    <span>Criada em: {new Date(community.createdAt).toLocaleDateString()}</span>
-                  </div>
-                  {community.isAdmin && <span className="admin-tag">Você é Admin</span>}
+                  <h3>{community.name}</h3>
+                  <p>{community.description || 'Nenhuma descrição.'}</p>
+                  <p className="community-creator">Criador: {community.Creator?.username || 'Desconhecido'}</p>
+                  <Link to={`/community/${community.id}`} className="view-community-button">Ver Comunidade</Link>
                 </div>
               ))
             )}

@@ -2,15 +2,15 @@
 
 .app-header {
   display: flex;
-  justify-content: space-between; /* Espaço entre o grupo esquerdo e o direito */
-  align-items: center; /* Alinha verticalmente todos os itens no centro */
+  justify-content: space-between;
+  align-items: center;
   padding: 10px 20px;
   background-color: #1a1a1b;
   color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 1000;
-  position: sticky;
-  top: 0;
+  position: sticky; /* <-- ESSA LINHA É CRÍTICA */
+  top: 0;           /* <-- ESSA LINHA É CRÍTICA */
   width: 100%;
   box-sizing: border-box;
 }
